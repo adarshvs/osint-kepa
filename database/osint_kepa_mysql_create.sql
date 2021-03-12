@@ -42,13 +42,24 @@ CREATE TABLE `mob_osint` (
 CREATE TABLE `email_osint` (
 	`id` INT(10) NOT NULL AUTO_INCREMENT,
 	`fb_url` varchar(255),
-	`owner_name` varchar(255),
-	`google_id` varchar(255),
-	`physical_location` varchar(255),
-	`map_reviews` varchar(255),
-	`calendar_events` varchar(255),
+	`twitter_url` varchar(200),
+	`instagram_url` varchar(200),
+	`other_url` varchar(200),
 	`updated_at` TIMESTAMP,
 	`created_at` TIMESTAMP,
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `gmail_data` (
+	`id` INT(10) NOT NULL AUTO_INCREMENT,
+	`owner_name` varchar(200),
+	`goolge_id` varchar(200),
+	`google_services` varchar(200),
+	`youtube_channel` varchar(200),
+	`map_contributions` varchar(200),
+	`calendar_events` varchar(200),
+	`updated_at` DATETIME,
+	`created_at` DATETIME,
 	PRIMARY KEY (`id`)
 );
 
@@ -57,4 +68,6 @@ ALTER TABLE `case_details` ADD CONSTRAINT `case_details_fk0` FOREIGN KEY (`id`) 
 ALTER TABLE `mob_osint` ADD CONSTRAINT `mob_osint_fk0` FOREIGN KEY (`id`) REFERENCES `case_details`(`id`);
 
 ALTER TABLE `email_osint` ADD CONSTRAINT `email_osint_fk0` FOREIGN KEY (`id`) REFERENCES `case_details`(`id`);
+
+ALTER TABLE `gmail_data` ADD CONSTRAINT `gmail_data_fk0` FOREIGN KEY (`id`) REFERENCES `case_details`(`id`);
 
