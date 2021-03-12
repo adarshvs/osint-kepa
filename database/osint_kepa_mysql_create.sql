@@ -50,7 +50,7 @@ CREATE TABLE `email_osint` (
 	PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `gmail_data` (
+CREATE TABLE `gmail_details` (
 	`id` INT(10) NOT NULL AUTO_INCREMENT,
 	`owner_name` varchar(200),
 	`goolge_id` varchar(200),
@@ -63,11 +63,40 @@ CREATE TABLE `gmail_data` (
 	PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `truecaller_details` (
+	`id` INT(10) NOT NULL AUTO_INCREMENT,
+	`owner_name` varchar(200),
+	`gender` varchar(200),
+	`about` varchar(500),
+	`job_title` varchar(200),
+	`company_name` varchar(200),
+	`e164_format` varchar(200),
+	`national_format` varchar(200),
+	`dialing_code` varchar(200),
+	`country_code` varchar(200),
+	`carrier_name` varchar(200),
+	`address` varchar(200),
+	`street` varchar(200),
+	`zip_code` varchar(200),
+	`city` varchar(200),
+	`country_code` varchar(200),
+	`time_zone` varchar(200) NOT NULL,
+	`internet_addresses_id` varchar(200),
+	`internet_addresses_service` varchar(200) NOT NULL,
+	`internet_addresses_caption` varchar(200),
+	`is_user` varchar(200),
+	`updated_at` TIMESTAMP,
+	`created_at` TIMESTAMP,
+	PRIMARY KEY (`id`)
+);
+
 ALTER TABLE `case_details` ADD CONSTRAINT `case_details_fk0` FOREIGN KEY (`id`) REFERENCES `user`(`username`);
 
 ALTER TABLE `mob_osint` ADD CONSTRAINT `mob_osint_fk0` FOREIGN KEY (`id`) REFERENCES `case_details`(`id`);
 
 ALTER TABLE `email_osint` ADD CONSTRAINT `email_osint_fk0` FOREIGN KEY (`id`) REFERENCES `case_details`(`id`);
 
-ALTER TABLE `gmail_data` ADD CONSTRAINT `gmail_data_fk0` FOREIGN KEY (`id`) REFERENCES `case_details`(`id`);
+ALTER TABLE `gmail_details` ADD CONSTRAINT `gmail_details_fk0` FOREIGN KEY (`id`) REFERENCES `case_details`(`id`);
+
+ALTER TABLE `truecaller_details` ADD CONSTRAINT `truecaller_details_fk0` FOREIGN KEY (`id`) REFERENCES `case_details`(`id`);
 
