@@ -90,6 +90,15 @@ CREATE TABLE `truecaller_details` (
 	PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `truecaller_api_key` (
+	`id` INT(10) NOT NULL AUTO_INCREMENT,
+	`user_id` INT(10),
+	`api_token` varchar(200),
+	`updated_at` DATETIME,
+	`created_at` DATETIME,
+	PRIMARY KEY (`id`)
+);
+
 ALTER TABLE `case_details` ADD CONSTRAINT `case_details_fk0` FOREIGN KEY (`id`) REFERENCES `user`(`username`);
 
 ALTER TABLE `mob_osint` ADD CONSTRAINT `mob_osint_fk0` FOREIGN KEY (`id`) REFERENCES `case_details`(`id`);
@@ -99,4 +108,6 @@ ALTER TABLE `email_osint` ADD CONSTRAINT `email_osint_fk0` FOREIGN KEY (`id`) RE
 ALTER TABLE `gmail_details` ADD CONSTRAINT `gmail_details_fk0` FOREIGN KEY (`id`) REFERENCES `case_details`(`id`);
 
 ALTER TABLE `truecaller_details` ADD CONSTRAINT `truecaller_details_fk0` FOREIGN KEY (`id`) REFERENCES `case_details`(`id`);
+
+ALTER TABLE `truecaller_api_key` ADD CONSTRAINT `truecaller_api_key_fk0` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`);
 
