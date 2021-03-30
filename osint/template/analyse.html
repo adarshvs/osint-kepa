@@ -1,3 +1,37 @@
-<!DOCTYPE html>
+{%  extends 'base.html' %}
 
-</html>
+
+{% block title %} Analyse {% endblock %}
+
+
+{% block body %} 
+<div class="container">
+    <br/>
+    <br/>
+
+    <h1>Mobile number OSINT</h1>
+    <br/>
+    <br/>
+<form action="" method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+
+        <input type="text" class="form-control" name="search" placeholder="Enter Phone number">
+
+
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Search">
+
+
+</form>
+
+<br/> Number : <b>{{num1}}</b>
+<br/> Name : <b>{{name}}</b>
+<br/> Gender : <b>{{gender}}</b>
+<br/> ISP : <b>{{isp}}</b>
+</div>
+
+
+{% endblock %}
