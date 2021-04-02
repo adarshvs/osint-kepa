@@ -50,10 +50,7 @@ def analyse(request):
 def iplookup(request):
     ip = str(request.POST.get('search'))
     if ip == 'None':
-        ip_details = IpLookup("")
-        output = ip_details.ip_lookup()
-        data = output.json()
-        return render(request,'iplookup.html',{"data":data})
+        return render(request,'iplookup.html')
     else:
         ip_details = IpLookup(ip)
         output = ip_details.ip_lookup()
