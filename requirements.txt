@@ -1,3 +1,5 @@
 pylint
 requests
 ipapi
+psycopg2
+Pillow

@@ -31,13 +31,13 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'osint.apps.OsintConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'osint',
+    'django.contrib.staticfiles',    
 ]
 
 MIDDLEWARE = [
@@ -76,12 +76,12 @@ WSGI_APPLICATION = 'osint_kepa.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'osint_db',
-        'USER': 'root',
-        'PASSWORD': '',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
         'HOST': '127.0.0.1',
-        'PORT': '3306'
+        #'PORT': '3306'
     }
 }
 
