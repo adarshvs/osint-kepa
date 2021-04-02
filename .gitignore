@@ -1,3 +1,8 @@
 osint_kepa/__pycache__/
 osint/__pycache__/
 osint/includes/__pycache__/
+osint/migrations/__pycache__/
+osint/gibbrish.py
+venv/
+osint/migrations/
+osint/Includes/classes/__pycache__/
