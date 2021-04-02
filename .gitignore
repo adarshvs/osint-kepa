@@ -6,3 +6,4 @@ osint/gibbrish.py
 venv/
 osint/migrations/
 osint/Includes/classes/__pycache__/
+.idea/
