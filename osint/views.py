@@ -27,7 +27,10 @@ def analyse(request):
             email = j['data'][0]['internetAddresses'][0]['id']
         elif not j['data'][0]['internetAddresses']:
             email = "not available"
-        carrier = j['data'][0]['phones'][0]['carrier']
+        try:
+            carrier = j['data'][0]['phones'][0]['carrier']
+        except KeyError:
+            carrier = "not available"
         try:
             gender = j['data'][0]['gender']
         except KeyError:
@@ -37,7 +40,10 @@ def analyse(request):
         except KeyError:
             street = "not known"
         city = j['data'][0]['addresses'][0]['city']
-        carrier = j['data'][0]['phones'][0]['carrier']     
-        return render(request,'analyse.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"key":key})
+        try:
+            image = j['data'][0]['image']
+        except KeyError:
+            image = "not known"
+        return render(request,'analyse.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"key":key,"image":image})
     
    
