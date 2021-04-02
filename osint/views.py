@@ -25,11 +25,21 @@ def analyse(request):
         tresponse = requests.get(turl, headers=theaders, timeout=5)
         output = tresponse
         j = output.json()
-        name = j['data'][0]['name']
-        p = phonenumbers.parse("+91"+num1)
-        isp = carrier.name_for_valid_number(p,'en')
-        #gender = j['data'][0]['gender']
-        return render(request,'analyse.html',{"name":name, "num1":num1, "isp":isp})
+        name = j['data'][0]['name'] 
+        if j['data'][0]['internetAddresses']:
+            email = j['data'][0]['internetAddresses'][0]['id']
+        elif not j['data'][0]['internetAddresses']:
+            email = "not available"
+        carrier = j['data'][0]['phones'][0]['carrier']
+        try:
+            gender = j['data'][0]['gender']
+        except KeyError:
+            gender = "gender is unknown"
+       
+        street = j['data'][0]['addresses'][0]['street']
+        city = j['data'][0]['addresses'][0]['city']
+        carrier = j['data'][0]['phones'][0]['carrier']     
+        return render(request,'analyse.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city})
     else:
         num1 == num1
         token ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
@@ -44,8 +54,21 @@ def analyse(request):
         output = tresponse
         j = output.json()
         name = j['data'][0]['name']
-        p = phonenumbers.parse("+91"+num1)
-        isp = carrier.name_for_valid_number(p,'en')
-        #gender = j['data'][0]['gender']
-        return render(request,'analyse.html',{"name":name, "num1":num1, "isp":isp})
+        if j['data'][0]['internetAddresses']:
+            email = j['data'][0]['internetAddresses'][0]['id']
+        elif not j['data'][0]['internetAddresses']:
+            email = "not available"
+        carrier = j['data'][0]['phones'][0]['carrier']
+        try:
+            gender = j['data'][0]['gender']
+        except KeyError:
+            gender = "gender is unknown"
+        try:
+            street = j['data'][0]['addresses'][0]['street']
+        except KeyError:
+            street = "not known"
+        city = j['data'][0]['addresses'][0]['city']
+        carrier = j['data'][0]['phones'][0]['carrier']     
+        return render(request,'analyse.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city})
+    
    
