@@ -1,6 +1,17 @@
 from django.db import models
 
 
+
+class TruecallerApiKey(models.Model):   
+    api_token = models.CharField(max_length=200, blank=True, null=True)
+    is_active = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'truecaller_api_key'
+
+
 class TruecallerDetails(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     birthday =  models.DateField(blank=True, null=True)
@@ -20,13 +31,4 @@ class TruecallerDetails(models.Model):
 
     class Meta:
         db_table = 'truecaller_details'    
-        app_label = 'osint' 
-
-class TruecallerApiKey(models.Model):
-    user_id = models.IntegerField(blank=True, null=True)
-    api_token = models.CharField(max_length=200, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = 'truecaller_api_key'
+       
