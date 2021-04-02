@@ -1,0 +1,37 @@
+{%  extends 'base.html' %}
+
+
+{% block title %} IP LOOKUP {% endblock %}
+
+
+{% block body %} 
+<div class="container">
+    <br/>
+    <br/>
+
+    <h1>IP LOOKUP</h1>
+    <br/>
+    <br/>
+<form action="" method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+
+        <input type="text" class="form-control" name="search" placeholder="Enter IP">
+
+
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Search">
+
+
+</form>
+
+<br/> {{data}}</b>
+
+<br/>
+
+</div>
+
+
+{% endblock %}

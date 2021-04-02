@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from osint.Includes.classes.truecaller_search_class import Truecaller
+from osint.Includes.classes.ipapi_class import IpLookup
 import requests
 import json
 from phonenumbers import carrier
@@ -45,5 +46,16 @@ def analyse(request):
         except KeyError:
             image = "not known"
         return render(request,'analyse.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"key":key,"image":image})
-    
-   
+
+def iplookup(request):
+    ip = str(request.POST.get('search'))
+    if ip == 'None':
+        ip_details = IpLookup("")
+        output = ip_details.ip_lookup()
+        data = output.json()
+        return render(request,'iplookup.html',{"data":data})
+    else:
+        ip_details = IpLookup(ip)
+        output = ip_details.ip_lookup()
+        data = output.json()
+        return render(request,'iplookup.html',{"data":data})
