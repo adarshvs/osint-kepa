@@ -19,4 +19,14 @@ class TruecallerDetails(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        abstract = True
+        db_table = 'truecaller_details'    
+        app_label = 'osint' 
+
+class TruecallerApiKey(models.Model):
+    user_id = models.IntegerField(blank=True, null=True)
+    api_token = models.CharField(max_length=200, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'truecaller_api_key'
