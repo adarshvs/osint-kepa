@@ -83,3 +83,7 @@ def account(request):
         return render(request,'account.html',{"message":message})
     else:
         return render(request,'account.html')
+
+
+def login(request):
+    return render(request,'login.html')
