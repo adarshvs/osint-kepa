@@ -13,5 +13,6 @@ urlpatterns = [
     path('users',views.users),
     path('add_users',views.add_users),
     path('addons',views.addons),
+    path('darkwebsearch',views.darkwebsearch),
 
 ]

@@ -140,3 +140,9 @@ def addons(request):
     if not request.user.is_authenticated:
         return redirect(login)
     return render(request,'addons.html')
+
+
+def darkwebsearch(request):
+    if not request.user.is_authenticated:
+        return redirect(login)
+    return render(request,'darkwebsearch.html')
