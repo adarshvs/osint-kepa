@@ -119,3 +119,24 @@ def iplookup(request):
 def logout(request):
     auth.logout(request)
     return redirect(login)
+
+
+def case_overview(request):
+    if not request.user.is_authenticated:
+        return redirect(login)
+    return render(request,'case_overview.html')
+
+def users(request):
+    if not request.user.is_authenticated:
+        return redirect(login)
+    return render(request,'users.html')
+
+def add_users(request):
+    if not request.user.is_authenticated:
+        return redirect(login)
+    return render(request,'add_users.html')
+
+def addons(request):
+    if not request.user.is_authenticated:
+        return redirect(login)
+    return render(request,'addons.html')
