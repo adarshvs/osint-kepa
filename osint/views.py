@@ -15,6 +15,8 @@ from .models import TruecallerApiKey
 def index(request):
     return HttpResponse('OPEN SOUCE INTELLIGENCE GATHERING')
 def analyse(request):
+    if not request.user.is_authenticated:
+        return redirect(login)
     key = TruecallerApiKey.objects.all()
     num1 = str(request.POST.get('search'))
     token ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
@@ -50,6 +52,8 @@ def analyse(request):
         return render(request,'analyse.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"key":key,"image":image})
 
 def iplookup(request):
+    if not request.user.is_authenticated:
+        return redirect(login)
     ip = str(request.POST.get('search'))
     if ip == 'None':
         return render(request,'iplookup.html')
@@ -61,6 +65,8 @@ def iplookup(request):
 
         
 def login(request):
+    if request.user.is_authenticated:
+            return redirect(analyse)
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -105,3 +111,6 @@ def account(request):
         return render(request,'account.html')
 
 
+def logout(request):
+    auth.logout(request)
+    return redirect(login)
