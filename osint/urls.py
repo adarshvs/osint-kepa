@@ -8,5 +8,10 @@ urlpatterns = [
     path('iplookup',views.iplookup),
     path('account',views.account),
     path('login',views.login),
-    path('logout',views.logout)
+    path('logout',views.logout),
+    path('case_overview',views.case_overview),
+    path('users',views.users),
+    path('add_users',views.add_users),
+    path('addons',views.addons),
+
 ]

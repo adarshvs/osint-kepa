@@ -1,19 +1,17 @@
-{%  extends 'base.html' %}
+{%  extends 'theme/base.html' %}
 
 
-{% block title %} IP LOOKUP {% endblock %}
+{% block title %}  IP LOOKUP {% endblock %}
 
+{% block page_heading %}  IP LOOKUP {% endblock %}
+
+{% block page_heading2 %}  IP LOOKUP {% endblock %}
+
+{% block sidebar %}   {% endblock %}
 
 {% block body %} 
-<div class="container">
-    <li>hi {{user.first_name}}</li>
-<li><a href="logout">logout</a></li>
-    <br/>
-    <br/>
 
-    <h1>IP LOOKUP</h1>
-    <br/>
-    <br/>
+
 <form action="" method="post">
     {% csrf_token %}
 
@@ -33,7 +31,7 @@
 
 <br/>
 
-</div>
+
 
 
 {% endblock %}
