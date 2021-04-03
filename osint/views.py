@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User, auth
 from osint.Includes.classes.truecaller_search_class import Truecaller
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
@@ -56,3 +57,29 @@ def iplookup(request):
         output = ip_details.ip_lookup()
         data = output.json()
         return render(request,'iplookup.html',{"data":data})
+
+def account(request):
+
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        email = request.POST['email']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        
+        if password1 == password2:
+            if User.objects.filter(username=username).exists():
+                message = 'Username Taken'
+            elif User.objects.filter(email=email).exists():
+                message = 'email taken'
+            else:
+                user = User.objects.create_user(username=username, password=password1, email=email, first_name=first_name, last_name=last_name)
+                user.save(); 
+                message = 'user added'
+        
+        else:
+            message = 'Password not matching'
+        return render(request,'account.html',{"message":message})
+    else:
+        return render(request,'account.html')
