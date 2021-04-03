@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
+from django.contrib import messages
 from osint.Includes.classes.truecaller_search_class import Truecaller
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
@@ -58,6 +59,23 @@ def iplookup(request):
         data = output.json()
         return render(request,'iplookup.html',{"data":data})
 
+        
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect(analyse)
+        else:
+            messages.info(request,'Invalid Credentials')
+            return redirect(login)
+    else:
+        return render(request,'login.html')
+
 def account(request):
 
     if request.method == 'POST':
@@ -70,20 +88,20 @@ def account(request):
         
         if password1 == password2:
             if User.objects.filter(username=username).exists():
-                message = 'Username Taken'
+                messages.info(request,'Username Taken')
+               
             elif User.objects.filter(email=email).exists():
-                message = 'email taken'
+                messages.info(request,'email taken')               
             else:
                 user = User.objects.create_user(username=username, password=password1, email=email, first_name=first_name, last_name=last_name)
                 user.save(); 
-                message = 'user added'
-        
+                messages.info(request,'user added')
+                return redirect(login)
         else:
-            message = 'Password not matching'
-        return render(request,'account.html',{"message":message})
+            messages.info(request,'Password not matching') 
+                       
+        return redirect(account)
     else:
         return render(request,'account.html')
 
 
-def login(request):
-    return render(request,'login.html')
