@@ -1,29 +1,22 @@
-{%  extends 'base.html' %}
+{%  extends 'theme/base.html' %}
 
 
 {% block title %} Analyse {% endblock %}
+{% block page_heading %} Mobile number OSINT {% endblock %}
+{% block page_heading2 %} Mobile number OSINT {% endblock %}
 
+{% block sidebar %}
+
+{% endblock %}
 
 {% block body %} 
-<li>hi {{user.first_name}}</li>
-<li><a href="logout">logout</a></li>
-<div class="container">
-    <br/>
-    <br/>
 
-    <h1>Mobile number OSINT</h1>
-    <br/>
-    <br/>
-<form action="" method="post">
+<form action="analyse" method="post">
     {% csrf_token %}
 
-    <div class="form-group">
-
+    
         <input type="text" class="form-control" name="search" placeholder="Enter Phone number">
-
-
-    </div>
-
+    
     <input type="submit" class="btn btn-primary" value="Search">
 
 
@@ -38,8 +31,4 @@
 <br/> MSP : <b>{{carrier}}</b>
 <br/> image : <img src ="{{image}}">
 <br/>
-{{key}}
-</div>
-
-
 {% endblock %}
