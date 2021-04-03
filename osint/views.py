@@ -13,7 +13,7 @@ from phonenumbers import timezone
 from .models import TruecallerApiKey
 # Create your views here.
 def index(request):
-    return HttpResponse('OPEN SOUCE INTELLIGENCE GATHERING')
+    return render(request, 'theme/index.html')
 def analyse(request):
     if not request.user.is_authenticated:
         return redirect(login)
