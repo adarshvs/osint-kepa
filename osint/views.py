@@ -13,7 +13,59 @@ from phonenumbers import timezone
 from .models import TruecallerApiKey
 # Create your views here.
 def index(request):
-    return HttpResponse('OPEN SOUCE INTELLIGENCE GATHERING')
+    if not request.user.is_authenticated:
+        return redirect(login)
+    user_count = User.objects.all().count()
+    return render(request, 'index.html',{'user_count':user_count})
+
+        
+def login(request):
+    if request.user.is_authenticated:
+            return redirect(analyse)
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect(index)
+        else:
+            messages.info(request,'Invalid Credentials')
+            return redirect(login)
+    else:
+        return render(request,'login.html')
+
+def account(request):
+
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        email = request.POST['email']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        
+        if password1 == password2:
+            if User.objects.filter(username=username).exists():
+                messages.info(request,'Username Taken')
+               
+            elif User.objects.filter(email=email).exists():
+                messages.info(request,'email taken')               
+            else:
+                user = User.objects.create_user(username=username, password=password1, email=email, first_name=first_name, last_name=last_name)
+                user.save()
+                messages.info(request,'user added')
+                return redirect(login)
+        else:
+            messages.info(request,'Password not matching') 
+                       
+        return redirect(account)
+    else:
+        return render(request,'account.html')
+
+
 def analyse(request):
     if not request.user.is_authenticated:
         return redirect(login)
@@ -49,7 +101,7 @@ def analyse(request):
             image = j['data'][0]['image']
         except KeyError:
             image = "not known"
-        return render(request,'analyse.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"key":key,"image":image})
+        return render(request,'analyse.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"image":image})
 
 def iplookup(request):
     if not request.user.is_authenticated:
@@ -62,53 +114,6 @@ def iplookup(request):
         output = ip_details.ip_lookup()
         data = output.json()
         return render(request,'iplookup.html',{"data":data})
-
-        
-def login(request):
-    if request.user.is_authenticated:
-            return redirect(analyse)
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = auth.authenticate(username=username, password=password)
-
-        if user is not None:
-            auth.login(request, user)
-            return redirect(analyse)
-        else:
-            messages.info(request,'Invalid Credentials')
-            return redirect(login)
-    else:
-        return render(request,'login.html')
-
-def account(request):
-
-    if request.method == 'POST':
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        username = request.POST['username']
-        email = request.POST['email']
-        password1 = request.POST['password1']
-        password2 = request.POST['password2']
-        
-        if password1 == password2:
-            if User.objects.filter(username=username).exists():
-                messages.info(request,'Username Taken')
-               
-            elif User.objects.filter(email=email).exists():
-                messages.info(request,'email taken')               
-            else:
-                user = User.objects.create_user(username=username, password=password1, email=email, first_name=first_name, last_name=last_name)
-                user.save()
-                messages.info(request,'user added')
-                return redirect(login)
-        else:
-            messages.info(request,'Password not matching') 
-                       
-        return redirect(account)
-    else:
-        return render(request,'account.html')
 
 
 def logout(request):

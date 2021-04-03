@@ -1,0 +1,33 @@
+
+{%  extends 'theme/base.html' %}
+
+
+{% block title %} Home {% endblock %}
+{% block page_heading %} Overview {% endblock %}
+{% block page_heading2 %} Overview {% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block body %} 
+<div class="row">
+   
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box bg-info">
+        <div class="inner">
+          <h3>{{user_count}}</h3>
+
+          <p>Total users</p>
+        </div>
+        <div class="icon">
+          <i class="ion fas fa-user-plus"></i>
+        </div>
+        <a href="users" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    
+</div>
+{% endblock %}
