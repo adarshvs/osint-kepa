@@ -17,7 +17,7 @@ def index(request):
 def analyse(request):
     if not request.user.is_authenticated:
         return redirect(login)
-    key = TruecallerApiKey.objects.all()
+    #key = TruecallerApiKey.objects.all()
     num1 = str(request.POST.get('search'))
     token ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
     if num1 == 'None':
@@ -100,7 +100,7 @@ def account(request):
                 messages.info(request,'email taken')               
             else:
                 user = User.objects.create_user(username=username, password=password1, email=email, first_name=first_name, last_name=last_name)
-                user.save(); 
+                user.save()
                 messages.info(request,'user added')
                 return redirect(login)
         else:
