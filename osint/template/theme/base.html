@@ -18,7 +18,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
 </head>
-<body class="hold-transition dark-mode sidebar-mini">
+<body class="hold-transition white-mode sidebar-mini">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -114,6 +114,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+          {% if  user.is_superuser == True %}
           <li class="nav-item">
             <a href="users" class="nav-link {% if request.path == '/osint/users' %}active{% endif %}">
               <i class="nav-icon fas fa-user-friends"></i>
@@ -132,7 +133,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
-          
+          {% endif %}
           <li class="nav-item">
             <a href="addons" class="nav-link {% if request.path == '/osint/addons' %}active{% endif %}">
               <i class="nav-icon fas fa-puzzle-piece"></i>
