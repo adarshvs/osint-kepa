@@ -1,5 +1,7 @@
 from django.db import models
-
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class TruecallerApiKey(models.Model):   
@@ -31,4 +33,14 @@ class TruecallerDetails(models.Model):
 
     class Meta:
         db_table = 'truecaller_details'    
-       
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    
+
+    designation = models.CharField(max_length=200, blank=True, null=True)
+    profile_pic = models.ImageField(upload_to="profile_pics/", max_length=200, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.user)

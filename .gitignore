@@ -7,3 +7,5 @@ venv/
 osint/migrations/
 osint/Includes/classes/__pycache__/
 .idea/
+images/profile_pics/
+images/trucallerImg/

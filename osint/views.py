@@ -6,10 +6,6 @@ from osint.Includes.classes.truecaller_search_class import Truecaller
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
 import json
-from phonenumbers import carrier
-from phonenumbers import geocoder
-import phonenumbers
-from phonenumbers import timezone
 from .models import TruecallerApiKey
 # Create your views here.
 def index(request):

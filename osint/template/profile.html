@@ -1,18 +1,207 @@
-{%  extends 'theme/base.html' %}
+{% extends 'theme/base.html' %}
+{% load static %}
 
+{% block title %} Profile {% endblock %}
 
-{% block title %} Profile  {% endblock %}
+{% block page_heading %} Profile {% endblock %}
 
-{% block page_heading %} Profile  {% endblock %}
-
-{% block breadcrumbnavigation %}   Profile {% endblock %}
+{% block breadcrumbnavigation %} Profile {% endblock %}
 
 {% block sidebarheading %} Profile Edit History {% endblock %}
 {% block sidebarcontent %}
-Last Visit : <br/>
-last Pofile Updated :
+Last Profile Edit : {{user.profile.updated_at}}<br/>
+Last Visit : {{user.last_login}} 
+
 {% endblock %}
-{% block body %} 
+{% block body %}
+
+<ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+    <li class="nav-item ">
+        <a class="nav-link active text-white" id="custom-content-below-home-tab" data-toggle="pill"
+            href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home"
+            aria-selected="false">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" id="custom-content-below-profile-tab" data-toggle="pill"
+            href="#custom-content-below-profile" role="tab" aria-controls="custom-content-below-profile"
+            aria-selected="false">Change Password</a>
+    </li>
+
+</ul>
+<div class="tab-content " id="custom-content-below-tabContent">
+    <div class="tab-pane fade active show" id="custom-content-below-home" role="tabpanel"
+        aria-labelledby="custom-content-below-home-tab">
+
+
+
+        <div class="row">
+            <div class="col mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-sm-auto mb-3">
+                                <div class="mx-auto" style="width: 140px;">
+                                    {% if user.profile.profile_pic %}
+                                    <img src="{{user.profile.profile_pic.url}}" height="140px">
+                                    {% else %}
+                                    <img src="{% static 'pro_pic/user.jpg' %}" height="140px">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                <div class="text-center text-sm-left mb-2 mb-sm-0">
+                                    <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{user.first_name}} {{user.last_name}}</h4>
+                                    <p class="mb-0">@{{user.username}}</p>
+                                    <div class="text-muted"><small>Last seen 2 hours ago </small></div>
+                                    <div class="mt-2">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="fa fa-fw fa-camera"></i>
+                                            <span>Change Photo</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="text-center text-sm-right">
+                                    <span class="badge badge-secondary">{% if user.is_superuser == True %}Administrator {% else %} user {% endif%}</span>
+                                    <div class="text-muted"><small>Joined on {{user.date_joined}}</small></div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-link active" >Details</li>
+                        </ul>
+                        <div class="tab-content pt-3">
+                            <div class="tab-pane active">
+                                <form class="form" novalidate="">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label>First Name</label>
+                                                        <input class="form-control" type="text" name="first_name"
+                                                            placeholder="{{user.first_name}}" value="{{user.first_name}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label>Last Name</label>
+                                                        <input class="form-control" type="text" name="last_name"
+                                                            placeholder="{{user.last_name}}" value="{{user.last_name}}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label>User Name</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="{{user.username}}" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label>Email</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="{{user.email}}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label>Registerd on</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="{{user.date_joined}}" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col d-flex justify-content-end">
+                                            <button class="btn btn-primary" type="submit">Save Changes</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel"
+        aria-labelledby="custom-content-below-profile-tab">
+        <div class="row">
+            <div class="col mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content pt-3">
+                            <div class="tab-pane active">
+                                <form class="form" novalidate="">
+                                  
+                                    <div class="row">
+                                        <div class="col-12 col-sm-6 mb-3">                                           
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label>Current Password</label>
+                                                        <input class="form-control" type="password"
+                                                            placeholder="••••••">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label>New Password</label>
+                                                        <input class="form-control" type="password"
+                                                            placeholder="••••••">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label>Confirm <span
+                                                                class="d-none d-xl-inline">Password</span></label>
+                                                        <input class="form-control" type="password"
+                                                            placeholder="••••••">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col d-flex justify-content-end">
+                                            <button class="btn btn-primary" type="submit">Save Changes</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
 
 
 
