@@ -21,7 +21,7 @@ def index(request):
         
 def login(request):
     if request.user.is_authenticated:
-            return redirect(analyse)
+            return redirect(index)
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -38,6 +38,8 @@ def login(request):
         return render(request,'login.html')
 
 def account(request):
+    if not request.user.is_authenticated:
+        return redirect(login)
 
     if request.method == 'POST':
         first_name = request.POST['first_name']
@@ -46,7 +48,12 @@ def account(request):
         email = request.POST['email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
-        
+        admin = request.POST.get('admin', "False")
+        staff = request.POST.get('staff', "False")
+        if admin == 'on':
+            admin = 'True'
+        if staff == 'on':
+            staff = 'True'
         if password1 == password2:
             if User.objects.filter(username=username).exists():
                 messages.info(request,'Username Taken')
@@ -54,7 +61,7 @@ def account(request):
             elif User.objects.filter(email=email).exists():
                 messages.info(request,'email taken')               
             else:
-                user = User.objects.create_user(username=username, password=password1, email=email, first_name=first_name, last_name=last_name)
+                user = User.objects.create_user(username=username, password=password1, email=email, first_name=first_name, last_name=last_name, is_superuser=admin, is_staff=staff)
                 user.save()
                 messages.info(request,'user added')
                 return redirect(account)
