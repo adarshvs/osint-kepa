@@ -9,8 +9,8 @@
 
 {% block sidebarheading %} Profile Edit History {% endblock %}
 {% block sidebarcontent %}
-Last Visit : <br />
-last Pofile Updated :
+Last Visit : {{user.last_login}}</ <br />
+
 {% endblock %}
 {% block body %}
 
@@ -48,8 +48,8 @@ last Pofile Updated :
                             </div>
                             <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
                                 <div class="text-center text-sm-left mb-2 mb-sm-0">
-                                    <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">John Smith</h4>
-                                    <p class="mb-0">@johnny.s</p>
+                                    <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{user.first_name}} {{user.last_name}}</h4>
+                                    <p class="mb-0">@{{user.username}}</p>
                                     <div class="text-muted"><small>Last seen 2 hours ago</small></div>
                                     <div class="mt-2">
                                         <button class="btn btn-primary" type="button">
@@ -59,8 +59,8 @@ last Pofile Updated :
                                     </div>
                                 </div>
                                 <div class="text-center text-sm-right">
-                                    <span class="badge badge-secondary">administrator</span>
-                                    <div class="text-muted"><small>Joined 09 Dec 2017</small></div>
+                                    <span class="badge badge-secondary">{% if user.is_superuser == True %}Administrator {% else %} user {% endif%}</span>
+                                    <div class="text-muted"><small>Joined on {{user.date_joined}}</small></div>
                                 </div>
                             </div>
                         </div>
@@ -75,16 +75,25 @@ last Pofile Updated :
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        <label>Full Name</label>
-                                                        <input class="form-control" type="text" name="name"
-                                                            placeholder="John Smith" value="John Smith">
+                                                        <label>First Name</label>
+                                                        <input class="form-control" type="text" name="first_name"
+                                                            placeholder="{{user.first_name}}" value="{{user.first_name}}">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        <label>Username</label>
-                                                        <input class="form-control" type="text" name="username"
-                                                            placeholder="johnny.s" value="johnny.s">
+                                                        <label>Last Name</label>
+                                                        <input class="form-control" type="text" name="last_name"
+                                                            placeholder="{{user.last_name}}" value="{{user.last_name}}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label>User Name</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="{{user.username}}" disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -93,19 +102,20 @@ last Pofile Updated :
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <input class="form-control" type="text"
-                                                            placeholder="user@example.com">
+                                                            placeholder="{{user.email}}">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col mb-3">
+                                                <div class="col">
                                                     <div class="form-group">
-                                                        <label>About</label>
-                                                        <textarea class="form-control" rows="5"
-                                                            placeholder="My Bio"></textarea>
+                                                        <label>Registerd on</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="{{user.date_joined}}" disabled>
                                                     </div>
                                                 </div>
                                             </div>
+                                            
                                         </div>
                                     </div>
                                     
