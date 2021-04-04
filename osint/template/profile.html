@@ -9,7 +9,8 @@
 
 {% block sidebarheading %} Profile Edit History {% endblock %}
 {% block sidebarcontent %}
-Last Visit : {{user.last_login}}</ <br />
+Last Profile Edit : {{user.profile.updated_at}}<br/>
+Last Visit : {{user.last_login}} 
 
 {% endblock %}
 {% block body %}
