@@ -72,6 +72,10 @@ def account(request):
     else:
         return render(request,'account.html')
 
+def profile(request):
+    if not request.user.is_authenticated:
+        return redirect(login)
+    return render(request,'profile.html')
 
 def analyse(request):
     if not request.user.is_authenticated:

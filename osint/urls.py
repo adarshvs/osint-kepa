@@ -7,6 +7,7 @@ urlpatterns = [
     path('analyse', views.analyse),
     path('iplookup',views.iplookup),
     path('account',views.account),
+    path('profile',views.profile),
     path('login',views.login),
     path('logout',views.logout),
     path('case_overview',views.case_overview),
