@@ -5,11 +5,33 @@
 
 {% block page_heading %} Add User {% endblock %}
 
-{% block page_heading2 %} Add User {% endblock %}
+{% block breadcrumbnavigation %} Add User {% endblock %}
 
 {% block sidebar %} {% endblock %}
 
 {% block body %}
+{% if  user.is_superuser == False %}
+
+<section class="content">
+    <div class="error-page">
+      <h2 class="headline text-danger">401</h2>
+
+      <div class="error-content">
+        <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Something went wrong.</h3>
+
+        <p>
+          You are not allowed to perform this action.
+          you can <a href="index">return to dashboard</a> or try login as Administrator .
+        </p>
+
+        
+      </div>
+    </div>
+    <!-- /.error-page -->
+
+  </section>
+
+{% else %}
 <section class="content">
     <div class="container-fluid">
         <div class="row">
@@ -95,4 +117,6 @@
         </div>
     </div>
 </section>
+
+{% endif %}
 {% endblock %}

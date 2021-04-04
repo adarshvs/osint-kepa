@@ -18,7 +18,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
 </head>
-<body class="hold-transition dark-mode sidebar-mini">
+<body class="hold-transition white-mode sidebar-mini">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -28,37 +28,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
-      </li>
+      
     </ul>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
-      <li class="nav-item">
-        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-          <i class="fas fa-search"></i>
-        </a>
-        <div class="navbar-search-block">
-          <form class="form-inline">
-            <div class="input-group input-group-sm">
-              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-              <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit">
-                  <i class="fas fa-search"></i>
-                </button>
-                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </li>
+      
 
       <!-- Messages Dropdown Menu -->
      
@@ -86,7 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="index" class="brand-link">
       <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">OSINT</span>
     </a>
@@ -112,7 +88,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                with font-awesome or any other icon font library -->
           
           <li class="nav-item">
-            <a href="index" class="nav-link active">
+            <a href="index" class="nav-link {% if request.path == '/osint/index' %}active{% endif %} ">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Overview
@@ -121,7 +97,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="analyse" class="nav-link">
+            <a href="analyse" class="nav-link {% if request.path == '/osint/analyse' %}active{% endif %}">
               <i class="nav-icon fas fa-file-upload"></i>
               <p>
                 Analyse
@@ -130,7 +106,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="case_overview" class="nav-link">
+            <a href="case_overview" class="nav-link {% if request.path == '/osint/case_overview' %}active{% endif %}">
               <i class="nav-icon fas fa-list-alt"></i>
               <p>
                 View Cases
@@ -138,8 +114,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+          {% if  user.is_superuser == True %}
           <li class="nav-item">
-            <a href="users" class="nav-link">
+            <a href="users" class="nav-link {% if request.path == '/osint/users' %}active{% endif %}">
               <i class="nav-icon fas fa-user-friends"></i>
               <p>
                 View Users
@@ -148,7 +125,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="account" class="nav-link">
+            <a href="account" class="nav-link {% if request.path == '/osint/account' %}active{% endif %}">
               <i class="nav-icon fas fa-user-plus"></i>
               <p>
                 Add Users
@@ -156,9 +133,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
-          
+          {% endif %}
           <li class="nav-item">
-            <a href="addons" class="nav-link">
+            <a href="addons" class="nav-link {% if request.path == '/osint/addons' %}active{% endif %}">
               <i class="nav-icon fas fa-puzzle-piece"></i>
               <p>
                 Add-Ons
@@ -167,7 +144,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="logout" class="nav-link">
+            <a href="logout" class="nav-link ">
               <i class="nav-icon fas fa-sign-out-alt"></i>
               <p>
                 Log Out
@@ -194,7 +171,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="index">Home</a></li>
-              <li class="breadcrumb-item active">{% block page_heading2 %} {% endblock %}</li>
+              <li class="breadcrumb-item active">{% block breadcrumbnavigation %} {% endblock %}</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -221,9 +198,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
     <div class="p-3">
-      {% block sidebar %}
-
-      {% endblock %}
+      <h5>{% block sidebarheading %}{% endblock %}</h5>
+      <hr class="mb-2">
+      {% block sidebarcontent %}{% endblock %}
     </div>
   </aside>
   <!-- /.control-sidebar -->
@@ -248,5 +225,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+{% block scripts %}{% endblock %}
 </body>
 </html>
