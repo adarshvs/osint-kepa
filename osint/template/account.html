@@ -1,27 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account</title>
-</head>
-<body>
-    <form action="account" method="post">
-        {% csrf_token %}
-        <input type="text" name="first_name" placeholder="First Name"><br/>
-        <input type="text" name="last_name" placeholder="Last Name"><br/>
-        <input type="text" name="username" placeholder="User Name"><br/>
-        <input type="email" name="email" placeholder="Email"><br/>
-        <input type="password" name="password1" placeholder="Password"><br/>
-        <input type="password" name="password2" placeholder="Confirm Password"><br/>
-        <input type="submit">
-    </form>
-    <div>
-        {% for message in messages %}
-        <h3>{{message}}</h3>
-        {% endfor %}
+{% extends 'theme/base.html' %}
+
+
+{% block title %} Add User {% endblock %}
+
+{% block page_heading %} Add User {% endblock %}
+
+{% block page_heading2 %} Add User {% endblock %}
+
+{% block sidebar %} {% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">User Details</h3>
+                    </div>
+                    <form action="account" method="post">
+                        <div class="card-body">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="first_name">First Name</label>
+                                        <input type="text" name="first_name" id="first_name" class="form-control"
+                                            placeholder="First Name">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="last_name">Last Name</label>
+                                        <input type="text" name="last_name" class="form-control"
+                                            placeholder="Last Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="username">User Name</label>
+                                <input type="text" name="username" class="form-control" placeholder="User Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" name="email" class="form-control" placeholder="Email">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="password1">Password</label>
+                                        <input type="password" name="password1" class="form-control"
+                                            placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="password2">Confirm Password</label>
+                                        <input type="password" name="password2" class="form-control"
+                                            placeholder="Confirm Password">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="admin" {% if user.is_superuser %}{% endif %} />
+
+                                        <label class="form-check-label" for="admin">Administrator</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="staff" {% if user.is_staff %}{% endif %} />
+
+                                        <label class="form-check-label" for="staff">Staff</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                    </form>
+                    {% for message in messages %}
+                    <div class="alert alert-warning" role="alert">
+
+
+                        <h4>{{message}}</h4>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-   
-</body>
-</html>
+</section>
+{% endblock %}
