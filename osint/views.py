@@ -140,7 +140,9 @@ def case_overview(request):
 def users(request):
     if not request.user.is_authenticated:
         return redirect(login)
-    return render(request,'users.html')
+    allusers = User.objects.all()
+    context={'allusers':allusers}
+    return render(request,'users.html',context)
 
 def add_users(request):
     if not request.user.is_authenticated:
@@ -157,3 +159,7 @@ def darkwebsearch(request):
     if not request.user.is_authenticated:
         return redirect(login)
     return render(request,'darkwebsearch.html')
+
+
+
+
