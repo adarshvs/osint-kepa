@@ -125,8 +125,21 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/truecallerImgs/'
+MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'Images')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"), 
 ]
+LOGIN_REDIRECT_URL = '/osint/'
+LOGOUT_REDIRECT_URL = '/osint/login'
+LOGIN_URL = '/osint/login'
+
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'Asia/Kolkata'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = False

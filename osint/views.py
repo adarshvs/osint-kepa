@@ -1,19 +1,50 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
+from .models import Profile
 from django.contrib import messages
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import UserUpdateForm,ProfileUpdateForm
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
+
+
+
 from osint.Includes.classes.truecaller_search_class import Truecaller
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
 import json
 from .models import TruecallerApiKey
+
+
+def profileEdit(request):
+
+    if request.method == 'POST':
+        p_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)
+        u_form = UserUpdateForm(request.POST,instance=request.user)
+        if p_form.is_valid() and u_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request,'Your Profile has been updated!')
+            return redirect(profileEdit)
+            
+    else:
+        p_form = ProfileUpdateForm(instance=request.user)
+        u_form = UserUpdateForm(instance=request.user.profile)
+
+    context={'p_form': p_form, 'u_form': u_form}
+    return render(request, 'profile_edit.html',context )
+
+    
+
 # Create your views here.
+@login_required
 def index(request):
-    if not request.user.is_authenticated:
-        return redirect(login)
+    
     user_count = User.objects.all().count()
     return render(request, 'index.html',{'user_count':user_count})
-
+reverse_lazy(index)
         
 def login(request):
     if request.user.is_authenticated:
@@ -33,6 +64,10 @@ def login(request):
     else:
         return render(request,'login.html')
 
+class AddUser(CreateView):
+    model = User
+    template_name = 'add_user.html'
+    fields = ('first_name','last_name','username','email','password')
 def account(request):
     if not request.user.is_authenticated:
         return redirect(login)
@@ -67,10 +102,9 @@ def account(request):
         return redirect(account)
     else:
         return render(request,'account.html')
-
+@login_required
 def profile(request):
-    if not request.user.is_authenticated:
-        return redirect(login)
+    
     return render(request,'profile.html')
 
 def analyse(request):
@@ -133,13 +167,11 @@ def case_overview(request):
         return redirect(login)
     return render(request,'case_overview.html')
 
-def users(request):
-    if not request.user.is_authenticated:
-        return redirect(login)
-    
-    allusers = User.objects.all()
-    context={'allusers':allusers}
-    return render(request,'users.html',context)
+class users(LoginRequiredMixin, ListView):
+    login_url = '/osint/login'
+    redirect_field_name = ''
+    model = User
+    template_name = 'users.html'
     
 
 def add_users(request):
