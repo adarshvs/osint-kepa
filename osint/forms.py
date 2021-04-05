@@ -41,3 +41,26 @@ class ProfileUpdateForm(forms.ModelForm):
                 attrs={                    
                     "class":"form-control"
                 })}
+
+class PasswordChangeForm(forms.ModelForm):
+    class Meta:
+        model=User
+        fields=['password']
+        widgets = {     
+            "old_password": TextInput(
+                attrs={                    
+                    "class":"form-control"
+                }),
+            "new_password1": TextInput(
+            attrs={                    
+                "class":"form-control"
+            }),
+            "new_password2": TextInput(
+            attrs={                    
+                "class":"form-control"
+            })
+        }
+        
+
+
+
