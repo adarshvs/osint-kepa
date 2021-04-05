@@ -5,10 +5,11 @@ from .models import Profile
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import UserUpdateForm,ProfileUpdateForm
+from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 from osint.Includes.classes.truecaller_search_class import Truecaller
@@ -17,7 +18,7 @@ import requests
 import json
 from .models import TruecallerApiKey
 
-
+@login_required
 def profileEdit(request):
 
     if request.method == 'POST':
@@ -36,7 +37,22 @@ def profileEdit(request):
     context={'p_form': p_form, 'u_form': u_form}
     return render(request, 'profile_edit.html',context )
 
-    
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        pass_form = PasswordChangeForm(request.user, request.POST)
+        if pass_form.is_valid():
+            user = pass_form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        pass_form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {
+        'pass_form': pass_form
+    })
 
 # Create your views here.
 @login_required
@@ -102,10 +118,7 @@ def account(request):
         return redirect(account)
     else:
         return render(request,'account.html')
-@login_required
-def profile(request):
-    
-    return render(request,'profile.html')
+
 
 def analyse(request):
     if not request.user.is_authenticated:

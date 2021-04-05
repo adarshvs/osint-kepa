@@ -18,5 +18,6 @@ urlpatterns = [
     path('users',users.as_view(),name="users"),
     path('add_user/', AddUser.as_view(),name='add_user'),    
     path('edit_profile',views.profileEdit),
+    path('change_pass',views.change_password, name='change_password'),
 
 ]
