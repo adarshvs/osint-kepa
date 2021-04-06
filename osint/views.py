@@ -119,14 +119,14 @@ def account(request):
         return render(request,'account.html')
 
 
-def analyse(request):
+def truecaller(request):
     if not request.user.is_authenticated:
         return redirect(login)
     #key = TruecallerApiKey.objects.all()
     num1 = str(request.POST.get('search'))
     token ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
     if num1 == 'None':
-        return render(request,'analyse.html')
+        return render(request,'truecaller.html')
     else:        
         num1 == num1
         true_caller_result = Truecaller(num1, token)
@@ -154,7 +154,7 @@ def analyse(request):
             image = j['data'][0]['image']
         except KeyError:
             image = "not known"
-        return render(request,'analyse.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"image":image})
+        return render(request,'truecaller.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"image":image})
 
 def iplookup(request):
     if not request.user.is_authenticated:
@@ -174,10 +174,6 @@ def logout(request):
     return redirect(login)
 
 
-def case_overview(request):
-    if not request.user.is_authenticated:
-        return redirect(login)
-    return render(request,'case_overview.html')
 
 class users(LoginRequiredMixin, ListView):
     login_url = '/osint/login'
@@ -216,4 +212,11 @@ class AddCaseDetails(generic.CreateView):
     form_class = AddCaseDetailsForm
     model = CaseDetails
     template_name = 'add_case_details.html'
+
+
+@method_decorator(login_required, name='dispatch')
+class ViewAllCases(generic.ListView):
+    
+    model = CaseDetails
+    template_name = 'case_overview.html'
     

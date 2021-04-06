@@ -58,6 +58,7 @@ class CaseDetails(models.Model):
     ref_id = models.CharField(max_length=200 , blank=True, null=True)
     case_title = models.TextField(blank=True, null=True)
     case_details = models.TextField(blank=True, null=True)
+    is_completed = models.BooleanField(default='False')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

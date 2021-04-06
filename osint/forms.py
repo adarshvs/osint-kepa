@@ -85,3 +85,4 @@ class AddCaseDetailsForm(forms.ModelForm):
                     "class":"form-control"
                 })
         }
+    
