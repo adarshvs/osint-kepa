@@ -1,0 +1,27 @@
+{%  extends 'theme/base.html' %}
+
+
+{% block title %}  Add Case {% endblock %}
+
+{% block page_heading %}  Add Case Details {% endblock %}
+
+{% block breadcrumbnavigation %}  Add Case {% endblock %}
+
+{% block sidebarheading %}   {% endblock %}
+{% block sidebarcontent %}  {% endblock %}
+
+{% block body %} 
+
+<form method="POST">
+    {% csrf_token %}
+    case no:  {{form.case_no}}
+   Name: {{form.case_title}}
+    details: {{form.case_details}}
+   
+    referance no:  {{form.ref_id}}
+    <button>add case</button>
+</form>
+
+{% endblock %}
+
+{% block scripts %}{% endblock %} 

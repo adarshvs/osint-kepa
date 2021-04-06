@@ -1,17 +1,18 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
-from .models import Profile
+from .models import Profile, CaseDetails
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView
+from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm
+from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 
-
+from django.utils.decorators import method_decorator
 from osint.Includes.classes.truecaller_search_class import Truecaller
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
@@ -80,10 +81,8 @@ def login(request):
     else:
         return render(request,'login.html')
 
-class AddUser(CreateView):
-    model = User
-    template_name = 'add_user.html'
-    fields = ('first_name','last_name','username','email','password')
+
+
 def account(request):
     if not request.user.is_authenticated:
         return redirect(login)
@@ -206,3 +205,15 @@ def darkwebsearch(request):
 
 
 
+@method_decorator(login_required, name='dispatch')
+class AddUser(CreateView):
+    model = User
+    template_name = 'add_user.html'
+    fields = ('first_name','last_name','username','email','password')
+
+@method_decorator(login_required, name='dispatch')
+class AddCaseDetails(generic.CreateView):
+    form_class = AddCaseDetailsForm
+    model = CaseDetails
+    template_name = 'add_case_details.html'
+    
