@@ -1,0 +1,81 @@
+{%  extends 'theme/base.html' %}
+
+
+{% block title %}  Add Case {% endblock %}
+
+{% block page_heading %}  Add Case Details {% endblock %}
+
+{% block breadcrumbnavigation %}  Add Case {% endblock %}
+
+{% block sidebarheading %}   {% endblock %}
+{% block sidebarcontent %}  {% endblock %}
+
+{% block body %} 
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Case Details</h3>
+                    </div>
+                    {% for field in form %}
+                    {% if field.errors %}<br/>
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-info"></i>There were some errors in the information you entered. Please correct the following:</h5>
+                        <ul>
+                            <li>{{ field.label }}: {{ field.errors|striptags }}</li>
+                            
+                        </ul>
+                      </div>{% endif %}
+                      {% endfor %}
+                
+                    <form method="POST" >
+                        <div class="card-body">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="case_no">Case Number</label>
+                                        {{form.case_no}}
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="last_name">Referance Number</label>
+                                        {{form.ref_id}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Case Title</label>
+                                {{form.case_title}}
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Case Title</label>
+                                    {{form.case_details}}
+                            </div>
+                            
+                            
+                            
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                    </form>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}
+
+{% block scripts %}{% endblock %} 

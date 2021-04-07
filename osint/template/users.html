@@ -72,7 +72,7 @@
                                 <td>
                                     {% if user.is_staff == True %}Staff{% endif%} {% if user.is_superuser == True %}, &nbsp;Admin {% else %} user {% endif%}</td>
                                 <td>{{ user.date_joined }}</td>
-                                <td>edit</td>
+                                <td><center><i class="fas fa-edit"  title="Edit"></i></center> </td>
                                
                             </tr>
                             {% endfor %}
