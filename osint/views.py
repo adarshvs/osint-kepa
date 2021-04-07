@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from .models import Profile, CaseDetails
 from django.contrib import messages
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views import generic
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm
 from django.contrib.auth.decorators import login_required
@@ -60,7 +61,10 @@ def change_password(request):
 def index(request):
     
     user_count = User.objects.all().count()
-    return render(request, 'index.html',{'user_count':user_count})
+    cases_count = CaseDetails.objects.all().count()
+    pendig_casecount = CaseDetails.objects.filter(is_completed=False).count()
+    completed_cases = CaseDetails.objects.filter(is_completed=True).count()
+    return render(request, 'index.html',{'user_count':user_count,"cases_count":cases_count,"pendig_casecount":pendig_casecount, "completed_cases":completed_cases})
 reverse_lazy(index)
         
 def login(request):
@@ -219,4 +223,17 @@ class ViewAllCases(generic.ListView):
     
     model = CaseDetails
     template_name = 'case_overview.html'
+
+class ProfileUpdate(UpdateView):
     
+    fields = '__all__'
+    template_name = 'update_profile.html'
+    success_url = reverse_lazy('update_profile')
+
+
+    def get_object(self):
+        return self.request.user.profile
+    
+class ViewCasesDetails(generic.DetailView):
+    model = CaseDetails
+    template_name = 'case_details.html'
