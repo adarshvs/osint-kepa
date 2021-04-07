@@ -18,7 +18,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
 </head>
-<body class="hold-transition dark-mode sidebar-mini">
+<body class="hold-transition white-mode sidebar-mini">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -51,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="logout" role="button">
+        <a class="nav-link" href="/logout" role="button">
           <i class="fas fa-sign-out-alt"></i>
         </a>
       </li>
@@ -62,7 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index" class="brand-link">
+    <a href="/index" class="brand-link">
       <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">OSINT</span>
     </a>
@@ -79,7 +79,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           {% endif %}
         </div>
         <div class="info">
-          <a href="edit_profile" class="d-block">{{user.first_name}} {{user.last_name}}</a>
+          <a href="/edit_profile" class="d-block">{{user.first_name}} {{user.last_name}}</a>
         </div>
       </div>
 
@@ -92,7 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                with font-awesome or any other icon font library -->
           
           <li class="nav-item">
-            <a href="index" class="nav-link {% if request.path == '/osint/index' %}active{% endif %} ">
+            <a href="/index" class="nav-link {% if request.path == '/index' %}active{% endif %} ">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Overview
@@ -101,7 +101,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="analyse" class="nav-link {% if request.path == '/osint/analyse' %}active{% endif %}">
+            <a href="/analyse" class="nav-link {% if request.path == '/analyse' %}active{% endif %}">
               <i class="nav-icon fas fa-file-upload"></i>
               <p>
                 Analyse
@@ -110,7 +110,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="case_overview" class="nav-link {% if request.path == '/osint/case_overview' %}active{% endif %}">
+            <a href="/case_overview" class="nav-link {% if request.path == '/case_overview' %}active{% endif %}">
               <i class="nav-icon fas fa-list-alt"></i>
               <p>
                 View Cases
@@ -120,7 +120,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           {% if  user.is_superuser == True %}
           <li class="nav-item">
-            <a href="users" class="nav-link {% if request.path == '/osint/users' %}active{% endif %}">
+            <a href="/users" class="nav-link {% if request.path == '/users' %}active{% endif %}">
               <i class="nav-icon fas fa-user-friends"></i>
               <p>
                 View Users
@@ -129,7 +129,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="account" class="nav-link {% if request.path == '/osint/account' %}active{% endif %}">
+            <a href="/account" class="nav-link {% if request.path == '/account' %}active{% endif %}">
               <i class="nav-icon fas fa-user-plus"></i>
               <p>
                 Add Users
@@ -139,7 +139,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           {% endif %}
           <li class="nav-item">
-            <a href="addons" class="nav-link {% if request.path == '/osint/addons' %}active{% endif %}">
+            <a href="/addons" class="nav-link {% if request.path == '/addons' %}active{% endif %}">
               <i class="nav-icon fas fa-puzzle-piece"></i>
               <p>
                 Add-Ons
@@ -148,7 +148,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="logout" class="nav-link ">
+            <a href="/logout" class="nav-link ">
               <i class="nav-icon fas fa-sign-out-alt"></i>
               <p>
                 Log Out
@@ -174,7 +174,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index">Home</a></li>
+              <li class="breadcrumb-item"><a href="/index">Home</a></li>
               <li class="breadcrumb-item active">{% block breadcrumbnavigation %} {% endblock %}</li>
             </ol>
           </div><!-- /.col -->
