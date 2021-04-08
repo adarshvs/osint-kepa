@@ -14,6 +14,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import user_passes_test
 from osint.Includes.classes.truecaller_search_class import Truecaller
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
@@ -224,8 +225,7 @@ class ViewAllCases(generic.ListView):
     model = CaseDetails
     template_name = 'case_overview.html'
 
-class ProfileUpdate(UpdateView):
-    
+class ProfileUpdate(UpdateView):    
     fields = '__all__'
     template_name = 'update_profile.html'
     success_url = reverse_lazy('update_profile')
@@ -233,7 +233,8 @@ class ProfileUpdate(UpdateView):
 
     def get_object(self):
         return self.request.user.profile
-    
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
 class ViewCasesDetails(generic.DetailView):
     model = CaseDetails
     template_name = 'case_details.html'
