@@ -180,11 +180,7 @@ def logout(request):
 
 
 
-class users(LoginRequiredMixin, ListView):
-    login_url = '/osint/login'
-    redirect_field_name = ''
-    model = User
-    template_name = 'users.html'
+
     
 
 def add_users(request):
@@ -203,8 +199,11 @@ def darkwebsearch(request):
         return redirect(login)
     return render(request,'darkwebsearch.html')
 
-
-
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')  
+class users(ListView):
+    
+    model = User
+    template_name = 'users.html'
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')  
 class AddUser(CreateView):
@@ -250,14 +249,7 @@ class ViewAllCases(generic.ListView):
     model = CaseDetails
     template_name = 'case_overview.html'
 
-class ProfileUpdate(UpdateView):    
-    fields = '__all__'
-    template_name = 'update_profile.html'
-    success_url = reverse_lazy('update_profile')
 
-
-    def get_object(self):
-        return self.request.user.profile
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
 class ViewCasesDetails(generic.DetailView):
