@@ -21,7 +21,7 @@
         <form method="post">
             {% csrf_token %}
             {{form.as_p}}
-            
+            {{ userp.profile.profile_pic }}
             <button type="submit" class="btn btn-success">Update</button>
         </form>
     </div>
