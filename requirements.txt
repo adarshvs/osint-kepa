@@ -3,3 +3,4 @@ requests
 ipapi
 psycopg2
 Pillow
+django-currentuser
