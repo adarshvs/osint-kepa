@@ -1,0 +1,20 @@
+{% extends 'theme/base.html' %}
+
+
+{% block title %} Add User {% endblock %}
+
+{% block page_heading %} Add User {% endblock %}
+
+{% block breadcrumbnavigation %} Add User {% endblock %}
+
+{% block sidebar %} {% endblock %}
+
+{% block body %}
+<form method="post">
+    {% csrf_token %}
+    {{ forms.profilef.as_p }}
+    <button type="submit">Register</button>
+    <br><br>
+</form>
+
+{% endblock %}

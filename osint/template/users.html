@@ -72,8 +72,12 @@
                                 <td>
                                     {% if user.is_staff == True %}Staff{% endif%} {% if user.is_superuser == True %}, &nbsp;Admin {% else %} user {% endif%}</td>
                                 <td>{{ user.date_joined }}</td>
-                                <td><center><i class="fas fa-edit"  title="Edit"></i></center> </td>
-                               
+                                    <td class="text-center py-0 align-middle"><div class="btn-group btn-group-sm">
+                                        <a href="{% url 'view-profile' user.pk %}" class="btn btn-info"><i class="fas fa-eye" title="View"></i></a>
+                                        <a href="{% url 'update-profile' user.pk %}" class="btn btn-warning"><i class="fas fa-edit" title="View"></i></a>
+                                        <a href="{% url 'delete-profile' user.pk %}" class="btn btn-danger"><i class="fas fa-trash" title="View"></i></a>
+                                      </div> 
+                                     </td>
                             </tr>
                             {% endfor %}
                         </tbody>

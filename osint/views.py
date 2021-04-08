@@ -3,11 +3,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from .models import Profile, CaseDetails
 from django.contrib import messages
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views import generic
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm
+from django.contrib.messages.views import SuccessMessageMixin
+
+from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm, AddUserForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
@@ -180,11 +182,7 @@ def logout(request):
 
 
 
-class users(LoginRequiredMixin, ListView):
-    login_url = '/osint/login'
-    redirect_field_name = ''
-    model = User
-    template_name = 'users.html'
+
     
 
 def add_users(request):
@@ -203,14 +201,43 @@ def darkwebsearch(request):
         return redirect(login)
     return render(request,'darkwebsearch.html')
 
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')  
+class users(ListView):
+    
+    model = User
+    template_name = 'users.html'
 
-
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')  
+class AddUser(SuccessMessageMixin, CreateView):
+    form_class = AddUserForm
+    template_name = 'profile/add_user.html'
+    success_url = reverse_lazy('users')
+    success_message = "%(username)s is created successfully"
 
 @method_decorator(login_required, name='dispatch')
-class AddUser(CreateView):
+class UpdateUser(UpdateView):
+
     model = User
-    template_name = 'add_user.html'
-    fields = ('first_name','last_name','username','email','password')
+    template_name = 'profile/updateuser.html'
+    context_object_name = 'userp'
+    fields = '__all__'
+    def get_success_url(self):
+        return reverse_lazy('view-profile', kwargs={'pk': self.object.id})
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class ViewUser(DetailView):
+    model = User
+    fields = '__all__'
+    template_name = 'profile/viewuser.html'
+    context_object_name = 'userp'
+
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class DeleteUser(DeleteView):
+    model = User
+    context_object_name = 'userp'
+    template_name = 'profile/delete.html'
+    success_url = reverse_lazy('users')
 
 @method_decorator(login_required, name='dispatch')
 class AddCaseDetails(generic.CreateView):
@@ -225,14 +252,7 @@ class ViewAllCases(generic.ListView):
     model = CaseDetails
     template_name = 'case_overview.html'
 
-class ProfileUpdate(UpdateView):    
-    fields = '__all__'
-    template_name = 'update_profile.html'
-    success_url = reverse_lazy('update_profile')
 
-
-    def get_object(self):
-        return self.request.user.profile
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
 class ViewCasesDetails(generic.DetailView):
