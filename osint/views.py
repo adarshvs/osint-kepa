@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from .models import Profile, CaseDetails
 from django.contrib import messages
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views import generic
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -206,11 +206,36 @@ def darkwebsearch(request):
 
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')  
 class AddUser(CreateView):
     model = User
     template_name = 'add_user.html'
     fields = ('first_name','last_name','username','email','password')
+
+@method_decorator(login_required, name='dispatch')
+class UpdateUser(UpdateView):
+
+    model = User
+    template_name = 'profile/updateuser.html'
+    context_object_name = 'userp'
+    fields = '__all__'
+    def get_success_url(self):
+        return reverse_lazy('book-detail', kwargs={'pk': self.object.id})
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class ViewUser(DetailView):
+    model = User
+    fields = '__all__'
+    template_name = 'profile/viewuser.html'
+    context_object_name = 'userp'
+
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class DeleteUser(DeleteView):
+    model = User
+    context_object_name = 'userp'
+    template_name = 'profile/delete.html'
+    success_url = reverse_lazy('users')
 
 @method_decorator(login_required, name='dispatch')
 class AddCaseDetails(generic.CreateView):
