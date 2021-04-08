@@ -4,7 +4,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.conf import settings
-
+from django_currentuser.middleware import (get_current_user, get_current_authenticated_user)
+# As model field:
+from django_currentuser.db.models import CurrentUserField
 
 class TruecallerApiKey(models.Model):   
     api_token = models.CharField(max_length=200, blank=True, null=True)
@@ -60,11 +62,12 @@ class CaseDetails(models.Model):
     ref_id = models.CharField(max_length=200 , blank=True, null=True)
     case_title = models.TextField(blank=True, null=True)
     case_details = models.TextField(blank=True, null=True)
+    fir_date = models.DateField(blank=True, null=True)
     is_completed = models.BooleanField(default='False')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    username = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_by = CurrentUserField()
 
     def get_absolute_url(self):
         return reverse('analyse')

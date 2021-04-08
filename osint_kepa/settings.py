@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_currentuser.middleware.ThreadLocalUserMiddleware',
 ]
 
 ROOT_URLCONF = 'osint_kepa.urls'
@@ -126,7 +127,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'Images')
+MEDIA_ROOT = os.path.join(BASE_DIR,'static/images')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"), 
 ]

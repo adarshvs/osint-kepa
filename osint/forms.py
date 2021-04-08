@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import TextInput, FileInput, NumberInput, Textarea
+from django.forms import TextInput, FileInput, NumberInput, Textarea, DateInput
 from django.contrib.auth.models import User
 from .models import Profile, CaseDetails
 
@@ -65,7 +65,7 @@ class PasswordChangeForm(forms.ModelForm):
 class AddCaseDetailsForm(forms.ModelForm):
     class Meta:
         model = CaseDetails
-        fields=['case_details','case_no','ref_id','case_title']
+        fields=['case_details','case_no','ref_id','case_title','fir_date']
         widgets = {     
             "case_details": Textarea(
                 attrs={                    
@@ -83,6 +83,12 @@ class AddCaseDetailsForm(forms.ModelForm):
                             "case_title": TextInput(
                 attrs={                    
                     "class":"form-control"
+                }),
+                
+                            "fir_date": DateInput(
+                attrs={                    
+                    "class":"form-control",
+                    "type":"date"
                 })
         }
     

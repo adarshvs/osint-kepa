@@ -54,7 +54,7 @@
                                 <th class="sorting" tabindex="0" aria-controls="usertable" rowspan="1" colspan="1"
                                     aria-label="Browser: activate to sort column ascending">Status</th>
                                 <th class="sorting" tabindex="0" aria-controls="usertable" rowspan="1" colspan="1"
-                                    aria-label="Browser: activate to sort column ascending">Registered on</th>
+                                    aria-label="Browser: activate to sort column ascending">FIR Date</th>
                                 <th class="sorting" tabindex="0" aria-controls="usertable" rowspan="1" colspan="1"
                                     aria-label="Browser: activate to sort column ascending">Action</th>
                                 <th class="sorting" tabindex="0" aria-controls="usertable" rowspan="1" colspan="1"
@@ -66,12 +66,12 @@
                             {% for case in object_list %}
 
                             <tr class="odd">
-                                <td class="dtr-control" tabindex="0">{{ case.username }}</td>
+                                <td class="dtr-control" tabindex="0">{{ case.created_by }}</td>
                                 <td>{{ case.case_no }}</td>
                                 <td>{{ case.case_title }}</td>
                                 <td>
                                  {% if case.is_completed == True %}Completed {% else %} Pending {% endif%}</td>
-                                <td>{{ case.created_at }}</td>
+                                <td>{{ case.fir_date }}</td>
                                 <td class="text-right py-0 align-middle"><div class="btn-group btn-group-sm">
                                     <a href="{% url 'case_details' case.pk %}" class="btn btn-info"><i class="fas fa-eye" title="View"></i></a>
                                     
@@ -88,7 +88,7 @@
                                 <th rowspan="1" colspan="1">Case No:</th>
                                 <th rowspan="1" colspan="1">Case Name</th>
                                 <th rowspan="1" colspan="1">Status</th>
-                                <th rowspan="1" colspan="1">Registered on</th>
+                                <th rowspan="1" colspan="1">FIR Date</th>
                                 <th rowspan="1" colspan="1">Action</th>
                                 <th rowspan="1" colspan="1">Change Status</th>
                                 
