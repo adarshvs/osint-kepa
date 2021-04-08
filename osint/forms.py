@@ -18,6 +18,8 @@ class AddUserForm(UserCreationForm):
             'email', 
             'password1', 
             'password2', 
+            'is_superuser',
+            'is_staff'
             ]
 class UserUpdateForm(forms.ModelForm):
     class Meta:
