@@ -222,7 +222,7 @@ class UpdateUser(UpdateView):
     context_object_name = 'userp'
     fields = '__all__'
     def get_success_url(self):
-        return reverse_lazy('book-detail', kwargs={'pk': self.object.id})
+        return reverse_lazy('view-profile', kwargs={'pk': self.object.id})
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
 class ViewUser(DetailView):
