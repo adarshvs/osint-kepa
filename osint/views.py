@@ -7,7 +7,9 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.views import generic
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm
+from django.contrib.messages.views import SuccessMessageMixin
+
+from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm, AddUserForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
@@ -206,10 +208,11 @@ class users(ListView):
     template_name = 'users.html'
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')  
-class AddUser(CreateView):
-    model = User
-    template_name = 'add_user.html'
-    fields = ('first_name','last_name','username','email','password')
+class AddUser(SuccessMessageMixin, CreateView):
+    form_class = AddUserForm
+    template_name = 'profile/add_user.html'
+    success_url = reverse_lazy('users')
+    success_message = "%(username)s is created successfully"
 
 @method_decorator(login_required, name='dispatch')
 class UpdateUser(UpdateView):
