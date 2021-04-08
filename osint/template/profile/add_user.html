@@ -12,7 +12,7 @@
 {% block body %}
 <form method="post">
     {% csrf_token %}
-    {{ forms.profilef.as_p }}
+    {{ form.as_p }}
     <button type="submit">Register</button>
     <br><br>
 </form>
