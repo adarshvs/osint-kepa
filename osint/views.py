@@ -92,6 +92,22 @@ def account(request):
         return render(request,'account.html')
 
 
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        pass_form = PasswordChangeForm(request.user, request.POST)
+        if pass_form.is_valid():
+            user = pass_form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        pass_form = PasswordChangeForm(request.user)
+    return render(request, 'profile/change_password.html', {
+        'pass_form': pass_form
+    })
 def truecaller(request):
     if not request.user.is_authenticated:
         return redirect(login)
