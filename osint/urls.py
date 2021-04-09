@@ -12,6 +12,7 @@ urlpatterns = [
     path('logout',views.logout),
     path('case_overview', ViewAllCases.as_view(), name='case_overview'),
     path('<int:pk>/case_details/', ViewCasesDetails.as_view(), name='case_details'),
+    path('<int:pk>/mycases/', views.mycases, name='mycases'),
     path('addons',views.addons),
     path('darkwebsearch',views.darkwebsearch),
     path('users',users.as_view(),name="users"),
