@@ -19,7 +19,7 @@
         <form method="post">
             {% csrf_token %}
             <div class="alert alert-warning" role="alert">
-                {% if object.is_completed == True %}Uncheck the below option for marking this case as Pending {% else %} Check the below option for marking this case as Completed {% endif%}
+                {% if object.is_completed == True %}Uncheck the below option for marking this case as #Pending {% else %} Check the below option for marking this case as #Completed {% endif%}
                 
                {{form.as_p}}
             </div>

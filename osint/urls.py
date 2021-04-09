@@ -22,5 +22,5 @@ urlpatterns = [
     path('<int:pk>/delete/', DeleteUser.as_view(), name='delete-profile'),
     path('<int:pk>/update/', AdminUserProfileUpdate.as_view(), name='update-profile'),
     path('<int:pk>/update-case-status/', UpdateCaseStatus.as_view(), name='update-case-status'),
-
+    path('change_pass',views.change_password, name='change_password'),
 ]
