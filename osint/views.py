@@ -23,41 +23,7 @@ import requests
 import json
 from .models import TruecallerApiKey
 
-@login_required
-def profileEdit(request):
 
-    if request.method == 'POST':
-        p_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)
-        u_form = UserUpdateForm(request.POST,instance=request.user)
-        if p_form.is_valid() and u_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request,'Your Profile has been updated!')
-            return redirect(profileEdit)
-            
-    else:
-        p_form = ProfileUpdateForm(instance=request.user)
-        u_form = UserUpdateForm(instance=request.user.profile)
-
-    context={'p_form': p_form, 'u_form': u_form}
-    return render(request, 'profile_edit.html',context )
-
-@login_required
-def change_password(request):
-    if request.method == 'POST':
-        pass_form = PasswordChangeForm(request.user, request.POST)
-        if pass_form.is_valid():
-            user = pass_form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('change_password')
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        pass_form = PasswordChangeForm(request.user)
-    return render(request, 'profile/change_password.html', {
-        'pass_form': pass_form
-    })
 
 # Create your views here.
 @login_required
@@ -210,15 +176,6 @@ class AddUser(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('users')
     success_message = "%(username)s is created successfully"
 
-@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')  
-class UpdateUser(UpdateView):
-
-    model = User
-    template_name = 'profile/updateuser.html'
-    context_object_name = 'userp'
-    fields = '__all__'
-    def get_success_url(self):
-        return reverse_lazy('view-profile', kwargs={'pk': self.object.id})
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
 class ViewUser(DetailView):
