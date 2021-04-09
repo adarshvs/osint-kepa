@@ -79,7 +79,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           {% endif %}
         </div>
         <div class="info">
-          <a href="/edit_profile" class="d-block">{{user.first_name}} {{user.last_name}}</a>
+          <a href="{% url 'edit_profile'  user.profile.pk %}" class="d-block">{{user.first_name}} {{user.last_name}}</a>
         </div>
       </div>
 

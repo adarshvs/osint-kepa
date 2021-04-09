@@ -6,7 +6,7 @@
 
 {% block page_heading %} View Profile {% endblock %}
 
-{% block breadcrumbnavigation %} <a href="account"> View Users</a> / View Profile {% endblock %}
+{% block breadcrumbnavigation %} <a href="/users"> View Users</a> / View Profile {% endblock %}
 
 {% block sidebarheading %} {% endblock %}
 {% block sidebarcontent %} {% endblock %}
@@ -34,7 +34,7 @@
                             <li class="large"><span class="fa-li"><i class="fas fa-lg fa-envelope-open-text"></i></span>
                             &nbsp; Registerd on : <b>{{ userp.date_joined }}</b></li><hr>
 
-
+                            {{ userp.casedetailes.case_title }}
                             
                         </ul>
                 </div>

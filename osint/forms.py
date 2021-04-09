@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import TextInput, FileInput, NumberInput, Textarea, DateInput
+from django.forms import TextInput, FileInput, NumberInput, Textarea, DateInput, PasswordInput, CheckboxInput 
 from django.contrib.auth.models import User
 from .models import Profile, CaseDetails
 from django.contrib.auth.forms import UserCreationForm
@@ -21,10 +21,11 @@ class AddUserForm(UserCreationForm):
             'is_superuser',
             'is_staff'
             ]
-class UserUpdateForm(forms.ModelForm):
+
+class UserAdminUpdateForm(forms.ModelForm):
     class Meta:
         model=User
-        fields=['first_name','last_name','username','email']
+        fields=['first_name','last_name','username','email','is_superuser','is_staff']
         widgets = {
             "first_name": TextInput(
                 attrs={                    
@@ -37,7 +38,30 @@ class UserUpdateForm(forms.ModelForm):
             "username": TextInput(
             attrs={                    
                 "class":"form-control"
+            }),       
+            
+            "email": TextInput(
+            attrs={                    
+                "class":"form-control"
+            })
+            
+            
+            
+        }
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model=User
+        fields=['first_name','last_name','email']
+        widgets = {
+            "first_name": TextInput(
+                attrs={                    
+                    "class":"form-control"
+                }),
+            "last_name": TextInput(
+            attrs={                    
+                "class":"form-control"
             }),
+            
             "email": TextInput(
             attrs={                    
                 "class":"form-control"
@@ -45,6 +69,7 @@ class UserUpdateForm(forms.ModelForm):
             
             
         }
+
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model=Profile
