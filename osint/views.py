@@ -33,8 +33,17 @@ def index(request):
     cases_count = CaseDetails.objects.all().count()
     pendig_casecount = CaseDetails.objects.filter(is_completed=False).count()
     completed_cases = CaseDetails.objects.filter(is_completed=True).count()
-    return render(request, 'index.html',{'user_count':user_count,"cases_count":cases_count,"pendig_casecount":pendig_casecount, "completed_cases":completed_cases})
+
+    mycases_count =  CaseDetails.objects.filter(created_by=request.user).count()
+    mycases_pendig_casecount = CaseDetails.objects.filter(created_by=request.user, is_completed=False).count()
+    mycases_completed_cases = CaseDetails.objects.filter(created_by=request.user, is_completed=True).count()
+
+    return render(request, 'index.html',{'user_count':user_count,"cases_count":cases_count,"pendig_casecount":pendig_casecount, "completed_cases":completed_cases,"mycases_count":mycases_count,"mycases_completed_cases":mycases_completed_cases,"mycases_pendig_casecount":mycases_pendig_casecount})
 reverse_lazy(index)
+@login_required
+def mycases(request, pk):
+    case_details =  CaseDetails.objects.filter(created_by=request.user)
+    return render(request, 'mycases.html',{"case_details":case_details})
         
 def login(request):
     if request.user.is_authenticated:
@@ -223,7 +232,7 @@ class ViewAllCases(generic.ListView):
 
 
 
-@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+@method_decorator(login_required, name='dispatch')
 class ViewCasesDetails(generic.DetailView):
     model = CaseDetails
     template_name = 'case_details.html'

@@ -110,15 +110,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
+            <a href="{% url 'mycases' user.profile.pk %}" class="nav-link ">
+              <i class="nav-icon fas fa-history"></i>
+              <p>
+                My Case History
+                
+              </p>
+            </a>
+          </li>
+          
+          {% if  user.is_superuser == True %}
+          <li class="nav-item">
             <a href="/case_overview" class="nav-link {% if request.path == '/case_overview' %}active{% endif %}">
               <i class="nav-icon fas fa-list-alt"></i>
               <p>
-                View Cases
+                All Cases
                 
               </p>
             </a><hr class="mb-2">
           </li>
-          {% if  user.is_superuser == True %}
           <li class="nav-item">
             <a href="/users" class="nav-link {% if request.path == '/users' %}active{% endif %}">
               <i class="nav-icon fas fa-user-friends"></i>
@@ -135,10 +145,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 Add Users
                 
               </p>
-            </a><hr class="mb-2">
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link {% if request.path == '/account' %}active{% endif %}">
+              <i class="nav-icon fas fa-key"></i>
+              <p>
+                API Settings
+                
+              </p>
+            </a>
           </li>
           {% endif %}
-          <li class="nav-item">
+          <li class="nav-item"><hr class="mb-2">
             <a href="/addons" class="nav-link {% if request.path == '/addons' %}active{% endif %}">
               <i class="nav-icon fas fa-puzzle-piece"></i>
               <p>
