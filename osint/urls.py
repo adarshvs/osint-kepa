@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import users, AddUser, AddCaseDetails, ViewAllCases, ViewCasesDetails, ViewUser, DeleteUser, UserProfileUpdate, AdminUserProfileUpdate
+from .views import users, AddUser, AddCaseDetails, ViewAllCases, ViewCasesDetails, ViewUser, DeleteUser, UserProfileUpdate, AdminUserProfileUpdate, UpdateCaseStatus
 
 urlpatterns = [
     path('', views.index),
@@ -21,5 +21,6 @@ urlpatterns = [
     path('<int:pk>/profile/', ViewUser.as_view(), name='view-profile'),
     path('<int:pk>/delete/', DeleteUser.as_view(), name='delete-profile'),
     path('<int:pk>/update/', AdminUserProfileUpdate.as_view(), name='update-profile'),
+    path('<int:pk>/update-case-status/', UpdateCaseStatus.as_view(), name='update-case-status'),
 
 ]
