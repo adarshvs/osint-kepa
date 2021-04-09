@@ -259,3 +259,10 @@ class AdminUserProfileUpdate(SuccessMessageMixin, UpdateView):
         if user_form.is_valid():
             user_form.save()
         return super(AdminUserProfileUpdate, self).form_valid(form)
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class UpdateCaseStatus(UpdateView):
+    model = CaseDetails
+    fields = ["is_completed"]    
+    template_name = 'updatecasestatus.html'
+    success_url = reverse_lazy('case_overview')
