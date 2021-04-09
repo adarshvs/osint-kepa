@@ -9,7 +9,7 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
-from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm, AddUserForm
+from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm, AddUserForm, UserAdminUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
@@ -23,41 +23,7 @@ import requests
 import json
 from .models import TruecallerApiKey
 
-@login_required
-def profileEdit(request):
 
-    if request.method == 'POST':
-        p_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)
-        u_form = UserUpdateForm(request.POST,instance=request.user)
-        if p_form.is_valid() and u_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request,'Your Profile has been updated!')
-            return redirect(profileEdit)
-            
-    else:
-        p_form = ProfileUpdateForm(instance=request.user)
-        u_form = UserUpdateForm(instance=request.user.profile)
-
-    context={'p_form': p_form, 'u_form': u_form}
-    return render(request, 'profile_edit.html',context )
-
-@login_required
-def change_password(request):
-    if request.method == 'POST':
-        pass_form = PasswordChangeForm(request.user, request.POST)
-        if pass_form.is_valid():
-            user = pass_form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('change_password')
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        pass_form = PasswordChangeForm(request.user)
-    return render(request, 'change_password.html', {
-        'pass_form': pass_form
-    })
 
 # Create your views here.
 @login_required
@@ -185,10 +151,6 @@ def logout(request):
 
     
 
-def add_users(request):
-    if not request.user.is_authenticated:
-        return redirect(login)
-    return render(request,'add_users.html')
 
 def addons(request):
     if not request.user.is_authenticated:
@@ -214,15 +176,6 @@ class AddUser(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('users')
     success_message = "%(username)s is created successfully"
 
-@method_decorator(login_required, name='dispatch')
-class UpdateUser(UpdateView):
-
-    model = User
-    template_name = 'profile/updateuser.html'
-    context_object_name = 'userp'
-    fields = '__all__'
-    def get_success_url(self):
-        return reverse_lazy('view-profile', kwargs={'pk': self.object.id})
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
 class ViewUser(DetailView):
@@ -258,3 +211,51 @@ class ViewAllCases(generic.ListView):
 class ViewCasesDetails(generic.DetailView):
     model = CaseDetails
     template_name = 'case_details.html'
+
+@method_decorator(login_required, name='dispatch')
+class UserProfileUpdate(SuccessMessageMixin, UpdateView):
+    
+    model = Profile
+    template_name = 'profile/updateuser.html'
+    form_class = ProfileUpdateForm
+    second_form_class = UserUpdateForm
+    success_message = 'profile updated successfully'
+    success_url = reverse_lazy('change_password')
+
+    def get_context_data(self, **kwargs):
+        context = super(UserProfileUpdate, self).get_context_data(**kwargs)
+
+        context['user_form'] = self.second_form_class(self.request.POST or None, instance=self.object.user)
+
+        return context
+    
+
+    def form_valid(self, form):
+        user_form = UserUpdateForm(self.request.POST, instance=self.object.user)
+        if user_form.is_valid():
+            user_form.save()
+        return super(UserProfileUpdate, self).form_valid(form)
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class AdminUserProfileUpdate(SuccessMessageMixin, UpdateView):
+    
+    model = Profile
+    template_name = 'profile/admin-updateuser.html'
+    form_class = ProfileUpdateForm
+    second_form_class = UserAdminUpdateForm
+    success_message = 'profile updated successfully'
+    success_url = reverse_lazy('users')
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminUserProfileUpdate, self).get_context_data(**kwargs)
+
+        context['user_form'] = self.second_form_class(self.request.POST or None, instance=self.object.user)
+
+        return context
+    
+
+    def form_valid(self, form):
+        user_form = UserAdminUpdateForm(self.request.POST, instance=self.object.user)
+        if user_form.is_valid():
+            user_form.save()
+        return super(AdminUserProfileUpdate, self).form_valid(form)

@@ -75,11 +75,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
           {% if user.profile.profile_pic%}
           <img src="{{ user.profile.profile_pic.url}}" class="img-circle elevation-2" alt="User Image">
           {% else %}
-          <img src="{% static 'pro_pic/user.jpg' %}" class="img-circle elevation-2" alt="User Image">
+          <img src="{% static 'avatars/noavatar.jpg' %}" class="img-circle elevation-2" alt="User Image">
           {% endif %}
         </div>
         <div class="info">
-          <a href="/edit_profile" class="d-block">{{user.first_name}} {{user.last_name}}</a>
+          <a href="{% url 'edit_profile'  user.profile.pk %}" class="d-block">{{user.first_name}} {{user.last_name}}</a>
         </div>
       </div>
 
