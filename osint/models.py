@@ -68,9 +68,10 @@ class CaseDetails(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     created_by = CurrentUserField()
-
+    
     def get_absolute_url(self):
         return reverse('analyse')
     class Meta:
         db_table = 'case_details'
+        ordering = ['-created_at']
     
