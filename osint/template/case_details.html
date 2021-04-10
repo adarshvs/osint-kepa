@@ -14,6 +14,8 @@
 {% block body %} 
 
 
+ {%  if  casedetails.created_by|slugify  == user.username|slugify   or  user.is_superuser == True %}
+
 <div class="col-md-12">
     <div class="card">
         <div class="ribbon-wrapper ribbon-lg">
@@ -51,7 +53,7 @@
           <dt class="col-sm-4">Created on</dt>
           <dd class="col-sm-8">{{ casedetails.created_at}}</dd>
         </dl>
-      </div>
+      </div> 
       <!-- /.card-body -->
     </div>
     <!-- /.card -->
@@ -90,6 +92,27 @@
       </div>
     </div>
   </div>
+  {% else %}
+
+  <section class="content">
+    <div class="error-page">
+      <h2 class="headline text-danger">401</h2>
+
+      <div class="error-content">
+        <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Something went wrong.</h3>
+
+        <p>
+          You are not authorized to view this case.  
+          you may <a href="/index">return to dashboard</a>  .!! 
+        </p>
+
+        
+      </div>
+    </div>
+    <!-- /.error-page -->
+
+  </section>
+ {% endif %}
 {% endblock %}
 
 {% block scripts %}{% endblock %} 
