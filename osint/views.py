@@ -291,3 +291,9 @@ class UpdateCaseStatus(UpdateView):
     fields = ["is_completed"]    
     template_name = 'updatecasestatus.html'
     success_url = reverse_lazy('case_overview')
+
+class UpdateTheme(UpdateView):
+    model = Profile
+    fields = ["enable_dark"]    
+    template_name = 'theme/updatetheme.html'
+    success_url = reverse_lazy('index')

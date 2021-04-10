@@ -40,8 +40,7 @@ class TruecallerDetails(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    
-
+    enable_dark = models.BooleanField(default='False')
     designation = models.CharField(max_length=200, blank=True, null=True)
     profile_pic = models.ImageField(upload_to="avatars/",default="avatars/user.jpg", max_length=200, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -74,4 +73,6 @@ class CaseDetails(models.Model):
     class Meta:
         db_table = 'case_details'
         ordering = ['-created_at']
+
+
     
