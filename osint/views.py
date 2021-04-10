@@ -37,8 +37,12 @@ def index(request):
     mycases_count =  CaseDetails.objects.filter(created_by=request.user).count()
     mycases_pendig_casecount = CaseDetails.objects.filter(created_by=request.user, is_completed=False).count()
     mycases_completed_cases = CaseDetails.objects.filter(created_by=request.user, is_completed=True).count()
-
-    return render(request, 'index.html',{'user_count':user_count,"cases_count":cases_count,"pendig_casecount":pendig_casecount, "completed_cases":completed_cases,"mycases_count":mycases_count,"mycases_completed_cases":mycases_completed_cases,"mycases_pendig_casecount":mycases_pendig_casecount})
+    last_ten = CaseDetails.objects.filter(created_by=request.user).order_by('-id')[:5]
+    last_ten_in_ascending_order = reversed(last_ten)
+    top_ten = CaseDetails.objects.all().order_by('-id')[:5]
+    top_ten_in_ascending_order = reversed(last_ten)
+    context = {'user_count':user_count,"cases_count":cases_count,"pendig_casecount":pendig_casecount, "completed_cases":completed_cases,"mycases_count":mycases_count,"mycases_completed_cases":mycases_completed_cases,"mycases_pendig_casecount":mycases_pendig_casecount,"last_ten":last_ten,"top_ten":top_ten}
+    return render(request, 'index.html',context)
 reverse_lazy(index)
 @login_required
 def mycases(request, pk):
@@ -291,3 +295,9 @@ class UpdateCaseStatus(UpdateView):
     fields = ["is_completed"]    
     template_name = 'updatecasestatus.html'
     success_url = reverse_lazy('case_overview')
+
+class UpdateTheme(UpdateView):
+    model = Profile
+    fields = ["enable_dark"]    
+    template_name = 'theme/updatetheme.html'
+    success_url = reverse_lazy('index')
