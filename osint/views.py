@@ -37,8 +37,8 @@ def index(request):
     mycases_count =  CaseDetails.objects.filter(created_by=request.user).count()
     mycases_pendig_casecount = CaseDetails.objects.filter(created_by=request.user, is_completed=False).count()
     mycases_completed_cases = CaseDetails.objects.filter(created_by=request.user, is_completed=True).count()
-
-    return render(request, 'index.html',{'user_count':user_count,"cases_count":cases_count,"pendig_casecount":pendig_casecount, "completed_cases":completed_cases,"mycases_count":mycases_count,"mycases_completed_cases":mycases_completed_cases,"mycases_pendig_casecount":mycases_pendig_casecount})
+    context = {'user_count':user_count,"cases_count":cases_count,"pendig_casecount":pendig_casecount, "completed_cases":completed_cases,"mycases_count":mycases_count,"mycases_completed_cases":mycases_completed_cases,"mycases_pendig_casecount":mycases_pendig_casecount}
+    return render(request, 'index.html',context)
 reverse_lazy(index)
 @login_required
 def mycases(request, pk):
