@@ -15,7 +15,7 @@
 
 {% if user.is_superuser == True %}
 <!-- ./col -->
-<div class="row">
+<div class="row col">
   <div class="col-lg-3 col-6">
     <!-- small box -->
     <div class="small-box bg-info">
@@ -73,51 +73,176 @@
     </div>
   </div>
 </div>
+<div class="row col">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header border-transparent ">
+        <h3 class="card-title">Latest #5 Cases</h3>
 
-<div class="col-sm-6">
-  <h3 class="m-0"> My History </h1>
-</div><br>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-tool" data-card-widget="remove">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table m-0">
+            <thead>
+              <tr>
+                <th>Case ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>FIR Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for last_tens in top_ten %}
+              <tr>
+                <td>{{last_tens.id}}</td>
+                <td>{{last_tens.case_title}}</td>
+                <td> <a href="{% url 'case_details' last_tens.pk %}">{% if last_tens.is_completed == True%} <span
+                      class="badge badge-success">Completed</span>
+                    {% else %}
+                    <span class="badge badge-danger">Pending</span>
+                    {% endif%} <i class="fas fa-external-link-alt"></i></a>
+                </td>
+                <td>{{last_tens.fir_date}}</td>
 
+              </tr>{% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- /.table-responsive -->
+      </div>
+      <!-- /.card-body -->
 
-<div class="col-md-4">
-  <!-- Info Boxes Style 2 -->
-  <div class="info-box mb-3 bg-warning">
-    <span class="info-box-icon"><i class="fas fa-list-ol"></i></span>
-
-    <div class="info-box-content">
-      <span class="info-box-text">Total cases</span>
-      <span class="info-box-number">{{mycases_count}}</span>
+      <!-- /.card-footer -->
     </div>
-    <!-- /.info-box-content -->
   </div>
-  <!-- /.info-box -->
-  <div class="info-box mb-3 bg-danger">
-    <span class="info-box-icon"><i class="fas fa-times-circle"></i></span>
+</div> 
+<br/>
+<div class="container-fluid">
+  <div class="row mb-2">
+    <div class="col-sm-6">
+      <h1 class="m-0" style="font-size: 1.8rem;"> My Area </h1>
+    </div><!-- /.col -->
+    
+  </div><!-- /.row -->
+</div>
+<br/>
+<div class="row col">
+  <div class="col-md-4">
+    <div class="card ">
+      <div class="card-header">
+        <h3 class="card-title">My History</h3>
 
-    <div class="info-box-content">
-      <span class="info-box-text">Pending Cases</span>
-      <span class="info-box-number">{{mycases_pendig_casecount}}</span>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-tool" data-card-widget="remove">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <!-- Info Boxes Style 2 -->
+        <div class="info-box mb-3 bg-warning">
+          <span class="info-box-icon"><i class="fas fa-list-ol"></i></span>
+
+          <div class="info-box-content">
+            <span class="info-box-text">Total cases</span>
+            <span class="info-box-number">{{mycases_count}}</span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+        <div class="info-box mb-3 bg-danger">
+          <span class="info-box-icon"><i class="fas fa-times-circle"></i></span>
+
+          <div class="info-box-content">
+            <span class="info-box-text">Pending Cases</span>
+            <span class="info-box-number">{{mycases_pendig_casecount}}</span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+        <div class="info-box mb-3 bg-success">
+          <span class="info-box-icon"><i class="fas fa-clipboard-check"></i></span>
+
+          <div class="info-box-content">
+            <span class="info-box-text">Completed Cases</span>
+            <span class="info-box-number">{{mycases_completed_cases}}</span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+      </div>
     </div>
-    <!-- /.info-box-content -->
   </div>
-  <!-- /.info-box -->
-  <div class="info-box mb-3 bg-success">
-    <span class="info-box-icon"><i class="fas fa-clipboard-check"></i></span>
+  <div class="col-md-8">
+    <div class="card ">
+      <div class="card-header border-transparent ">
+        <h3 class="card-title">Latest Cases</h3>
 
-    <div class="info-box-content">
-      <span class="info-box-text">Completed Cases</span>
-      <span class="info-box-number">{{mycases_completed_cases}}</span>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-tool" data-card-widget="remove">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table m-0">
+            <thead>
+              <tr>
+                <th>Case ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>FIR Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for last_tens in last_ten %}
+              <tr>
+                <td>{{last_tens.id}}</td>
+                <td>{{last_tens.case_title}}</td>
+                <td> <a href="{% url 'case_details' last_tens.pk %}">{% if last_tens.is_completed == True%} <span
+                      class="badge badge-success">Completed</span>
+                    {% else %}
+                    <span class="badge badge-danger">Pending</span>
+                    {% endif%} <i class="fas fa-external-link-alt"></i></a>
+                </td>
+                <td>{{last_tens.fir_date}}</td>
+
+              </tr>{% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- /.table-responsive -->
+      </div>
+      <!-- /.card-body -->
+
+      <!-- /.card-footer -->
     </div>
-    <!-- /.info-box-content -->
   </div>
 </div>
-  <!-- /.info-box -->
-  {% endif %}
+
+
+{% endif %}
 
 
 
-  {% if not user.is_superuser == True %}
-  <div class="row">
+{% if not user.is_superuser == True %}
+<div class="row">
 
   <div class="col-lg-4 col-6">
     <!-- small box -->
@@ -161,11 +286,72 @@
       <a href="case_overview" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
+  <div class="col-md-12">
+    <div class="card ">
+      <div class="card-header border-transparent ">
+        <h3 class="card-title">Latest Cases</h3>
+
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-tool" data-card-widget="remove">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table m-0">
+            <thead>
+              <tr>
+                <th>Case ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>FIR Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for last_tens in last_ten %}
+              <tr>
+                <td>{{last_tens.id}}</td>
+                <td>{{last_tens.case_title}}</td>
+                <td> <a href="{% url 'case_details' last_tens.pk %}">{% if last_tens.is_completed == True%} <span
+                      class="badge badge-success">Completed</span>
+                    {% else %}
+                    <span class="badge badge-danger">Pending</span>
+                    {% endif%} <i class="fas fa-external-link-alt"></i></a>
+                </td>
+                <td>{{last_tens.fir_date}}</td>
+
+              </tr>{% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- /.table-responsive -->
+      </div>
+      <!-- /.card-body -->
+
+      <!-- /.card-footer -->
+    </div>
+  </div>
 </div>
 {% endif %}
 
 {% endblock %}
 {% block scripts %}
+
+<script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- ChartJS -->
+<script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{% static 'dist/js/demo.js' %}"></script>
 
 
 {% endblock %}
