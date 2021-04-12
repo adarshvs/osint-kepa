@@ -168,7 +168,34 @@ def iplookup(request):
         ip_details = IpLookup(ip)
         output = ip_details.ip_lookup()
         data = output.json()
-        return render(request,'iplookup.html',{"data":data})
+        ip = data['ip']
+        version = data['version']
+        city = data['city']
+        region = data['region']
+        region_code = data['region_code']
+        country = data['country']
+        country_name = data['country_name']
+        country_code = data['country_code']
+        country_code_iso3 = data['country_code_iso3']
+        country_capital = data['country_capital']
+        country_tld = data['country_tld']
+        continent_code = data['continent_code']
+        in_eu = data['in_eu']
+        postal = data['postal']
+        latitude = data['latitude']
+        longitude = data['longitude']
+        timezone = data['timezone']
+        utc_offset = data['utc_offset']
+        country_calling_code = data['country_calling_code']
+        currency = data['currency']
+        currency_name = data['currency_name']
+        languages = data['languages']
+        country_area = data['country_area']
+        country_population = data['country_population']
+        asn = data['asn']
+        org = data['org']
+        context = {"ip":ip,"version":version,"city":city,"region":region,"region_code":region_code,"country":country,"country_name":country_name,"country_code":country_code,"country_code_iso3":country_code_iso3,"country_capital":country_capital,"country_tld":country_tld,"continent_code":continent_code,"in_eu":in_eu,"postal":postal,"latitude":latitude,"longitude":longitude,"timezone":timezone,"utc_offset":utc_offset,"country_calling_code0":country_calling_code,"currency":currency,"currency_name":currency_name,"languages":languages,"country_area":country_area,"country_population":country_population,"asn":asn,"org":org}
+        return render(request,'iplookup.html',context)
 
 
 def logout(request):
