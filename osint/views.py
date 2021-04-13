@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
-from .models import Profile, CaseDetails
+from .models import Profile, CaseDetails, Iplookup
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views import generic
@@ -168,9 +168,18 @@ def iplookup(request):
         ip_details = IpLookup(ip)
         output = ip_details.ip_lookup()
         data = output.json()
-        ip = data['ip']
-        version = data['version']
-        city = data['city']
+        try:
+            ip = data['ip']
+        except KeyError:
+            ip = "not known"
+        try:
+            version = data['version']
+        except KeyError:
+            version = "not known"
+        try:
+            city = data['city']
+        except KeyError:
+            city = "not known"
         region = data['region']
         region_code = data['region_code']
         country = data['country']
@@ -194,7 +203,10 @@ def iplookup(request):
         country_population = data['country_population']
         asn = data['asn']
         org = data['org']
-        context = {"ip":ip,"version":version,"city":city,"region":region,"region_code":region_code,"country":country,"country_name":country_name,"country_code":country_code,"country_code_iso3":country_code_iso3,"country_capital":country_capital,"country_tld":country_tld,"continent_code":continent_code,"in_eu":in_eu,"postal":postal,"latitude":latitude,"longitude":longitude,"timezone":timezone,"utc_offset":utc_offset,"country_calling_code0":country_calling_code,"currency":currency,"currency_name":currency_name,"languages":languages,"country_area":country_area,"country_population":country_population,"asn":asn,"org":org}
+        context = {"ip":ip,"version":version,"city":city,"region":region,"region_code":region_code,"country":country,"country_name":country_name,"country_code":country_code,"country_code_iso3":country_code_iso3,"country_capital":country_capital,"country_tld":country_tld,"continent_code":continent_code,"in_eu":in_eu,"postal":postal,"latitude":latitude,"longitude":longitude,"timezone":timezone,"utc_offset":utc_offset,"country_calling_code":country_calling_code,"currency":currency,"currency_name":currency_name,"languages":languages,"country_area":country_area,"country_population":country_population,"asn":asn,"org":org,"data":data}
+        ip_data = Iplookup(ip=ip, version = version, city=city, region=region, region_code = region_code,country = country, country_name = country_name,country_code = country_code, country_code_iso3 = country_code_iso3, country_capital =country_capital, country_tld= country_tld, continent_code = continent_code, in_eu=in_eu, postal = postal,latitude = latitude, longitude = longitude,timezone = timezone, utc_offset = utc_offset, country_calling_code = country_calling_code, currency = currency,currency_name = currency_name, languages= languages, country_area= country_area, country_population = country_population, asn= asn, org= org)
+        model = IpLookup
+        ip_data.save()
         return render(request,'iplookup.html',context)
 
 
