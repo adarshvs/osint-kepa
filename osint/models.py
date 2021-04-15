@@ -15,7 +15,7 @@ class TruecallerApiKey(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'truecaller_api_key'
+        db_table = 'truecaller_api_keys'
 
 
 class TruecallerDetails(models.Model):
@@ -75,7 +75,6 @@ class CaseDetails(models.Model):
         ordering = ['-created_at']
 
 
-
 class IpLookupData(models.Model):
     ip = models.CharField(max_length=200, blank=True, null=True)    
     version =  models.CharField(max_length=200, blank=True, null=True)
@@ -107,5 +106,4 @@ class IpLookupData(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        db_table = 'ip_details'    
-        abstract = True
+        db_table = 'iplookup_data'   

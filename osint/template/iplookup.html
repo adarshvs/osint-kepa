@@ -7,7 +7,19 @@
 
 {% block breadcrumbnavigation %} <a href="addons">Add-Ons</a> / IP LOOKUP {% endblock %}
 
-{% block sidebar %} {% endblock %}
+{% block sidebarheading %} Previous Searches {% endblock %}
+{% block sidebarcontent %} 
+{% for ip in ip_count %}
+<table>
+    <tr>
+        <td>
+
+            {{ ip.ip }} 
+        </td>
+    </tr>
+</table>
+{% endfor %}
+{% endblock %}
 
 {% block body %}
 <div class="row col">
@@ -15,7 +27,7 @@
     <!-- general form elements -->
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">#{{ip}} </h3>
+            <h3 class="card-title">#{{ip}}   </h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
