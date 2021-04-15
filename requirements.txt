@@ -4,3 +4,4 @@ ipapi
 psycopg2
 Pillow
 django-currentuser
+django-reset-migrations
