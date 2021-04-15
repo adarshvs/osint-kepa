@@ -76,7 +76,7 @@ class CaseDetails(models.Model):
 
 
 
-class Iplookup(models.Model):
+class IpLookupData(models.Model):
     ip = models.CharField(max_length=200, blank=True, null=True)    
     version =  models.CharField(max_length=200, blank=True, null=True)
     city =  models.CharField(max_length=200, blank=True, null=True)

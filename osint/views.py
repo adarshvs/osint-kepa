@@ -1,9 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, auth
-from .models import Profile, CaseDetails, Iplookup
-from django.contrib import messages
+
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.models import User, auth
+from .models import Profile, CaseDetails, IpLookupData
+from django.contrib import messages
 from django.views import generic
 
 from django.contrib.auth.mixins import LoginRequiredMixin
