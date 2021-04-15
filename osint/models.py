@@ -75,4 +75,37 @@ class CaseDetails(models.Model):
         ordering = ['-created_at']
 
 
+
+class IpLookupData(models.Model):
+    ip = models.CharField(max_length=200, blank=True, null=True)    
+    version =  models.CharField(max_length=200, blank=True, null=True)
+    city =  models.CharField(max_length=200, blank=True, null=True)
+    region =  models.CharField(max_length=200, blank=True, null=True)
+    region_code =  models.CharField(max_length=200, blank=True, null=True)
+    country_name =  models.CharField(max_length=200, blank=True, null=True)
+    country_code =  models.CharField(max_length=200, blank=True, null=True)
+    country_code_iso3 =  models.CharField(max_length=200, blank=True, null=True)
+    country_capital =  models.CharField(max_length=200, blank=True, null=True)
+    country_tld =  models.CharField(max_length=200, blank=True, null=True)
+    continent_code =  models.CharField(max_length=200, blank=True, null=True)
+    in_eu =  models.CharField(max_length=200, blank=True, null=True)
+    postal =  models.CharField(max_length=200, blank=True, null=True)
+    latitude =  models.CharField(max_length=200, blank=True, null=True)
+    longitude =  models.CharField(max_length=200, blank=True, null=True)
+    timezone =  models.CharField(max_length=200, blank=True, null=True)
+    utc_offset =  models.CharField(max_length=200, blank=True, null=True)
+    country_calling_code =  models.CharField(max_length=200, blank=True, null=True)
+    currency_name =  models.CharField(max_length=200, blank=True, null=True)
+    languages =  models.CharField(max_length=200, blank=True, null=True)
+    country_area =  models.CharField(max_length=200, blank=True, null=True)
+    country_population =  models.CharField(max_length=200, blank=True, null=True)
+    asn =  models.CharField(max_length=200, blank=True, null=True)
+    org =  models.CharField(max_length=200, blank=True, null=True)
+    currency =  models.CharField(max_length=200, blank=True, null=True)
+    created_by = CurrentUserField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
+    class Meta:
+        db_table = 'ip_details'    
+        abstract = True
