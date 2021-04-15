@@ -15,23 +15,24 @@ class TruecallerApiKey(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'truecaller_api_key'
+        db_table = 'truecaller_api_keys'
 
 
 class TruecallerDetails(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
-    birthday =  models.DateField(blank=True, null=True)
-    gender =  models.CharField(max_length=200, blank=True, null=True)
-    image = models.ImageField(upload_to='trucallerImg', max_length=200, blank=True, null=True)
+    email =  models.EmailField(blank=True, null=True)
+    carrier =  models.CharField(max_length=200, blank=True, null=True)
     about = models.TextField(blank=True, null=True)
-    job_title =  models.CharField(max_length=200, blank=True, null=True)
-    company_name = models.CharField(max_length=200, blank=True, null=True)
-    carrier = models.CharField(max_length=200, blank=True, null=True)
-    street_name = models.CharField(max_length=200, blank=True, null=True)
-    zipcode = models.CharField(max_length=200, blank=True, null=True)
+    image = models.CharField(max_length=200, blank=True, null=True)    
+    gender =  models.CharField(max_length=200, blank=True, null=True)
+    street = models.CharField(max_length=200, blank=True, null=True)
     city = models.CharField(max_length=200, blank=True, null=True)
-    country_code =  models.CharField(max_length=200, blank=True, null=True)
-    email = models.CharField(max_length=200, blank=True, null=True)
+    address = models.TextField(max_length=200, blank=True, null=True)
+    birthday = models.TextField(max_length=200, blank=True, null=True)
+    jobTitle = models.CharField(max_length=200, blank=True, null=True)
+    companyName =  models.CharField(max_length=200, blank=True, null=True)
+    created_by = CurrentUserField()
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -75,7 +76,6 @@ class CaseDetails(models.Model):
         ordering = ['-created_at']
 
 
-
 class IpLookupData(models.Model):
     ip = models.CharField(max_length=200, blank=True, null=True)    
     version =  models.CharField(max_length=200, blank=True, null=True)
@@ -107,5 +107,4 @@ class IpLookupData(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        db_table = 'ip_details'    
-        abstract = True
+        db_table = 'iplookup_data'   

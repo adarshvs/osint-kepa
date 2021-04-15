@@ -1,9 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.db.models import Count
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
-from .models import Profile, CaseDetails, IpLookupData
+from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails
 from django.contrib import messages
 from django.views import generic
 
@@ -22,7 +23,6 @@ from osint.Includes.classes.truecaller_search_class import Truecaller
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
 import json
-from .models import TruecallerApiKey
 
 
 
@@ -39,9 +39,9 @@ def index(request):
     mycases_pendig_casecount = CaseDetails.objects.filter(created_by=request.user, is_completed=False).count()
     mycases_completed_cases = CaseDetails.objects.filter(created_by=request.user, is_completed=True).count()
     last_ten = CaseDetails.objects.filter(created_by=request.user).order_by('-id')[:5]
-    last_ten_in_ascending_order = reversed(last_ten)
+   # last_ten_in_ascending_order = reversed(last_ten)
     top_ten = CaseDetails.objects.all().order_by('-id')[:5]
-    top_ten_in_ascending_order = reversed(last_ten)
+   # top_ten_in_ascending_order = reversed(last_ten)
     context = {'user_count':user_count,"cases_count":cases_count,"pendig_casecount":pendig_casecount, "completed_cases":completed_cases,"mycases_count":mycases_count,"mycases_completed_cases":mycases_completed_cases,"mycases_pendig_casecount":mycases_pendig_casecount,"last_ten":last_ten,"top_ten":top_ten}
     return render(request, 'index.html',context)
 reverse_lazy(index)
@@ -153,11 +153,32 @@ def truecaller(request):
         except KeyError:
             street = "not known"
         city = j['data'][0]['addresses'][0]['city']
+        address = j['data'][0]['addresses'][0]['address']
         try:
             image = j['data'][0]['image']
         except KeyError:
             image = "not known"
-        return render(request,'truecaller.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"image":image})
+        try:
+            birthday = j['data'][0]['birthday']
+        except KeyError:
+            birthday = "not known"
+        try:
+            jobTitle = j['data'][0]['jobTitle']
+        except KeyError:
+            jobTitle = "not known"
+        try:
+            companyName = j['data'][0]['companyName']
+        except KeyError:
+            companyName = "not known"
+        try:
+            about = j['data'][0]['about']
+        except KeyError:
+            about = "not known"
+
+
+        truecaller_data = TruecallerDetails(name=name, email=email, carrier=carrier, about=about,image=image,gender=gender, street=street, city=city, address=address, birthday=birthday, jobTitle=jobTitle, companyName=companyName)
+        truecaller_data.save()
+        return render(request,'truecaller.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"image":image,"j":j,"birthday":birthday,"jobTitle":jobTitle,"companyName":companyName,"address":address,"about":about})
 
 def iplookup(request):
     if not request.user.is_authenticated:
@@ -181,19 +202,47 @@ def iplookup(request):
             city = data['city']
         except KeyError:
             city = "not known"
-        region = data['region']
-        region_code = data['region_code']
-        country = data['country']
-        country_name = data['country_name']
-        country_code = data['country_code']
-        country_code_iso3 = data['country_code_iso3']
-        country_capital = data['country_capital']
-        country_tld = data['country_tld']
+        try:
+            region = data['region']
+        except KeyError:
+            region = "not known"
+        try:
+            region_code = data['region_code']
+        except KeyError:
+            region_code = "not known"
+        try:
+            country = data['country']
+        except KeyError:
+            country = "not known"
+        try:
+            country_name = data['country_name']
+        except KeyError:
+            country_name = "not known"        
+        try:
+            country_code = data['country_code']
+        except KeyError:
+            country_code = "not known"  
+        try:
+            country_code_iso3 = data['country_code_iso3']
+        except KeyError:
+            country_code_iso3 = "not known" 
+        try:
+            country_capital = data['country_capital']
+        except KeyError:
+            country_capital = "not known" 
+        try:
+            country_tld = data['country_tld']
+        except KeyError:
+            country_tld = "not known" 
         continent_code = data['continent_code']
         in_eu = data['in_eu']
         postal = data['postal']
+        #if latitude == str('Sign up to access'):
+         #   latitude = "N/A"
+         #   longitude = "N/A"
         latitude = data['latitude']
         longitude = data['longitude']
+            
         timezone = data['timezone']
         utc_offset = data['utc_offset']
         country_calling_code = data['country_calling_code']
@@ -204,10 +253,14 @@ def iplookup(request):
         country_population = data['country_population']
         asn = data['asn']
         org = data['org']
-        context = {"ip":ip,"version":version,"city":city,"region":region,"region_code":region_code,"country":country,"country_name":country_name,"country_code":country_code,"country_code_iso3":country_code_iso3,"country_capital":country_capital,"country_tld":country_tld,"continent_code":continent_code,"in_eu":in_eu,"postal":postal,"latitude":latitude,"longitude":longitude,"timezone":timezone,"utc_offset":utc_offset,"country_calling_code":country_calling_code,"currency":currency,"currency_name":currency_name,"languages":languages,"country_area":country_area,"country_population":country_population,"asn":asn,"org":org,"data":data}
-        ip_data = Iplookup(ip=ip, version = version, city=city, region=region, region_code = region_code,country = country, country_name = country_name,country_code = country_code, country_code_iso3 = country_code_iso3, country_capital =country_capital, country_tld= country_tld, continent_code = continent_code, in_eu=in_eu, postal = postal,latitude = latitude, longitude = longitude,timezone = timezone, utc_offset = utc_offset, country_calling_code = country_calling_code, currency = currency,currency_name = currency_name, languages= languages, country_area= country_area, country_population = country_population, asn= asn, org= org)
-        model = IpLookup
+
+
+        ip_data = IpLookupData(ip=ip, version = version, city=city, region=region, region_code = region_code, country_name = country_name,country_code = country_code, country_code_iso3 = country_code_iso3, country_capital =country_capital, country_tld= country_tld, continent_code = continent_code, in_eu=in_eu, postal = postal,latitude = latitude, longitude = longitude,timezone = timezone, utc_offset = utc_offset, country_calling_code = country_calling_code, currency = currency,currency_name = currency_name, languages= languages, country_area= country_area, country_population = country_population, asn= asn, org= org)
+        #model = IpLookup
         ip_data.save()
+        ip_count= IpLookupData.objects.distinct('ip') 
+        context = {"ip":ip,"version":version,"city":city,"region":region,"region_code":region_code,"country":country,"country_name":country_name,"country_code":country_code,"country_code_iso3":country_code_iso3,"country_capital":country_capital,"country_tld":country_tld,"continent_code":continent_code,"in_eu":in_eu,"postal":postal,"latitude":latitude,"longitude":longitude,"timezone":timezone,"utc_offset":utc_offset,"country_calling_code":country_calling_code,"currency":currency,"currency_name":currency_name,"languages":languages,"country_area":country_area,"country_population":country_population,"asn":asn,"org":org,"data":data,"ip_count":ip_count}
+        
         return render(request,'iplookup.html',context)
 
 
