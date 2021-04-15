@@ -11,7 +11,7 @@
 
 {% block body %} 
 
-<form action="truecaller" method="post">
+<form action="" method="post">
     {% csrf_token %}
 
     
@@ -29,7 +29,7 @@
 <br/> City : <b>{{city}}</b>
 <br/> Gender : <b>{{gender}}</b>
 <br/> MSP : <b>{{carrier}}</b>
-<br/> image : <img src ="{{image}}">
+<br/> image : <img src ="{{image}}" height="200px" width="200px">
 <br/>birthday : {{birthday}}
 <br> jobTitle : {{jobTitle}}
 <br> addresses : {{address}}
