@@ -101,7 +101,7 @@
             <tbody>
               {% for last_tens in top_ten %}
               <tr>
-                <td>{{last_tens.id}}</td>
+                <td>{{last_tens.case_no}}</td>
                 <td>{{last_tens.case_title}}</td>
                 <td> <a href="{% url 'case_details' last_tens.pk %}">{% if last_tens.is_completed == True%} <span
                       class="badge badge-success">Completed</span>
@@ -211,7 +211,7 @@
             <tbody>
               {% for last_tens in last_ten %}
               <tr>
-                <td>{{last_tens.id}}</td>
+                <td>{{last_tens.case_no}}</td>
                 <td>{{last_tens.case_title}}</td>
                 <td> <a href="{% url 'case_details' last_tens.pk %}">{% if last_tens.is_completed == True%} <span
                       class="badge badge-success">Completed</span>
