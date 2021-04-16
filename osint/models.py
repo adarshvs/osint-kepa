@@ -58,13 +58,13 @@ def save_user_profile(sender, instance, **kwargs):
 
 class CaseDetails(models.Model):
     
-    case_no = models.CharField(max_length=200 , blank=True, null=True)
+    case_no = models.CharField(max_length=200, unique=True )
     ref_id = models.CharField(max_length=200 , blank=True, null=True)
     case_title = models.TextField(blank=True, null=True)
     case_details = models.TextField(blank=True, null=True)
     fir_date = models.DateField(blank=True, null=True)
     email = models.CharField(max_length=200 , blank=True, null=True)
-    phone_no = models.CharField(max_length=200 , blank=True, null=True)
+    phone_no = models.IntegerField(max_length=200 , blank=True, null=True)
     is_completed = models.BooleanField(default='False')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

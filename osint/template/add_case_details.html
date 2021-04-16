@@ -1,6 +1,6 @@
 {%  extends 'theme/base.html' %}
-
-
+{% load static %}
+{% block css %} <link rel="stylesheet" href="{% static 'plugins/bs-stepper/css/bs-stepper.min.css' %}"> {% endblock %}
 {% block title %}  Add Case {% endblock %}
 
 {% block page_heading %}  Add Case Details {% endblock %}
@@ -12,16 +12,13 @@
 
 {% block body %} 
 
-
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Case Details</h3>
-                    </div>
-                    {% for field in form %}
+<div class="row">
+    <div class="col-md-12">
+      <div class="card card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Case Detail </h3>
+        </div>
+        {% for field in form %}
                     {% if field.errors %}<br/>
                     <div class="alert alert-danger alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -32,57 +29,107 @@
                         </ul>
                       </div>{% endif %}
                       {% endfor %}
-                
-                    <form method="POST" >
-                        <div class="card-body">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="case_no">Case Number</label>
-                                        {{form.case_no}}
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="last_name">Referance Number</label>
-                                        {{form.ref_id}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="username">Case Title</label>
-                                {{form.case_title}}
-                            </div></div> <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="username">Case Registerd on</label>
-                                    {{form.fir_date}}
-                            </div></div></div>
-                            <div class="form-group">
-                                <label for="username">Case Details</label>
-                                    {{form.case_details}}
-                            </div>
-                            
-                            
-                            
-                            
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Next</button>
-                            </div>
-                    </form>
-                    
-                    
-                </div>
+        
+        <div class="card-body p-0">
+          <div class="bs-stepper linear">
+            <div class="bs-stepper-header" role="tablist">
+              <!-- your steps here -->
+              <div class="step active" data-target="#logins-part">
+                <button type="button" class="step-trigger" role="tab" aria-controls="logins-part" id="logins-part-trigger" aria-selected="true">
+                  <span class="bs-stepper-circle">1</span>
+                  <span class="bs-stepper-label">FIR DETAILS</span>
+                </button>
+              </div>
+              <div class="line"></div>
+              <div class="step" data-target="#information-part">
+                <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger" aria-selected="false" disabled="disabled">
+                  <span class="bs-stepper-circle">2</span>
+                  <span class="bs-stepper-label">SUSPECT DETAILS</span>
+                </button>
+              </div>
             </div>
+            <div class="bs-stepper-content">
+                <form method="POST" >    
+                    {% csrf_token %}
+              <!-- your steps content here -->
+              <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
+                
+                
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="case_no">Case Number</label>
+                            {{form.case_no}}
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="last_name">Referance Number</label>
+                            {{form.ref_id}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="username">Case Title</label>
+                    {{form.case_title}}
+                </div></div> 
+                <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="username">Case Registerd on</label>
+                        {{form.fir_date}}
+                </div></div>
+            </div>
+            <div class="form-group">
+                <label for="username">Case Details</label>
+                    {{form.case_details}}
+            </div>
+
+
+
+
+                <a class= "btn btn-primary" href="#" onclick="stepper.next()">Next</a>
+              </div>
+              <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
+                <div class="form-group">
+                    <label for="InputEmail">Email address</label>
+                    {{form.email}}
+                  </div>
+                  <div class="form-group">
+                    <label for="InputNumber">Phone Number</label>
+                    {{form.phone_no}}
+                </div>
+
+
+
+
+
+                <a class= "btn btn-primary" href="#"  onclick="stepper.previous()">Previous</a>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+            </div>
+          </div>
         </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+         
+        </div>
+      </div>
+      <!-- /.card -->
     </div>
-</section>
-
-
+  </div>
 
 {% endblock %}
 
-{% block scripts %}{% endblock %} 
+{% block scripts %}
+
+<script src="{% static 'plugins/bs-stepper/js/bs-stepper.min.js' %}"></script>
+<script> // BS-Stepper Init
+    document.addEventListener('DOMContentLoaded', function () {
+      window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+    })
+  </script>
+{% endblock %} 
