@@ -319,7 +319,7 @@ class AddCaseDetails(generic.CreateView):
     form_class = AddCaseDetailsForm
     model = CaseDetails
     template_name = 'add_case_details.html'
-
+    success_url = reverse_lazy('truecaller')
 
 @method_decorator(login_required, name='dispatch')
 class ViewAllCases(generic.ListView):
