@@ -315,11 +315,12 @@ class DeleteUser(DeleteView):
     success_url = reverse_lazy('users')
 
 @method_decorator(login_required, name='dispatch')
-class AddCaseDetails(generic.CreateView):
+class AddCaseDetails(SuccessMessageMixin, generic.CreateView):
     form_class = AddCaseDetailsForm
     model = CaseDetails
     template_name = 'add_case_details.html'
-    success_url = reverse_lazy('truecaller')
+    success_url = reverse_lazy('truecaller')    
+    success_message = 'Case details added successfully'
 
 @method_decorator(login_required, name='dispatch')
 class ViewAllCases(generic.ListView):
