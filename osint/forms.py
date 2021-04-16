@@ -114,7 +114,7 @@ class AddCaseDetailsForm(forms.ModelForm):
                 attrs={                    
                     "class":"form-control"
                 }),
-                            "case_no": NumberInput(
+                            "case_no": TextInput(
                 attrs={                    
                     "class":"form-control"
                 }),
