@@ -36,7 +36,7 @@
                                 <th class="sorting" tabindex="0" aria-controls="usertable" rowspan="1" colspan="1"
                                     aria-label="Browser: activate to sort column ascending">FIR Date</th>
                                 <th class="sorting" tabindex="0" aria-controls="usertable" rowspan="1" colspan="1"
-                                    aria-label="Browser: activate to sort column ascending">Action</th>
+                                    aria-label="Browser: activate to sort column ascending">Actions</th>
                                     
                                   {% if  user.is_superuser == True %}
                                 <th class="sorting" tabindex="0" aria-controls="usertable" rowspan="1" colspan="1"
@@ -56,11 +56,13 @@
                                  {% if case.is_completed == True %}Completed {% else %} Pending {% endif%}</td>
                                 <td>{{ case.fir_date }}</td>
                                 <td class="text-left py-0 align-middle"><div class="btn-group btn-group-sm">
-                                    <a href="{% url 'case_details' case.pk %}" class="btn btn-info"><i class="fas fa-eye" title="View"></i></a>
+                                    <a href="{% url 'case_details' case.pk %}" class="btn btn-info" title="View" ><i class="fas fa-eye" title="View" ></i></a>
+                                    <a href="#" class="btn btn-success" title="Start Analysing"><i class="fas fa-play-circle" title="Start Analysing"></i></a>
+                                    <a href="#" class="btn btn-warning" title="Edit Case"><i class="fas fa-edit" title="Edit Case"></i></a>
                                     
                                   </div> 
                                  </td>{% if  user.is_superuser == True %}
-                                <td >  <a href="{% url 'update-case-status' case.pk %}" > {% if case.is_completed == True %}Mark as Pending {% else %} Mark as Completed {% endif%}</a></td>{% endif %}
+                                <td >  <a href="{% url 'update-case-status' case.pk %}" > {% if case.is_completed == True %}Mark as Pending {% else %} Mark as Closed {% endif%}</a></td>{% endif %}
                                
                             </tr>
                             {% endfor %}
@@ -72,7 +74,7 @@
                                 <th rowspan="1" colspan="1">Case Name</th>
                                 <th rowspan="1" colspan="1">Status</th>
                                 <th rowspan="1" colspan="1">FIR Date</th>
-                                <th rowspan="1" colspan="1">Action</th>
+                                <th rowspan="1" colspan="1">Actions</th>
                                 {% if  user.is_superuser == True %}
                                 <th rowspan="1" colspan="1">Change Status</th>
                                 {% endif %}
