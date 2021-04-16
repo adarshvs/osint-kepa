@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+
 from django.conf import settings
 
 from django.core.validators import RegexValidator
@@ -19,44 +20,6 @@ class TruecallerApiKey(models.Model):
 
     class Meta:
         db_table = 'truecaller_api_keys'
-
-
-class TruecallerDetails(models.Model):
-    name = models.CharField(max_length=200, blank=True, null=True)
-    email =  models.EmailField(blank=True, null=True)
-    carrier =  models.CharField(max_length=200, blank=True, null=True)
-    about = models.TextField(blank=True, null=True)
-    image = models.CharField(max_length=200, blank=True, null=True)    
-    gender =  models.CharField(max_length=200, blank=True, null=True)
-    street = models.CharField(max_length=200, blank=True, null=True)
-    city = models.CharField(max_length=200, blank=True, null=True)
-    address = models.TextField(max_length=200, blank=True, null=True)
-    birthday = models.TextField(max_length=200, blank=True, null=True)
-    jobTitle = models.CharField(max_length=200, blank=True, null=True)
-    companyName =  models.CharField(max_length=200, blank=True, null=True)
-    created_by = CurrentUserField()
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = 'truecaller_details'    
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    enable_dark = models.BooleanField(default='False')
-    designation = models.CharField(max_length=200, blank=True, null=True)
-    profile_pic = models.ImageField(upload_to="avatars/",default="avatars/user.jpg", max_length=200, blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
 
 
 class CaseDetails(models.Model):
@@ -80,6 +43,45 @@ class CaseDetails(models.Model):
     class Meta:
         db_table = 'case_details'
         ordering = ['-created_at']
+
+class TruecallerDetails(models.Model):
+    case_no = models.IntegerField(max_length=200)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    email =  models.EmailField(blank=True, null=True)
+    carrier =  models.CharField(max_length=200, blank=True, null=True)
+    about = models.TextField(blank=True, null=True)
+    image = models.CharField(max_length=200, blank=True, null=True)    
+    gender =  models.CharField(max_length=200, blank=True, null=True)
+    street = models.CharField(max_length=200, blank=True, null=True)
+    city = models.CharField(max_length=200, blank=True, null=True)
+    address = models.TextField(max_length=200, blank=True, null=True)
+    birthday = models.TextField(max_length=200, blank=True, null=True)
+    jobTitle = models.CharField(max_length=200, blank=True, null=True)
+    companyName =  models.CharField(max_length=200, blank=True, null=True)
+    created_by = CurrentUserField()
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'truecaller_details'    
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    enable_dark = models.BooleanField(default='False')
+    designation = models.CharField(max_length=200, blank=True, null=True)
+    profile_pic = models.ImageField(upload_to="avatars/",default="avatars/user.jpg", max_length=200, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
 
 
 class IpLookupData(models.Model):

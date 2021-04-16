@@ -5,7 +5,7 @@ from .views import users, AddUser, AddCaseDetails, ViewAllCases, ViewCasesDetail
 urlpatterns = [
     path('', views.index),
     path('index', views.index,name='index'),
-    path('truecaller', views.truecaller, name='truecaller'),
+    path('<int:pk>/truecaller/', views.truecaller, name='truecaller'),
     path('iplookup',views.iplookup),
     path('account',views.account, name= 'account'),
     path('login',views.login),

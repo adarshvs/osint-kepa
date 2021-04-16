@@ -122,13 +122,15 @@ def change_password(request):
     return render(request, 'profile/change_password.html', {
         'pass_form': pass_form
     })
-def truecaller(request):
+def truecaller(request, pk):
     if not request.user.is_authenticated:
         return redirect(login)
     #key = TruecallerApiKey.objects.all()
+    case_no = pk
     num1 = str(request.POST.get('search'))
     token ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
     if num1 == 'None':
+       
         return render(request,'truecaller.html')
     else:        
         num1 == num1
@@ -152,7 +154,10 @@ def truecaller(request):
             street = j['data'][0]['addresses'][0]['street']
         except KeyError:
             street = "not known"
-        city = j['data'][0]['addresses'][0]['city']
+        try:
+            city = j['data'][0]['addresses'][0]['city']
+        except KeyError:
+            city = "not known"
         address = j['data'][0]['addresses'][0]['address']
         try:
             image = j['data'][0]['image']
@@ -174,11 +179,12 @@ def truecaller(request):
             about = j['data'][0]['about']
         except KeyError:
             about = "not known"
+        
 
-
-        truecaller_data = TruecallerDetails(name=name, email=email, carrier=carrier, about=about,image=image,gender=gender, street=street, city=city, address=address, birthday=birthday, jobTitle=jobTitle, companyName=companyName)
+        case_no = pk
+        truecaller_data = TruecallerDetails(name=name, email=email, carrier=carrier, about=about,image=image,gender=gender, street=street, city=city, address=address, birthday=birthday, jobTitle=jobTitle, companyName=companyName,case_no=case_no)
         truecaller_data.save()
-        return render(request,'truecaller.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"image":image,"j":j,"birthday":birthday,"jobTitle":jobTitle,"companyName":companyName,"address":address,"about":about})
+        return render(request,'truecaller.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"image":image,"j":j,"birthday":birthday,"jobTitle":jobTitle,"companyName":companyName,"address":address,"about":about,"case_no":case_no})
 
 def iplookup(request):
     if not request.user.is_authenticated:
