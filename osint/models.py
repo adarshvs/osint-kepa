@@ -4,6 +4,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.conf import settings
+
+from django.core.validators import RegexValidator
+
 from django_currentuser.middleware import (get_current_user, get_current_authenticated_user)
 # As model field:
 from django_currentuser.db.models import CurrentUserField
@@ -64,7 +67,8 @@ class CaseDetails(models.Model):
     case_details = models.TextField(blank=True, null=True)
     fir_date = models.DateField(blank=True, null=True)
     email = models.CharField(max_length=200 , blank=True, null=True)
-    phone_no = models.CharField(max_length=200 , blank=True, null=True)
+    phone_regex = RegexValidator(regex=r'^\d{10}$', message="Phone number must be entered without +91. Up to 10 digits allowed.")
+    phone_no = models.CharField(validators=[phone_regex],max_length=200 , blank=True, null=True)
     is_completed = models.BooleanField(default='False')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
