@@ -319,8 +319,8 @@ class AddCaseDetails(SuccessMessageMixin, generic.CreateView):
     form_class = AddCaseDetailsForm
     model = CaseDetails
     template_name = 'add_case_details.html'
-    success_url = reverse_lazy('truecaller')    
-    success_message = 'Case details added successfully'
+    success_url = reverse_lazy('index')    
+    success_message = 'Case details added successfully. You may now start osint analysis under My Case History tab'
 
 @method_decorator(login_required, name='dispatch')
 class ViewAllCases(generic.ListView):
