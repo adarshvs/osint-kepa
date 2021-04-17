@@ -4,7 +4,7 @@
 
 {% block title %} Home {% endblock %}
 {% block page_heading %} Overview {% endblock %}
-{% block breadcrumbnavigation %} Overview {% endblock %}
+{% block breadcrumbnavigation %} APP Overview {% endblock %}
 {% block sidebarheading %}   {% endblock %}
 {% block sidebarcontent %}  {% endblock %}
 
@@ -62,7 +62,7 @@
       <div class="inner">
         <h3>{{completed_cases}}</h3>
 
-        <p>completed Cases</p>
+        <p>Closed Cases</p>
       </div>
       <div class="icon">
         <i class="ion fas fa-clipboard-check"></i>
@@ -104,7 +104,7 @@
                 <td>{{last_tens.case_no}}</td>
                 <td>{{last_tens.case_title}}</td>
                 <td> <a href="{% url 'case_details' last_tens.pk %}">{% if last_tens.is_completed == True%} <span
-                      class="badge badge-success">Completed</span>
+                      class="badge badge-success">Closed</span>
                     {% else %}
                     <span class="badge badge-danger">Pending</span>
                     {% endif%} <i class="fas fa-external-link-alt"></i></a>
@@ -174,7 +174,7 @@
           <span class="info-box-icon"><i class="fas fa-clipboard-check"></i></span>
 
           <div class="info-box-content">
-            <span class="info-box-text">Completed Cases</span>
+            <span class="info-box-text">Closed Cases</span>
             <span class="info-box-number">{{mycases_completed_cases}}</span>
           </div>
           <!-- /.info-box-content -->
@@ -214,7 +214,7 @@
                 <td>{{last_tens.case_no}}</td>
                 <td>{{last_tens.case_title}}</td>
                 <td> <a href="{% url 'case_details' last_tens.pk %}">{% if last_tens.is_completed == True%} <span
-                      class="badge badge-success">Completed</span>
+                      class="badge badge-success">Closed</span>
                     {% else %}
                     <span class="badge badge-danger">Pending</span>
                     {% endif%} <i class="fas fa-external-link-alt"></i></a>
@@ -277,7 +277,7 @@
       <div class="inner">
         <h3>{{mycases_completed_cases}}</h3>
 
-        <p>completed Cases</p>
+        <p>Closed Cases</p>
       </div>
       <div class="icon">
         <i class="ion fas fa-clipboard-check"></i>
@@ -317,7 +317,7 @@
                 <td>{{last_tens.id}}</td>
                 <td>{{last_tens.case_title}}</td>
                 <td> <a href="{% url 'case_details' last_tens.pk %}">{% if last_tens.is_completed == True%} <span
-                      class="badge badge-success">Completed</span>
+                      class="badge badge-success">Closed</span>
                     {% else %}
                     <span class="badge badge-danger">Pending</span>
                     {% endif%} <i class="fas fa-external-link-alt"></i></a>

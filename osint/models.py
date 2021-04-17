@@ -3,7 +3,11 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+
 from django.conf import settings
+
+from django.core.validators import RegexValidator
+
 from django_currentuser.middleware import (get_current_user, get_current_authenticated_user)
 # As model field:
 from django_currentuser.db.models import CurrentUserField
@@ -18,7 +22,30 @@ class TruecallerApiKey(models.Model):
         db_table = 'truecaller_api_keys'
 
 
+class CaseDetails(models.Model):
+    
+    case_no = models.CharField(max_length=200, unique=True )
+    ref_id = models.CharField(max_length=200 , blank=True, null=True)
+    case_title = models.TextField(blank=True, null=True)
+    case_details = models.TextField(blank=True, null=True)
+    fir_date = models.DateField(blank=True, null=True)
+    email = models.CharField(max_length=200 , blank=True, null=True)
+    phone_regex = RegexValidator(regex=r'^\d{10}$', message="Phone number must be entered without +91. Up to 10 digits allowed.")
+    phone_no = models.CharField(validators=[phone_regex],max_length=200 , blank=True, null=True)
+    is_completed = models.BooleanField(default='False')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    created_by = CurrentUserField()
+    
+    def get_absolute_url(self):
+        return reverse('analyse')
+    class Meta:
+        db_table = 'case_details'
+        ordering = ['-created_at']
+
 class TruecallerDetails(models.Model):
+    case_no = models.IntegerField()
     name = models.CharField(max_length=200, blank=True, null=True)
     email =  models.EmailField(blank=True, null=True)
     carrier =  models.CharField(max_length=200, blank=True, null=True)
@@ -32,7 +59,7 @@ class TruecallerDetails(models.Model):
     jobTitle = models.CharField(max_length=200, blank=True, null=True)
     companyName =  models.CharField(max_length=200, blank=True, null=True)
     created_by = CurrentUserField()
-
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -55,25 +82,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-
-class CaseDetails(models.Model):
-    
-    case_no = models.IntegerField(unique=True)
-    ref_id = models.CharField(max_length=200 , blank=True, null=True)
-    case_title = models.TextField(blank=True, null=True)
-    case_details = models.TextField(blank=True, null=True)
-    fir_date = models.DateField(blank=True, null=True)
-    is_completed = models.BooleanField(default='False')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    created_by = CurrentUserField()
-    
-    def get_absolute_url(self):
-        return reverse('analyse')
-    class Meta:
-        db_table = 'case_details'
-        ordering = ['-created_at']
 
 
 class IpLookupData(models.Model):

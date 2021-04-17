@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import TextInput, FileInput, NumberInput, Textarea, DateInput, PasswordInput, CheckboxInput 
+from django.forms import TextInput, FileInput, NumberInput, Textarea, DateInput, PasswordInput, CheckboxInput, EmailInput
 from django.contrib.auth.models import User
 from .models import Profile, CaseDetails
 from django.contrib.auth.forms import UserCreationForm
@@ -108,30 +108,46 @@ class PasswordChangeForm(forms.ModelForm):
 class AddCaseDetailsForm(forms.ModelForm):
     class Meta:
         model = CaseDetails
-        fields=['case_details','case_no','ref_id','case_title','fir_date']
+        fields=['case_details','case_no','ref_id','case_title','fir_date','phone_no','email']
         widgets = {     
             "case_details": Textarea(
                 attrs={                    
                     "class":"form-control"
                 }),
-                            "case_no": NumberInput(
+                            "case_no": TextInput(
                 attrs={                    
-                    "class":"form-control"
+                    "class":"form-control",
+                    "placeholder":"Enter case number* "
                 }),
                             "ref_id": TextInput(
                 attrs={                    
-                    "class":"form-control"
+                    "class":"form-control",
+                    "placeholder":"Enter referance number "
                 }),
                 
                             "case_title": TextInput(
                 attrs={                    
-                    "class":"form-control"
+                    "class":"form-control",
+                    "placeholder":"Enter case title "
                 }),
                 
                             "fir_date": DateInput(
                 attrs={                    
                     "class":"form-control",
                     "type":"date"
+                }),
+                
+                            "email": EmailInput(
+                attrs={                    
+                    "class":"form-control",
+                    "placeholder":"Enter email "
+                }),
+                
+                            "phone_no": TextInput(
+                attrs={                    
+                    "class":"form-control",
+                    "placeholder":"Enter mobile number without +91"
                 })
+
         }
     

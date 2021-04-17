@@ -77,7 +77,7 @@
                                     
                                   </div> 
                                  </td>
-                                <td >  <a href="{% url 'update-case-status' case.pk %}" > {% if case.is_completed == True %}Mark as Pending {% else %} Mark as Completed {% endif%}</a></td>
+                                <td >  <a href="{% url 'update-case-status' case.pk %}" > {% if case.is_completed == True %}Mark as Pending {% else %} Mark as Closed {% endif%}</a></td>
                                
                             </tr>
                             {% endfor %}
