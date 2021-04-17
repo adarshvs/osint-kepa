@@ -45,7 +45,7 @@ class CaseDetails(models.Model):
         ordering = ['-created_at']
 
 class TruecallerDetails(models.Model):
-    case_no = models.IntegerField(max_length=200)
+    case_no = models.IntegerField()
     name = models.CharField(max_length=200, blank=True, null=True)
     email =  models.EmailField(blank=True, null=True)
     carrier =  models.CharField(max_length=200, blank=True, null=True)
