@@ -32,6 +32,7 @@ class CaseDetails(models.Model):
     email = models.CharField(max_length=200 , blank=True, null=True)
     phone_regex = RegexValidator(regex=r'^\d{10}$', message="Phone number must be entered without +91. Up to 10 digits allowed.")
     phone_no = models.CharField(validators=[phone_regex],max_length=200 , blank=True, null=True)
+    analysis_status = models.BooleanField(default='False')
     is_completed = models.BooleanField(default='False')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

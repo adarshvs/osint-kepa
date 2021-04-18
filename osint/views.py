@@ -124,7 +124,6 @@ def change_password(request):
     })
 def startAnalyse(request, pk):
     case_no = pk
-
     emails = CaseDetails.objects.values_list('email', flat=True).filter(id=pk)
     for email in emails:
         email = email
@@ -133,6 +132,7 @@ def startAnalyse(request, pk):
         phone_no = phone_no
     token ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
     
+    context = {"case_no":case_no,"phone_no":phone_no,"email":email}
     true_caller_result = Truecaller(phone_no, token)
     output = true_caller_result.truecaller_search()
     j = output.json()
@@ -157,7 +157,11 @@ def startAnalyse(request, pk):
         city = j['data'][0]['addresses'][0]['city']
     except KeyError:
         city = "not known"
-    address = j['data'][0]['addresses'][0]['address']
+    try:
+        address = j['data'][0]['addresses'][0]['address']
+    except KeyError:
+        address = "not known"
+    
     try:
         image = j['data'][0]['image']
     except KeyError:
@@ -181,9 +185,10 @@ def startAnalyse(request, pk):
     
     truecaller_data = TruecallerDetails(name=name, email=email, carrier=carrier, about=about,image=image,gender=gender, street=street, city=city, address=address, birthday=birthday, jobTitle=jobTitle, companyName=companyName,case_no=case_no)
     truecaller_data.save()
-
-    
-    return render(request,'startanalyse.html',{"case_no":case_no,"phone_no":phone_no,"email":email})
+    a = CaseDetails.objects.get(id = pk )
+    a.analysis_status = 'True'
+    a.save()
+    return render(request,'startanalyse.html',context)
 def truecaller(request, pk):
     if not request.user.is_authenticated:
         return redirect(login)
@@ -254,8 +259,10 @@ def iplookup(request):
     if not request.user.is_authenticated:
         return redirect(login)
     ip = str(request.POST.get('search'))
+    ip_count= IpLookupData.objects.distinct('ip') 
     if ip == 'None':
-        return render(request,'iplookup.html')
+
+        return render(request,'iplookup.html',{"ip_count":ip_count})
     else:
         ip_details = IpLookup(ip)
         output = ip_details.ip_lookup()
@@ -401,9 +408,15 @@ class ViewAllCases(generic.ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class ViewCasesDetails(generic.DetailView):
-    model = CaseDetails
+class ViewCasesDetails(generic.TemplateView):
+    #model = CaseDetails, TruecallerDetails
     template_name = 'case_details.html'
+    def get_context_data(self, **kwargs):
+         pk = int(kwargs['pk'])
+         context = super(ViewCasesDetails, self).get_context_data(**kwargs)
+         context['casedetails'] = CaseDetails.objects.filter(id=pk)
+         context['truecallerdetails'] = TruecallerDetails.objects.filter(case_no=pk)
+         return context
 
 @method_decorator(login_required, name='dispatch')
 class UserProfileUpdate(SuccessMessageMixin, UpdateView):

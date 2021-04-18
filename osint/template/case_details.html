@@ -17,7 +17,7 @@
  {%  if  casedetails.created_by|slugify  == user.username|slugify   or  user.is_superuser == True %}
 
 <div class="col-md-12">
-    <div class="card">
+    <div class="card card-primary card-outline">
         <div class="ribbon-wrapper ribbon-lg">
             {% if casedetails.is_completed == True %}
             <div class="ribbon bg-success">
@@ -37,61 +37,97 @@
       </div>
       <!-- /.card-header -->
       <div class="card-body">
-        <dl class="row">
+        <dl class="row">{% for casedetail in casedetails %}
           <dt class="col-sm-4">Officer's Username </dt>
-          <dd class="col-sm-8">{{ casedetails.created_by}}</dd>
+          <dd class="col-sm-8">{{ casedetail.created_by }}</dd>
           <dt class="col-sm-4">Case Number </dt>
-          <dd class="col-sm-8">{{ casedetails.case_no}}</dd>
+          <dd class="col-sm-8">{{ casedetail.case_no}}</dd>
           <dt class="col-sm-4">Case Name</dt>
-          <dd class="col-sm-8">{{ casedetails.case_title}}</dd>
+          <dd class="col-sm-8">{{ casedetail.case_title}}</dd>
           <dt class="col-sm-4">Details</dt>
-          <dd class="col-sm-8">{{ casedetails.case_details}}</dd>
+          <dd class="col-sm-8">{{ casedetail.case_details}}</dd>
           <dt class="col-sm-4">Referance Number</dt>
-          <dd class="col-sm-8">{{ casedetails.ref_id}}</dd>
+          <dd class="col-sm-8">{{ casedetail.ref_id}}</dd>
           <dt class="col-sm-4">FIR Date</dt>
-          <dd class="col-sm-8">{{ casedetails.fir_date}}</dd>
+          <dd class="col-sm-8">{{ casedetail.fir_date}}</dd>
           <dt class="col-sm-4">Created on</dt>
-          <dd class="col-sm-8">{{ casedetails.created_at}}</dd>
+          <dd class="col-sm-8">{{ casedetail.created_at}}</dd>
         </dl>
+        <div class="card-header">
+          <h3 class="card-title">
+              <i class="fas fa-user-secret"></i> &nbsp;Suspects Details</h3>
+        </div>
+        <div class="row">
+          
+          <div class="col-sm-6 border-right">
+            <div class="description-block">
+              <h5 class="description-header">Email</h5>
+              <span class="description-text">{{ casedetail.email}}</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-6 ">
+            <div class="description-block">
+              <h5 class="description-header">Mobile Number</h5>
+              <span class="description-text">{{ casedetail.phone_no}}</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          
+          <!-- /.col -->
+        </div>{% endfor %}
+
+
       </div> 
       <!-- /.card-body -->
     </div>
     <!-- /.card -->
 
     
-  </div>
-  <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-    <div class="card bg-light d-flex flex-fill">
+          
+          
+  </div>{% for object in truecallerdetails %}
+  <div class="col-12 col-sm-6 col-md-6 d-flex align-items-stretch flex-column">
+    <div class="card bg-light d-flex flex-fill card-primary card-outline">
       <div class="card-header text border-bottom-0">
-        True Caller Details
+        True Caller Details  
+        
+          
+          
       </div>
       <div class="card-body pt-0">
         <div class="row">
           <div class="col-7">
-            <h2 class="lead"><b>Nicole Pearson</b></h2>
-            <p class="text text-sm"><b>About: </b> Web Designer / UX / Graphic Artist / Coffee Lover </p>
+            <h1 class="lead"><b>{{object.name}}</b></h1>
+            <p class="text text-sm"><b>About: </b>{{object.about}}</p>
             <ul class="ml-4 mb-0 fa-ul text">
-              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Address: Demo Street 123, Demo City 04312, NJ</li>
-              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: + 800 - 12 12 23 52</li>
+              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-birthday-cake"></i></span>&nbsp; Birthday :<b> {{object.birthday}}</b></li><hr/>
+              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-venus-mars"></i></span>&nbsp; Gender :<b> {{object.gender}}</b></li><hr/>
+              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-user-tie"></i></span>&nbsp; Job Title : <b>{{object.jobTitle}}</b></li><hr/>
+              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-handshake"></i></span> &nbsp;Company Name : <b>{{object.companyName}} </b></li><hr/>
+              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-broadcast-tower"></i></span>&nbsp; Mobile Service Provider :<b> {{object.carrier}}</b></li><hr/>
+              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-at"></i></span> &nbsp;Email :<b> {{object.email}}</b></li><hr/>
+              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-id-card"></i></span>&nbsp; Home Address:<b> {{object.address}}</b></li>
             </ul>
           </div>
           <div class="col-5 text-center">
+            {% if object.image == 'not known' %}
             <img src="{% static 'images/avatars/noavatar.jpg' %}" alt="user-avatar" class="img-circle img-fluid">
+            {% else %}
+            <img src="{{object.image }}" alt="user-avatar" class="img-circle img-fluid">
+            {% endif %}
           </div>
         </div>
       </div>
       <div class="card-footer">
         <div class="text-right">
-          <a href="#" class="btn btn-sm bg-teal">
-            <i class="fas fa-comments"></i>
-          </a>
-          <a href="#" class="btn btn-sm btn-primary">
-            <i class="fas fa-user"></i> View Profile
-          </a>
+          
         </div>
       </div>
     </div>
-  </div>
+  </div>{% endfor %}
   {% else %}
 
   <section class="content">
