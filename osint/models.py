@@ -20,18 +20,27 @@ class TruecallerApiKey(models.Model):
 
     class Meta:
         db_table = 'truecaller_api_keys'
+class EyeconApiKey(models.Model):   
+    api_token = models.CharField(max_length=200, blank=True, null=True)
+    is_active = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'eyecon_api_keys'
 
 
 class CaseDetails(models.Model):
     
     case_no = models.CharField(max_length=200, unique=True )
-    ref_id = models.CharField(max_length=200 , blank=True, null=True)
-    case_title = models.TextField(blank=True, null=True)
+    ref_id = models.CharField(max_length=200 )
+    case_title = models.CharField(max_length=200)
     case_details = models.TextField(blank=True, null=True)
-    fir_date = models.DateField(blank=True, null=True)
+    fir_date = models.DateField()
     email = models.CharField(max_length=200 , blank=True, null=True)
     phone_regex = RegexValidator(regex=r'^\d{10}$', message="Phone number must be entered without +91. Up to 10 digits allowed.")
     phone_no = models.CharField(validators=[phone_regex],max_length=200 , blank=True, null=True)
+    analysis_status = models.BooleanField(default='False')
     is_completed = models.BooleanField(default='False')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -65,6 +74,18 @@ class TruecallerDetails(models.Model):
 
     class Meta:
         db_table = 'truecaller_details'    
+
+class EyeconDetails(models.Model):
+    case_no = models.IntegerField()
+    supects_name = models.CharField(max_length=200, blank=True, null=True)
+    image = models.CharField(max_length=200, blank=True, null=True)  
+    created_by = CurrentUserField()
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'eyecon_details'      
 
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)

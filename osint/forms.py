@@ -122,7 +122,7 @@ class AddCaseDetailsForm(forms.ModelForm):
                             "ref_id": TextInput(
                 attrs={                    
                     "class":"form-control",
-                    "placeholder":"Enter referance number "
+                    "placeholder":"Enter case referance number "
                 }),
                 
                             "case_title": TextInput(
