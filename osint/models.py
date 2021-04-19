@@ -20,6 +20,14 @@ class TruecallerApiKey(models.Model):
 
     class Meta:
         db_table = 'truecaller_api_keys'
+class EyeconApiKey(models.Model):   
+    api_token = models.CharField(max_length=200, blank=True, null=True)
+    is_active = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'eyecon_api_keys'
 
 
 class CaseDetails(models.Model):
