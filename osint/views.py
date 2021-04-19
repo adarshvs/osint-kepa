@@ -185,10 +185,12 @@ def startAnalyse(request, pk):
     
     truecaller_data = TruecallerDetails(name=name, email=email, carrier=carrier, about=about,image=image,gender=gender, street=street, city=city, address=address, birthday=birthday, jobTitle=jobTitle, companyName=companyName,case_no=case_no)
     truecaller_data.save()
+    messages.success(request, 'Truecaller OSINT Completed')
     a = CaseDetails.objects.get(id = pk )
     a.analysis_status = 'True'
     a.save()
-    return render(request,'startanalyse.html',context)
+    messages.success(request, 'Case staus updated')
+    return redirect(login)
 def truecaller(request, pk):
     if not request.user.is_authenticated:
         return redirect(login)
