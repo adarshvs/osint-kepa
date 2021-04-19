@@ -67,6 +67,18 @@ class TruecallerDetails(models.Model):
     class Meta:
         db_table = 'truecaller_details'    
 
+class EyeconDetails(models.Model):
+    case_no = models.IntegerField()
+    supects_name = models.CharField(max_length=200, blank=True, null=True)
+    image = models.CharField(max_length=200, blank=True, null=True)  
+    created_by = CurrentUserField()
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'eyecon_details'      
+
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     enable_dark = models.BooleanField(default='False')
