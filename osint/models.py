@@ -25,10 +25,10 @@ class TruecallerApiKey(models.Model):
 class CaseDetails(models.Model):
     
     case_no = models.CharField(max_length=200, unique=True )
-    ref_id = models.CharField(max_length=200 , blank=True, null=True)
-    case_title = models.TextField(blank=True, null=True)
+    ref_id = models.CharField(max_length=200 )
+    case_title = models.CharField(max_length=200)
     case_details = models.TextField(blank=True, null=True)
-    fir_date = models.DateField(blank=True, null=True)
+    fir_date = models.DateField()
     email = models.CharField(max_length=200 , blank=True, null=True)
     phone_regex = RegexValidator(regex=r'^\d{10}$', message="Phone number must be entered without +91. Up to 10 digits allowed.")
     phone_no = models.CharField(validators=[phone_regex],max_length=200 , blank=True, null=True)
