@@ -4,7 +4,7 @@ from django.db.models import Count
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
-from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails
+from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails
 from django.contrib import messages
 from django.views import generic
 
@@ -20,6 +20,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import user_passes_test
 from osint.Includes.classes.truecaller_search_class import Truecaller
+from osint.Includes.classes.eyecon import Eyecon
+
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
 import json
@@ -130,10 +132,9 @@ def startAnalyse(request, pk):
     phone_nos =  CaseDetails.objects.values_list('phone_no', flat=True).filter(id=pk)
     for phone_no in phone_nos:
         phone_no = phone_no
-    token ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
-    
-    context = {"case_no":case_no,"phone_no":phone_no,"email":email}
-    true_caller_result = Truecaller(phone_no, token)
+    token_truecaller ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
+    token_eyecon ="c4664ab6-6202-4bb2-8ac5-dbd8bfbd5861"
+    true_caller_result = Truecaller(phone_no, token_truecaller)
     output = true_caller_result.truecaller_search()
     j = output.json()
     name = j['data'][0]['name']
@@ -186,6 +187,23 @@ def startAnalyse(request, pk):
     truecaller_data = TruecallerDetails(name=name, email=email, carrier=carrier, about=about,image=image,gender=gender, street=street, city=city, address=address, birthday=birthday, jobTitle=jobTitle, companyName=companyName,case_no=case_no)
     truecaller_data.save()
     messages.success(request, 'Truecaller OSINT Completed')
+    
+    eyecon_result = Eyecon(phone_no, token_eyecon)
+    eyecon_resp = eyecon_result.eyecon_search()
+    eyecon_json = eyecon_resp.json()
+    temp = json.dumps(eyecon_json).replace('[', '').replace(']', '')
+    jsonload = json.loads(temp)
+    name_eyecon =  jsonload["name"]
+    imgresp = eyecon_result.eyecon_img_search()
+    img_split = imgresp.url.replace('https://graph.', '').replace('picture?width=600', '')
+    img_http_resp = requests.get(img_split)
+    if not img_http_resp.status_code == 200:
+        img_path = "None"
+    else:
+        img_path = img_split
+    eyecon_data = EyeconDetails(suspects_name= name_eyecon, image=img_path,case_no=case_no)
+    eyecon_data.save()
+    messages.success(request, 'Eyecon OSINT Completed')
     a = CaseDetails.objects.get(id = pk )
     a.analysis_status = 'True'
     a.save()
@@ -418,6 +436,7 @@ class ViewCasesDetails(generic.TemplateView):
          context = super(ViewCasesDetails, self).get_context_data(**kwargs)
          context['casedetails'] = CaseDetails.objects.filter(id=pk)
          context['truecallerdetails'] = TruecallerDetails.objects.filter(case_no=pk)
+         context['eycondetails'] = EyeconDetails.objects.filter(case_no=pk)
          return context
 
 @method_decorator(login_required, name='dispatch')
