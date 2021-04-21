@@ -206,74 +206,9 @@ def startAnalyse(request, pk):
     messages.success(request, 'Eyecon OSINT Completed')
     a = CaseDetails.objects.get(id = pk )
     a.analysis_status = 'True'
-    a.save()
-    messages.success(request, 'Case staus updated')
+        a.save()
+        messages.success(request, 'Case staus updated')
     return redirect(login)
-def truecaller(request, pk):
-    if not request.user.is_authenticated:
-        return redirect(login)
-    #key = TruecallerApiKey.objects.all()
-    case_nos =  CaseDetails.objects.values_list('phone_no', flat=True).filter(id=pk)
-    for case_no1 in case_nos:
-        case_no = case_no1
-    num1 = str(request.POST.get('search'))
-    token ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
-    if num1 == 'None':
-       
-        return render(request,'truecaller.html',{"case_no":case_no})
-    else:        
-        num1 == num1
-        true_caller_result = Truecaller(num1, token)
-        output = true_caller_result.truecaller_search()
-        j = output.json()
-        name = j['data'][0]['name']
-        if j['data'][0]['internetAddresses']:
-            email = j['data'][0]['internetAddresses'][0]['id']
-        elif not j['data'][0]['internetAddresses']:
-            email = "not available"
-        try:
-            carrier = j['data'][0]['phones'][0]['carrier']
-        except KeyError:
-            carrier = "not available"
-        try:
-            gender = j['data'][0]['gender']
-        except KeyError:
-            gender = "gender is unknown"
-        try:
-            street = j['data'][0]['addresses'][0]['street']
-        except KeyError:
-            street = "not known"
-        try:
-            city = j['data'][0]['addresses'][0]['city']
-        except KeyError:
-            city = "not known"
-        address = j['data'][0]['addresses'][0]['address']
-        try:
-            image = j['data'][0]['image']
-        except KeyError:
-            image = "not known"
-        try:
-            birthday = j['data'][0]['birthday']
-        except KeyError:
-            birthday = "not known"
-        try:
-            jobTitle = j['data'][0]['jobTitle']
-        except KeyError:
-            jobTitle = "not known"
-        try:
-            companyName = j['data'][0]['companyName']
-        except KeyError:
-            companyName = "not known"
-        try:
-            about = j['data'][0]['about']
-        except KeyError:
-            about = "not known"
-        
-
-        case_no = pk
-        truecaller_data = TruecallerDetails(name=name, email=email, carrier=carrier, about=about,image=image,gender=gender, street=street, city=city, address=address, birthday=birthday, jobTitle=jobTitle, companyName=companyName,case_no=case_no)
-        truecaller_data.save()
-        return render(request,'truecaller.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"image":image,"j":j,"birthday":birthday,"jobTitle":jobTitle,"companyName":companyName,"address":address,"about":about,"case_no":case_no})
 
 def iplookup(request):
     if not request.user.is_authenticated:
