@@ -150,21 +150,21 @@ def startAnalyse(request, pk):
         gender = j['data'][0]['gender']
     except KeyError:
         gender = "gender is unknown"
-    try:
-        street = j['data'][0]['addresses'][0]['street']
-    except KeyError:
-        street = "not known"
-    try:
-        city = j['data'][0]['addresses'][0]['city']
-    except KeyError:
-        city = "not known"
-    try:
-        address = j['data'][0]['addresses'][0]['address']
-    except KeyError:
-        address = "not known"
-    
-    try:
-        image = j['data'][0]['image']
+        try:
+            street = j['data'][0]['addresses'][0]['street']
+        except KeyError:
+            street = "unknown"
+        try:
+            city = j['data'][0]['addresses'][0]['city']
+        except KeyError:
+            city = "unknown"
+        try:
+            address = j['data'][0]['addresses'][0]['address']
+        except KeyError:
+            address = "unknown"
+        
+        try:
+            image = j['data'][0]['image']
     except KeyError:
         image = "not known"
     try:
@@ -229,43 +229,43 @@ def iplookup(request):
         try:
             version = data['version']
         except KeyError:
-            version = "not known"
+            version = "unknown"
         try:
             city = data['city']
         except KeyError:
-            city = "not known"
+            city = "unknown"
         try:
             region = data['region']
         except KeyError:
-            region = "not known"
+            region = "unknown"
         try:
             region_code = data['region_code']
         except KeyError:
-            region_code = "not known"
+            region_code = "unknown"
         try:
             country = data['country']
         except KeyError:
-            country = "not known"
+            country = "unknown"
         try:
             country_name = data['country_name']
         except KeyError:
-            country_name = "not known"        
+            country_name = "unknown"        
         try:
             country_code = data['country_code']
         except KeyError:
-            country_code = "not known"  
+            country_code = "unknown"  
         try:
             country_code_iso3 = data['country_code_iso3']
         except KeyError:
-            country_code_iso3 = "not known" 
+            country_code_iso3 = "unknown" 
         try:
             country_capital = data['country_capital']
         except KeyError:
-            country_capital = "not known" 
+            country_capital = "unknown" 
         try:
             country_tld = data['country_tld']
         except KeyError:
-            country_tld = "not known" 
+            country_tld = "unknown" 
         continent_code = data['continent_code']
         in_eu = data['in_eu']
         postal = data['postal']
