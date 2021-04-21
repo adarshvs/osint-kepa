@@ -3,7 +3,92 @@
 {% load static %}
 
 {% block title %}  Case Details {% endblock %}
+{% block css %}
 
+<style>
+#myImg:hover {opacity: 0.7;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (image) */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+/* Caption of Modal Image */
+#caption {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+  height: 150px;
+}
+
+/* Add Animation */
+.modal-content, #caption {  
+  -webkit-animation-name: zoom;
+  -webkit-animation-duration: 0.6s;
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+  from {-webkit-transform:scale(0)} 
+  to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+  from {transform:scale(0)} 
+  to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modal-content {
+    width: 100%;
+  }
+}
+</style>
+
+
+{% endblock %}
 {% block page_heading %} Case Details  {% endblock %}
 
 {% block breadcrumbnavigation %}  Case Details {% endblock %}
@@ -55,7 +140,7 @@
         </dl>
         <div class="card-header">
           <h3 class="card-title">
-              <i class="fas fa-user-secret"></i> &nbsp;Suspects Details</h3>
+              <i class="fas fa-user-secret"></i> &nbsp;Suspect's Known Details: </h3>
         </div>
         <div class="row">
           
@@ -114,9 +199,9 @@
           </div>
           <div class="col-5 text-center">
             {% if object.image == 'not known' %}
-            <img src="{% static 'images/avatars/noavatar.jpg' %}" alt="user-avatar" class="img-circle img-fluid">
+            <img src="{% static 'images/avatars/noavatar.jpg' %}" alt="user-avatar" id="myImg" class="img-circle img-fluid">
             {% else %}
-            <img src="{{object.image }}" alt="user-avatar" class="img-circle img-fluid">
+            <img src="{{object.image }}" alt="user-avatar" id="myImg" class="img-circle img-fluid">
             {% endif %}
             Profile Picture
           </div>
@@ -145,7 +230,7 @@
           </div>
           <div class="col-5 text-center">
             <img src="
-            {{object.image }}" alt="user-avatar" class="img-circle img-fluid">
+            {{object.image }}" alt="user-avatar" id="myImg" class="img-circle img-fluid">
           </div>
         </div>
       </div>
@@ -156,8 +241,15 @@
       </div>
     </div>
   </div></div>
+
+
+ 
   {% endfor %}
-  
+  <div id="myModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+  </div>
   {% else %}
 
   <section class="content">
@@ -181,4 +273,31 @@
  {% endif %}
 {% endblock %}
 
-{% block scripts %}{% endblock %} 
+{% block scripts %}
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("myModal");
+  
+  // Get the image and insert it inside the modal - use its "alt" text as a caption
+  var img = document.getElementById("myImg");
+  var modalImg = document.getElementById("img01");
+  var captionText = document.getElementById("caption");
+  img.onclick = function(){
+    modal.style.display = "block";
+    modalImg.src = this.src;
+    captionText.innerHTML = this.alt;
+  }
+  
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+  
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() { 
+    modal.style.display = "none";
+  }
+  </script>
+
+
+
+{% endblock %} 
