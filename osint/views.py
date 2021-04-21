@@ -134,22 +134,25 @@ def startAnalyse(request, pk):
         phone_no = phone_no
     token_truecaller ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
     token_eyecon ="c4664ab6-6202-4bb2-8ac5-dbd8bfbd5861"
-    true_caller_result = Truecaller(phone_no, token_truecaller)
-    output = true_caller_result.truecaller_search()
-    j = output.json()
-    name = j['data'][0]['name']
-    if j['data'][0]['internetAddresses']:
-        email = j['data'][0]['internetAddresses'][0]['id']
-    elif not j['data'][0]['internetAddresses']:
-        email = "not available"
-    try:
-        carrier = j['data'][0]['phones'][0]['carrier']
-    except KeyError:
-        carrier = "not available"
-    try:
-        gender = j['data'][0]['gender']
-    except KeyError:
-        gender = "gender is unknown"
+    if TruecallerDetails.objects.filter(case_no = pk).exists():
+        messages.info(request, ' Trucaller OSINT related with this case number already completed')
+    else:
+        true_caller_result = Truecaller(phone_no, token_truecaller)
+        output = true_caller_result.truecaller_search()
+        j = output.json()
+        name = j['data'][0]['name']
+        if j['data'][0]['internetAddresses']:
+            email = j['data'][0]['internetAddresses'][0]['id']
+        elif not j['data'][0]['internetAddresses']:
+            email = "not available"
+        try:
+            carrier = j['data'][0]['phones'][0]['carrier']
+        except KeyError:
+            carrier = "not available"
+        try:
+            gender = j['data'][0]['gender']
+        except KeyError:
+            gender = "gender is unknown"
         try:
             street = j['data'][0]['addresses'][0]['street']
         except KeyError:
@@ -165,47 +168,49 @@ def startAnalyse(request, pk):
         
         try:
             image = j['data'][0]['image']
-    except KeyError:
-        image = "not known"
-    try:
-        birthday = j['data'][0]['birthday']
-    except KeyError:
-        birthday = "not known"
-    try:
-        jobTitle = j['data'][0]['jobTitle']
-    except KeyError:
-        jobTitle = "not known"
-    try:
-        companyName = j['data'][0]['companyName']
-    except KeyError:
-        companyName = "not known"
-    try:
-        about = j['data'][0]['about']
-    except KeyError:
-        about = "not known"
-    
-    truecaller_data = TruecallerDetails(name=name, email=email, carrier=carrier, about=about,image=image,gender=gender, street=street, city=city, address=address, birthday=birthday, jobTitle=jobTitle, companyName=companyName,case_no=case_no)
-    truecaller_data.save()
-    messages.success(request, 'Truecaller OSINT Completed')
-    
-    eyecon_result = Eyecon(phone_no, token_eyecon)
-    eyecon_resp = eyecon_result.eyecon_search()
-    eyecon_json = eyecon_resp.json()
-    temp = json.dumps(eyecon_json).replace('[', '').replace(']', '')
-    jsonload = json.loads(temp)
-    name_eyecon =  jsonload["name"]
-    imgresp = eyecon_result.eyecon_img_search()
-    img_split = imgresp.url.replace('https://graph.', '').replace('picture?width=600', '')
-    img_http_resp = requests.get(img_split)
-    if not img_http_resp.status_code == 200:
-        img_path = "None"
+        except KeyError:
+            image = "not known"
+        try:
+            birthday = j['data'][0]['birthday']
+        except KeyError:
+            birthday = "unknown"
+        try:
+            jobTitle = j['data'][0]['jobTitle']
+        except KeyError:
+            jobTitle = "unknown"
+        try:
+            companyName = j['data'][0]['companyName']
+        except KeyError:
+            companyName = "unknown"
+        try:
+            about = j['data'][0]['about']
+        except KeyError:
+            about = "unknown"
+        
+        truecaller_data = TruecallerDetails(name=name, email=email, carrier=carrier, about=about,image=image,gender=gender, street=street, city=city, address=address, birthday=birthday, jobTitle=jobTitle, companyName=companyName,case_no=case_no)
+        truecaller_data.save()
+        messages.success(request, 'Truecaller OSINT Completed')
+    if EyeconDetails.objects.filter(case_no = pk).exists():
+        messages.info(request, ' Eyecon OSINT related with this case number already completed')
     else:
-        img_path = img_split
-    eyecon_data = EyeconDetails(suspects_name= name_eyecon, image=img_path,case_no=case_no)
-    eyecon_data.save()
-    messages.success(request, 'Eyecon OSINT Completed')
-    a = CaseDetails.objects.get(id = pk )
-    a.analysis_status = 'True'
+        eyecon_result = Eyecon(phone_no, token_eyecon)
+        eyecon_resp = eyecon_result.eyecon_search()
+        eyecon_json = eyecon_resp.json()
+        temp = json.dumps(eyecon_json).replace('[', '').replace(']', '')
+        jsonload = json.loads(temp)
+        name_eyecon =  jsonload["name"]
+        imgresp = eyecon_result.eyecon_img_search()
+        img_split = imgresp.url.replace('https://graph.', '').replace('picture?width=600', '')
+        img_http_resp = requests.get(img_split)
+        if not img_http_resp.status_code == 200:
+            img_path = "None"
+        else:
+            img_path = img_split
+        eyecon_data = EyeconDetails(suspects_name= name_eyecon, image=img_path,case_no=case_no)
+        eyecon_data.save()
+        messages.success(request, 'Eyecon OSINT Completed')
+        a = CaseDetails.objects.get(id = pk )
+        a.analysis_status = 'True'
         a.save()
         messages.success(request, 'Case staus updated')
     return redirect(login)
