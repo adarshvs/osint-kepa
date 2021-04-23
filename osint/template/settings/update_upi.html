@@ -1,0 +1,26 @@
+{%  extends 'theme/base.html' %}
+
+
+{% block title %} Edit UPI  {% endblock %}
+{% block css %} {% endblock %}
+
+{% block page_heading %}  Edit UPI {% endblock %}
+
+{% block breadcrumbnavigation %}<a href="/settings">UPI Settings</a> / Edit UPI  {% endblock %}
+
+{% block sidebarheading %}   {% endblock %}
+{% block sidebarcontent %}l  {% endblock %}
+
+{% block body %} 
+
+<form method="post">
+    {% csrf_token %}
+    
+       {{form.as_p}}
+    
+    
+    <button type="submit" class="btn btn-success">  Submit </button> 
+
+{% endblock %}
+
+{% block scripts %}{% endblock %} 
