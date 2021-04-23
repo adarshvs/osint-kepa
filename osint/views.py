@@ -461,3 +461,11 @@ class AllUpiLists(generic.ListView):
 
     model = UpiLists
     template_name = 'settings/settings.html'
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class AddUpi(SuccessMessageMixin, generic.CreateView):
+    model = UpiLists
+    fields = '__all__'
+    template_name = 'settings/add_upi.html'
+    success_url = reverse_lazy('settings')    
+    success_message = 'New UPI added to the database'
