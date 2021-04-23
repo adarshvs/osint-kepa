@@ -137,3 +137,15 @@ class IpLookupData(models.Model):
     
     class Meta:
         db_table = 'iplookup_data'   
+
+
+class UpiLists(models.Model):
+    upi_id = models.CharField(max_length=200)
+    bank_name = models.CharField(max_length=200)
+
+    created_by = CurrentUserField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'upi_lists'   
