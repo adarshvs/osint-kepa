@@ -17,7 +17,7 @@ class TruecallerApiKey(models.Model):
     is_active = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    created_by = CurrentUserField()
     class Meta:
         db_table = 'truecaller_api_keys'
 class EyeconApiKey(models.Model):   
@@ -25,7 +25,7 @@ class EyeconApiKey(models.Model):
     is_active = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    created_by = CurrentUserField()
     class Meta:
         db_table = 'eyecon_api_keys'
 
