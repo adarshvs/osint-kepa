@@ -4,7 +4,7 @@ from django.db.models import Count
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
-from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails
+from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists
 from django.contrib import messages
 from django.views import generic
 
@@ -20,6 +20,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import user_passes_test
 from osint.Includes.classes.truecaller_search_class import Truecaller
+from osint.Includes.classes.eyecon import Eyecon
+
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
 import json
@@ -130,82 +132,12 @@ def startAnalyse(request, pk):
     phone_nos =  CaseDetails.objects.values_list('phone_no', flat=True).filter(id=pk)
     for phone_no in phone_nos:
         phone_no = phone_no
-    token ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
-    
-    context = {"case_no":case_no,"phone_no":phone_no,"email":email}
-    true_caller_result = Truecaller(phone_no, token)
-    output = true_caller_result.truecaller_search()
-    j = output.json()
-    name = j['data'][0]['name']
-    if j['data'][0]['internetAddresses']:
-        email = j['data'][0]['internetAddresses'][0]['id']
-    elif not j['data'][0]['internetAddresses']:
-        email = "not available"
-    try:
-        carrier = j['data'][0]['phones'][0]['carrier']
-    except KeyError:
-        carrier = "not available"
-    try:
-        gender = j['data'][0]['gender']
-    except KeyError:
-        gender = "gender is unknown"
-    try:
-        street = j['data'][0]['addresses'][0]['street']
-    except KeyError:
-        street = "not known"
-    try:
-        city = j['data'][0]['addresses'][0]['city']
-    except KeyError:
-        city = "not known"
-    try:
-        address = j['data'][0]['addresses'][0]['address']
-    except KeyError:
-        address = "not known"
-    
-    try:
-        image = j['data'][0]['image']
-    except KeyError:
-        image = "not known"
-    try:
-        birthday = j['data'][0]['birthday']
-    except KeyError:
-        birthday = "not known"
-    try:
-        jobTitle = j['data'][0]['jobTitle']
-    except KeyError:
-        jobTitle = "not known"
-    try:
-        companyName = j['data'][0]['companyName']
-    except KeyError:
-        companyName = "not known"
-    try:
-        about = j['data'][0]['about']
-    except KeyError:
-        about = "not known"
-    
-    truecaller_data = TruecallerDetails(name=name, email=email, carrier=carrier, about=about,image=image,gender=gender, street=street, city=city, address=address, birthday=birthday, jobTitle=jobTitle, companyName=companyName,case_no=case_no)
-    truecaller_data.save()
-    messages.success(request, 'Truecaller OSINT Completed')
-    a = CaseDetails.objects.get(id = pk )
-    a.analysis_status = 'True'
-    a.save()
-    messages.success(request, 'Case staus updated')
-    return redirect(login)
-def truecaller(request, pk):
-    if not request.user.is_authenticated:
-        return redirect(login)
-    #key = TruecallerApiKey.objects.all()
-    case_nos =  CaseDetails.objects.values_list('phone_no', flat=True).filter(id=pk)
-    for case_no1 in case_nos:
-        case_no = case_no1
-    num1 = str(request.POST.get('search'))
-    token ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
-    if num1 == 'None':
-       
-        return render(request,'truecaller.html',{"case_no":case_no})
-    else:        
-        num1 == num1
-        true_caller_result = Truecaller(num1, token)
+    token_truecaller ="Bearer a1i0R--QULj06V5kbAlVPy_aynMfCnoUHbndb2k01j2bzL9nMP1y8Ti1a5o5xNle"
+    token_eyecon ="c4664ab6-6202-4bb2-8ac5-dbd8bfbd5861"
+    if TruecallerDetails.objects.filter(case_no = pk).exists():
+        messages.info(request, ' Trucaller OSINT related with this case number already completed')
+    else:
+        true_caller_result = Truecaller(phone_no, token_truecaller)
         output = true_caller_result.truecaller_search()
         j = output.json()
         name = j['data'][0]['name']
@@ -224,12 +156,16 @@ def truecaller(request, pk):
         try:
             street = j['data'][0]['addresses'][0]['street']
         except KeyError:
-            street = "not known"
+            street = "unknown"
         try:
             city = j['data'][0]['addresses'][0]['city']
         except KeyError:
-            city = "not known"
-        address = j['data'][0]['addresses'][0]['address']
+            city = "unknown"
+        try:
+            address = j['data'][0]['addresses'][0]['address']
+        except KeyError:
+            address = "unknown"
+        
         try:
             image = j['data'][0]['image']
         except KeyError:
@@ -237,25 +173,47 @@ def truecaller(request, pk):
         try:
             birthday = j['data'][0]['birthday']
         except KeyError:
-            birthday = "not known"
+            birthday = "unknown"
         try:
             jobTitle = j['data'][0]['jobTitle']
         except KeyError:
-            jobTitle = "not known"
+            jobTitle = "unknown"
         try:
             companyName = j['data'][0]['companyName']
         except KeyError:
-            companyName = "not known"
+            companyName = "unknown"
         try:
             about = j['data'][0]['about']
         except KeyError:
-            about = "not known"
+            about = "unknown"
         
-
-        case_no = pk
         truecaller_data = TruecallerDetails(name=name, email=email, carrier=carrier, about=about,image=image,gender=gender, street=street, city=city, address=address, birthday=birthday, jobTitle=jobTitle, companyName=companyName,case_no=case_no)
         truecaller_data.save()
-        return render(request,'truecaller.html',{"name":name, "num1":num1, "carrier":carrier, "email":email,"gender":gender,"street":street,"city":city,"image":image,"j":j,"birthday":birthday,"jobTitle":jobTitle,"companyName":companyName,"address":address,"about":about,"case_no":case_no})
+        messages.success(request, 'Truecaller OSINT Completed')
+    if EyeconDetails.objects.filter(case_no = pk).exists():
+        messages.info(request, ' Eyecon OSINT related with this case number already completed')
+    else:
+        eyecon_result = Eyecon(phone_no, token_eyecon)
+        eyecon_resp = eyecon_result.eyecon_search()
+        eyecon_json = eyecon_resp.json()
+        temp = json.dumps(eyecon_json).replace('[', '').replace(']', '')
+        jsonload = json.loads(temp)
+        name_eyecon =  jsonload["name"]
+        imgresp = eyecon_result.eyecon_img_search()
+        img_split = imgresp.url.replace('https://graph.', '').replace('picture?width=600', '')
+        img_http_resp = requests.get(img_split)
+        if not img_http_resp.status_code == 200:
+            img_path = "None"
+        else:
+            img_path = img_split
+        eyecon_data = EyeconDetails(suspects_name= name_eyecon, image=img_path,case_no=case_no)
+        eyecon_data.save()
+        messages.success(request, 'Eyecon OSINT Completed')
+        a = CaseDetails.objects.get(id = pk )
+        a.analysis_status = 'True'
+        a.save()
+        messages.success(request, 'Case staus updated')
+    return redirect(login)
 
 def iplookup(request):
     if not request.user.is_authenticated:
@@ -276,43 +234,43 @@ def iplookup(request):
         try:
             version = data['version']
         except KeyError:
-            version = "not known"
+            version = "unknown"
         try:
             city = data['city']
         except KeyError:
-            city = "not known"
+            city = "unknown"
         try:
             region = data['region']
         except KeyError:
-            region = "not known"
+            region = "unknown"
         try:
             region_code = data['region_code']
         except KeyError:
-            region_code = "not known"
+            region_code = "unknown"
         try:
             country = data['country']
         except KeyError:
-            country = "not known"
+            country = "unknown"
         try:
             country_name = data['country_name']
         except KeyError:
-            country_name = "not known"        
+            country_name = "unknown"        
         try:
             country_code = data['country_code']
         except KeyError:
-            country_code = "not known"  
+            country_code = "unknown"  
         try:
             country_code_iso3 = data['country_code_iso3']
         except KeyError:
-            country_code_iso3 = "not known" 
+            country_code_iso3 = "unknown" 
         try:
             country_capital = data['country_capital']
         except KeyError:
-            country_capital = "not known" 
+            country_capital = "unknown" 
         try:
             country_tld = data['country_tld']
         except KeyError:
-            country_tld = "not known" 
+            country_tld = "unknown" 
         continent_code = data['continent_code']
         in_eu = data['in_eu']
         postal = data['postal']
@@ -418,6 +376,7 @@ class ViewCasesDetails(generic.TemplateView):
          context = super(ViewCasesDetails, self).get_context_data(**kwargs)
          context['casedetails'] = CaseDetails.objects.filter(id=pk)
          context['truecallerdetails'] = TruecallerDetails.objects.filter(case_no=pk)
+         context['eycondetails'] = EyeconDetails.objects.filter(case_no=pk)
          return context
 
 @method_decorator(login_required, name='dispatch')
@@ -475,8 +434,30 @@ class UpdateCaseStatus(UpdateView):
     template_name = 'updatecasestatus.html'
     success_url = reverse_lazy('case_overview')
 
+@method_decorator(login_required, name='dispatch')
 class UpdateTheme(UpdateView):
     model = Profile
     fields = ["enable_dark"]    
     template_name = 'theme/updatetheme.html'
     success_url = reverse_lazy('index')
+
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class AddTruecallerApi(SuccessMessageMixin, generic.CreateView):
+    model = TruecallerApiKey
+    fields = '__all__'
+    template_name = 'api/add_truecaller_api.html'
+    success_url = reverse_lazy('index')    
+    success_message = 'New api authorization token for truecaller added successfully'
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class ViewAllTruecallerApi(generic.ListView):
+    
+    model = TruecallerApiKey
+    template_name = 'api/truecaller_api_lists.html'
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch') 
+class AllUpiLists(generic.ListView):
+
+    model = UpiLists
+    template_name = 'settings/settings.html'

@@ -13,11 +13,11 @@ from django_currentuser.middleware import (get_current_user, get_current_authent
 from django_currentuser.db.models import CurrentUserField
 
 class TruecallerApiKey(models.Model):   
-    api_token = models.CharField(max_length=200, blank=True, null=True)
+    api_token = models.CharField(max_length=200, unique=True)
     is_active = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    created_by = CurrentUserField()
     class Meta:
         db_table = 'truecaller_api_keys'
 class EyeconApiKey(models.Model):   
@@ -25,7 +25,7 @@ class EyeconApiKey(models.Model):
     is_active = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    created_by = CurrentUserField()
     class Meta:
         db_table = 'eyecon_api_keys'
 
@@ -77,8 +77,8 @@ class TruecallerDetails(models.Model):
 
 class EyeconDetails(models.Model):
     case_no = models.IntegerField()
-    supects_name = models.CharField(max_length=200, blank=True, null=True)
-    image = models.CharField(max_length=200, blank=True, null=True)  
+    suspects_name = models.CharField(max_length=200, blank=True, null=True)
+    image = models.CharField(max_length=1000, blank=True, null=True)  
     created_by = CurrentUserField()
     
     created_at = models.DateTimeField(auto_now_add=True)
@@ -137,3 +137,15 @@ class IpLookupData(models.Model):
     
     class Meta:
         db_table = 'iplookup_data'   
+
+
+class UpiLists(models.Model):
+    upi_id = models.CharField(max_length=200)
+    bank_name = models.CharField(max_length=200)
+
+    created_by = CurrentUserField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'upi_lists'   

@@ -1,11 +1,11 @@
 from django.urls import path
 from . import views
-from .views import users, AddUser, AddCaseDetails, ViewAllCases, ViewCasesDetails, ViewUser, DeleteUser, UserProfileUpdate, AdminUserProfileUpdate, UpdateCaseStatus, UpdateTheme
+from .views import users, AddUser, AddCaseDetails, ViewAllCases, ViewCasesDetails, ViewUser, DeleteUser, UserProfileUpdate, AdminUserProfileUpdate, UpdateCaseStatus, UpdateTheme, AddTruecallerApi, ViewAllTruecallerApi, AllUpiLists
 
 urlpatterns = [
     path('', views.index),
     path('index', views.index,name='index'),
-    path('<int:pk>/truecaller/', views.truecaller, name='truecaller'),    
+    #path('<int:pk>/truecaller/', views.truecaller, name='truecaller'),    
     path('<int:pk>/startanalyse/', views.startAnalyse, name='startanalyse'),
     path('iplookup',views.iplookup),
     path('account',views.account, name= 'account'),
@@ -26,4 +26,7 @@ urlpatterns = [
     path('<int:pk>/update-case-status/', UpdateCaseStatus.as_view(), name='update-case-status'),
     path('<int:pk>/updatetheme/', UpdateTheme.as_view(), name='update-theme'),
     path('change_pass',views.change_password, name='change_password'),
+    path('add-api/', AddTruecallerApi.as_view(), name='add-api'),
+    path('truecaller-api/', ViewAllTruecallerApi.as_view(), name='truecaller-api'),
+    path('settings/', AllUpiLists.as_view(), name='settings'),
 ]

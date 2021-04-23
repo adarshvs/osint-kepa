@@ -43,13 +43,3 @@ class Eyecon:
         self.token = token
 
 
-token ="c4664ab6-6202-4bb2-8ac5-dbd8bfbd5861"
-num = "9995432221"
-
-eyecon_result = Eyecon(num, token)
-name = eyecon_result.eyecon_search()
-imgresp = eyecon_result.eyecon_img_search()
-
-fbrslt = imgresp.url.replace('https://graph.', '').replace('picture?width=600', '')
-print(name.text)
-print(fbrslt)
