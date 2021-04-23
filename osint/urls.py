@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
-from .views import users, AddUser, AddCaseDetails, ViewAllCases, ViewCasesDetails, ViewUser, DeleteUser, UserProfileUpdate, AdminUserProfileUpdate, UpdateCaseStatus, UpdateTheme, AddTruecallerApi, ViewAllTruecallerApi, AllUpiLists, AddUpi
+from .views import users, AddUser, AddCaseDetails, ViewAllCases, ViewCasesDetails, ViewUser, DeleteUser, UserProfileUpdate, AdminUserProfileUpdate, UpdateCaseStatus, UpdateTheme, AddTruecallerApi, ViewAllTruecallerApi, AllUpiLists, AddUpi, UpdateUpi, DeleteUpi
+
 urlpatterns = [
     path('', views.index),
     path('index', views.index,name='index'),
@@ -29,4 +30,6 @@ urlpatterns = [
     path('truecaller-api/', ViewAllTruecallerApi.as_view(), name='truecaller-api'),
     path('settings/', AllUpiLists.as_view(), name='settings'),
     path('add-upi/', AddUpi.as_view(), name='add-upi'),
+    path('<int:pk>/edit-upi/', UpdateUpi.as_view(), name='edit-upi'),
+    path('<int:pk>/delete-upi/', DeleteUpi.as_view(), name='delete-upi'),
 ]

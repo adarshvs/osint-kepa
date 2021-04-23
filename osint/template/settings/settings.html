@@ -46,8 +46,8 @@
                                 <td>{{ upi.created_by }}</td>
                                 
                                     <td class="text-center py-0 align-middle"><div class="btn-group btn-group-sm">
-                                        <a href="{% url 'update-profile' user.profile.pk %}" class="btn btn-warning"><i class="fas fa-edit" title="Edit"></i></a>
-                                        <a href="{% url 'delete-profile' user.pk %}" class="btn btn-danger"><i class="fas fa-trash" title="delete"></i></a>
+                                        <a href="{% url 'edit-upi' upi.pk %}" class="btn btn-warning"><i class="fas fa-edit" title="Edit"></i></a>
+                                        <a href="{% url 'delete-upi' upi.pk %}" class="btn btn-danger"><i class="fas fa-trash" title="delete"></i></a>
                                       </div> 
                                      </td>
                             </tr>
