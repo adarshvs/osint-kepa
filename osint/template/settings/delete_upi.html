@@ -1,0 +1,33 @@
+{%  extends 'theme/base.html' %}
+
+
+{% block title %}   {% endblock %}
+{% block css %} {% endblock %}
+
+{% block page_heading %}   {% endblock %}
+
+{% block breadcrumbnavigation %}   {% endblock %}
+
+{% block sidebarheading %}   {% endblock %}
+{% block sidebarcontent %}l  {% endblock %}
+
+{% block body %} 
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title"> @{{object.upi_id}}</h5>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="alert alert-warning" role="alert">
+                Are you sure you want to delete <strong>{{ object.upi_id }}</strong> ?
+            </div>
+            
+            <button type="submit" class="btn btn-danger"> <i class="fas fa-trash" title="View"> Delete </i></button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}{% endblock %} 

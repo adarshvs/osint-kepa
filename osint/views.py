@@ -461,3 +461,26 @@ class AllUpiLists(generic.ListView):
 
     model = UpiLists
     template_name = 'settings/settings.html'
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class AddUpi(SuccessMessageMixin, generic.CreateView):
+    model = UpiLists
+    fields = ["upi_id","bank_name"]
+    template_name = 'settings/add_upi.html'
+    success_url = reverse_lazy('settings')    
+    success_message = 'New UPI added to the database'
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class UpdateUpi(SuccessMessageMixin, UpdateView):
+    model = UpiLists
+    fields = ["upi_id","bank_name"]    
+    template_name = 'settings/update_upi.html'
+    success_url = reverse_lazy('settings')    
+    success_message = ' UPI details updated successfully'
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class DeleteUpi(SuccessMessageMixin, DeleteView):
+    model = UpiLists
+    template_name = 'settings/delete_upi.html'
+    success_url = reverse_lazy('settings')    
+    success_message = ' UPI deleted successfully'
