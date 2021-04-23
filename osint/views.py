@@ -4,7 +4,7 @@ from django.db.models import Count
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
-from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails
+from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists
 from django.contrib import messages
 from django.views import generic
 
@@ -455,3 +455,9 @@ class ViewAllTruecallerApi(generic.ListView):
     
     model = TruecallerApiKey
     template_name = 'api/truecaller_api_lists.html'
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch') 
+class AllUpiLists(generic.ListView):
+
+    model = UpiLists
+    template_name = 'settings/settings.html'
