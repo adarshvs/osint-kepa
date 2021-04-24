@@ -20,7 +20,7 @@
         <form method="post">
             {% csrf_token %}
             <div class="alert alert-warning" role="alert">
-                Are you sure you want to delete <strong>{{ object.upi_id }}</strong> ?
+                Are you sure you want to delete @<strong>{{ object.upi_id }}</strong> ?
             </div>
             
             <button type="submit" class="btn btn-danger"> <i class="fas fa-trash" title="View"> Delete </i></button>
