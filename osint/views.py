@@ -441,21 +441,6 @@ class UpdateTheme(UpdateView):
     template_name = 'theme/updatetheme.html'
     success_url = reverse_lazy('index')
 
-
-@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class AddTruecallerApi(SuccessMessageMixin, generic.CreateView):
-    model = TruecallerApiKey
-    fields = '__all__'
-    template_name = 'api/add_truecaller_api.html'
-    success_url = reverse_lazy('index')    
-    success_message = 'New api authorization token for truecaller added successfully'
-
-@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class ViewAllTruecallerApi(generic.ListView):
-    
-    model = TruecallerApiKey
-    template_name = 'api/truecaller_api_lists.html'
-
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch') 
 class AllUpiLists(generic.TemplateView):
     template_name = 'settings/settings.html'
