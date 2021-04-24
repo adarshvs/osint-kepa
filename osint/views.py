@@ -389,7 +389,6 @@ class ViewAllCases(generic.ListView):
 
 @method_decorator(login_required, name='dispatch')
 class ViewCasesDetails(generic.TemplateView):
-    #model = CaseDetails, TruecallerDetails
     template_name = 'case_details.html'
     def get_context_data(self, **kwargs):
          pk = int(kwargs['pk'])
@@ -397,6 +396,9 @@ class ViewCasesDetails(generic.TemplateView):
          context['casedetails'] = CaseDetails.objects.filter(id=pk)
          context['truecallerdetails'] = TruecallerDetails.objects.filter(case_no=pk)
          context['eycondetails'] = EyeconDetails.objects.filter(case_no=pk)
+         context['upidetails'] = UpiDetails.objects.filter(case_no=pk)         
+         context['upidetails_uniquename'] = UpiDetails.objects.filter(case_no=pk).distinct('name')
+         context['upidetails_uniquevpa'] = UpiDetails.objects.filter(case_no=pk).distinct('vpa')
          return context
 
 @method_decorator(login_required, name='dispatch')
