@@ -4,7 +4,7 @@ from django.db.models import Count
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
-from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists
+from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists, EyeconApiKey
 from django.contrib import messages
 from django.views import generic
 
@@ -457,10 +457,14 @@ class ViewAllTruecallerApi(generic.ListView):
     template_name = 'api/truecaller_api_lists.html'
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch') 
-class AllUpiLists(generic.ListView):
-
-    model = UpiLists
+class AllUpiLists(generic.TemplateView):
     template_name = 'settings/settings.html'
+    def get_context_data(self, **kwargs):
+         context = super(AllUpiLists, self).get_context_data(**kwargs)
+         context['upilists'] = UpiLists.objects.all()
+         context['truecallerapi'] = TruecallerApiKey.objects.all()
+         context['eyeconapi'] = EyeconApiKey.objects.all()
+         return context
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
 class AddUpi(SuccessMessageMixin, generic.CreateView):
@@ -484,3 +488,20 @@ class DeleteUpi(SuccessMessageMixin, DeleteView):
     template_name = 'settings/delete_upi.html'
     success_url = reverse_lazy('settings')    
     success_message = ' UPI deleted successfully'
+
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class AddTruecallerToken(SuccessMessageMixin, generic.CreateView):
+    model = TruecallerApiKey
+    fields = ["api_token","is_active"]
+    template_name = 'settings/add_truecaller_api.html'
+    success_url = reverse_lazy('settings')    
+    success_message = 'New Truecaller authorization token added to the database'
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class AddEyeconToken(SuccessMessageMixin, generic.CreateView):
+    model = EyeconApiKey
+    fields = ["api_token","is_active"]
+    template_name = 'settings/add_eyecon_api.html'
+    success_url = reverse_lazy('settings')    
+    success_message = 'New Eyecon authorization token added to the database'
