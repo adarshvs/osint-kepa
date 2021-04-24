@@ -175,6 +175,7 @@
           
   </div><div class="row">{% for object in truecallerdetails %}
   <div class="col-12 col-sm-6 col-md-6 d-flex align-items-stretch flex-column">
+    <div class="col-md-12">
     <div class="card bg-light d-flex flex-fill card-primary card-outline">
       <div class="card-header text border-bottom-0">
         True Caller Details  
@@ -213,10 +214,11 @@
         </div>
       </div>
     </div>
+  </div>
   </div>{% endfor %}
 
   {% for object in eycondetails %}
-  <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+  <div class="col-12 col-sm-6 col-md-6 d-flex align-items-stretch flex-column">
     <div class="card bg-light d-flex flex-fill">
       <div class="card-header text-muted border-bottom-0 text-warning">
        Eyecon Details
@@ -239,12 +241,36 @@
         
         </div>
       </div>
+    </div>{% endfor %}
+    
+    <div class="card bg-light d-flex flex-fill">
+      <div class="card-header text-muted border-bottom-0 text-warning">
+       Possible UPI Details
+      </div>
+      <div class="card-body pt-0">
+        <div class="row">
+          <div class="col-7">{% for object in upidetails_uniquename %}
+            <h2 class="lead"><b>
+              {{object.name }}</b></h2>
+              {% endfor %}
+          </div>
+          <div class="col-5 text-center">{% for object in upidetails_uniquevpa %}
+            {{object.vpa }}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="text-right">
+        
+        </div>
+      </div>
     </div>
-  </div></div>
+  </div>
+</div>
 
 
  
-  {% endfor %}
   <div id="myModal" class="modal">
     <span class="close">&times;</span>
     <img class="modal-content" id="img01">
