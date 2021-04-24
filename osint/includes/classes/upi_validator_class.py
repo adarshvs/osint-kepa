@@ -26,11 +26,6 @@ class UpiValidator:
         self.vpa = vpa
         self.upi = upi
 
-vpa ="random_vpa" #text before @ symbol
-upi ="random_upi" #text after @symbol
-UpiValidator_result = UpiValidator(vpa, upi)
-output = UpiValidator_result.VpaValidator()
-print(output.text)
 
 
 
