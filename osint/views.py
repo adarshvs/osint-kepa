@@ -4,7 +4,7 @@ from django.db.models import Count
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
-from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists
+from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists, EyeconApiKey, UpiDetails
 from django.contrib import messages
 from django.views import generic
 
@@ -19,8 +19,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import user_passes_test
+
 from osint.Includes.classes.truecaller_search_class import Truecaller
 from osint.Includes.classes.eyecon import Eyecon
+from osint.Includes.classes.upi_validator_class import UpiValidator
 
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
@@ -209,10 +211,27 @@ def startAnalyse(request, pk):
         eyecon_data = EyeconDetails(suspects_name= name_eyecon, image=img_path,case_no=case_no)
         eyecon_data.save()
         messages.success(request, 'Eyecon OSINT Completed')
-        a = CaseDetails.objects.get(id = pk )
-        a.analysis_status = 'True'
-        a.save()
-        messages.success(request, 'Case staus updated')
+    if UpiDetails.objects.filter(vpa_id = phone_no).exists():
+        messages.info(request, 'Found all possible upi addresses of this mobile number already completed')
+    else:
+        upix = UpiLists.objects.all().values_list('upi_id', flat=True)
+        upi1 = upix[::1]
+        vpa = phone_no #text before @ symbol
+        for upi in upi1:    
+            UpiValidator_result = UpiValidator(vpa, upi)
+            output = UpiValidator_result.VpaValidator()
+            upi_res1 = output.json()
+            upi_res_status = upi_res1['status']
+            if upi_res_status == str('VALID'):
+                upi_res = upi_res1['customer_name']
+                vpax =  upi_res1['vpa']
+                upi_data = UpiDetails(name = upi_res, vpa = vpax, case_no=case_no, vpa_id = vpa)
+                upi_data.save()
+        messages.success(request, 'UPI OSINT Completed')
+    a = CaseDetails.objects.get(id = pk )
+    a.analysis_status = 'True'
+    a.save()
+    messages.success(request, 'Case staus updated')
     return redirect(login)
 
 def iplookup(request):
@@ -320,6 +339,7 @@ def addons(request):
 def darkwebsearch(request):
     if not request.user.is_authenticated:
         return redirect(login)
+    
     return render(request,'darkwebsearch.html')
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')  
@@ -441,26 +461,15 @@ class UpdateTheme(UpdateView):
     template_name = 'theme/updatetheme.html'
     success_url = reverse_lazy('index')
 
-
-@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class AddTruecallerApi(SuccessMessageMixin, generic.CreateView):
-    model = TruecallerApiKey
-    fields = '__all__'
-    template_name = 'api/add_truecaller_api.html'
-    success_url = reverse_lazy('index')    
-    success_message = 'New api authorization token for truecaller added successfully'
-
-@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class ViewAllTruecallerApi(generic.ListView):
-    
-    model = TruecallerApiKey
-    template_name = 'api/truecaller_api_lists.html'
-
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch') 
-class AllUpiLists(generic.ListView):
-
-    model = UpiLists
+class AllUpiLists(generic.TemplateView):
     template_name = 'settings/settings.html'
+    def get_context_data(self, **kwargs):
+         context = super(AllUpiLists, self).get_context_data(**kwargs)
+         context['upilists'] = UpiLists.objects.all()
+         context['truecallerapi'] = TruecallerApiKey.objects.all()
+         context['eyeconapi'] = EyeconApiKey.objects.all()
+         return context
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
 class AddUpi(SuccessMessageMixin, generic.CreateView):
@@ -484,3 +493,20 @@ class DeleteUpi(SuccessMessageMixin, DeleteView):
     template_name = 'settings/delete_upi.html'
     success_url = reverse_lazy('settings')    
     success_message = ' UPI deleted successfully'
+
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class AddTruecallerToken(SuccessMessageMixin, generic.CreateView):
+    model = TruecallerApiKey
+    fields = ["api_token","is_active"]
+    template_name = 'settings/add_truecaller_api.html'
+    success_url = reverse_lazy('settings')    
+    success_message = 'New Truecaller authorization token added to the database'
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
+class AddEyeconToken(SuccessMessageMixin, generic.CreateView):
+    model = EyeconApiKey
+    fields = ["api_token","is_active"]
+    template_name = 'settings/add_eyecon_api.html'
+    success_url = reverse_lazy('settings')    
+    success_message = 'New Eyecon authorization token added to the database'

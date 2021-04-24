@@ -1,12 +1,12 @@
 {%  extends 'theme/base.html' %}
 
 
-{% block title %}   {% endblock %}
+{% block title %}  Delete UPI {% endblock %}
 {% block css %} {% endblock %}
 
-{% block page_heading %}   {% endblock %}
+{% block page_heading %}   Delete UPI {% endblock %}
 
-{% block breadcrumbnavigation %}   {% endblock %}
+{% block breadcrumbnavigation %}   <a href="/settings">UPI Settings</a> / Delete UPI {% endblock %}
 
 {% block sidebarheading %}   {% endblock %}
 {% block sidebarcontent %}l  {% endblock %}
@@ -20,7 +20,7 @@
         <form method="post">
             {% csrf_token %}
             <div class="alert alert-warning" role="alert">
-                Are you sure you want to delete <strong>{{ object.upi_id }}</strong> ?
+                Are you sure you want to delete @<strong>{{ object.upi_id }}</strong> ?
             </div>
             
             <button type="submit" class="btn btn-danger"> <i class="fas fa-trash" title="View"> Delete </i></button>
