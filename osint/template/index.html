@@ -233,7 +233,10 @@
     </div>
   </div>
 </div>
-
+<div class="top5">
+  <p class="topicTop5">Top 5 Selling Products</p>
+  <canvas id="top5"></canvas>
+</div>
 
 {% endif %}
 
@@ -351,5 +354,20 @@
 <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
 <!-- AdminLTE for demo purposes -->
 
+<script>
+  var top5 = document.getElementById('top5').getContext('2d');
+  var chart = new Chart(top5, {
+      type: 'doughnut',
+      data: {
+          labels: ['{{mycases_count}}', '{{cases_count}}', '{{pendig_casecount}}', '{{completed_cases}}', '{{user_count}}'],
+          datasets: [{
+              label: 'Top 5 selling products ',
+              backgroundColor: '#CE3B21',
+              borderColor: 'rgb(255, 99, 132)',
+              data:['{{mycases_count}}', '{{cases_count}}', '{{pendig_casecount}}', '{{completed_cases}}', '{{user_count}}']
+          }]
+      },
+  });
+</script>
 
 {% endblock %}
