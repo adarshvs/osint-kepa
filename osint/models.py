@@ -153,6 +153,7 @@ class UpiDetails(models.Model):
     name = models.CharField(max_length=200)
     vpa_id = models.CharField(max_length=200)
     vpa = models.CharField(max_length=200)
+    bank = models.TextField(max_length=200, default='Unknown', blank=True, null=True)
     case_no= models.CharField(max_length=200)
     created_by = CurrentUserField()
     created_at = models.DateTimeField(auto_now_add=True)
