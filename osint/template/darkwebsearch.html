@@ -20,8 +20,8 @@
                 <form action="" method="post">
                     {% csrf_token %}
                     <div class="input-group">
-                        {% if keyword %}
-                        <input type="text" name="search" class="form-control form-control-lg" placeholder="{{keyword}}">
+                        {% if keyword_term %}
+                        <input type="text" name="search" class="form-control form-control-lg" placeholder="{{keyword_term}}">
                         
                         {% else %}
                         <input type="text" name="search" class="form-control form-control-lg" placeholder="Type your keywords here">
@@ -36,8 +36,9 @@
         </div>
     </div>
 </section>
-<br/>
+<br/>  {% if result_count %}About <b>{{result_count}}</b> results were found{% endif %}
   {% for obj in json_string.data %}
+
   <blockquote class="quote-secondary">
     <p><b>{{obj.title}}</b></p>
     <p><a href="{{obj.link}}" class="text-success" >{{obj.link}}</a></p>

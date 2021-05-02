@@ -265,15 +265,16 @@ def startAnalyse(request, pk):
 def darkwebsearch(request):
     if not request.user.is_authenticated:
         return redirect(login)
-    keyword = str(request.POST.get('search'))
-    if keyword == '' or keyword == 'None':
+    keyword_term = str(request.POST.get('search'))
+    if keyword_term == '' or keyword_term == 'None':
         return render(request,'darkwebsearch.html')
     else:
-        keyword = urllib.parse.quote(keyword)
+        keyword = urllib.parse.quote(keyword_term)
         darknet_result = Darknet(keyword)
         output = darknet_result.darknet_search()
         json_string = json.loads(output.text)
-        return render(request,'darkwebsearch.html',{"json_string":json_string,"keyword":keyword})
+        result_count = json_string['total']
+        return render(request,'darkwebsearch.html',{"json_string":json_string,"keyword_term":keyword_term,"result_count":result_count})
 def iplookup(request):
     if not request.user.is_authenticated:
         return redirect(login)
