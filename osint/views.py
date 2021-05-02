@@ -5,7 +5,7 @@ from django.db.models import Count
 import urllib.parse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
-from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists, EyeconApiKey, UpiDetails
+from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists, EyeconApiKey, UpiDetails, DarkwebSearches
 from django.contrib import messages
 from django.views import generic
 
@@ -274,6 +274,8 @@ def darkwebsearch(request):
         output = darknet_result.darknet_search()
         json_string = json.loads(output.text)
         result_count = json_string['total']
+        search_term = DarkwebSearches(keyword= keyword_term)
+        search_term.save()
         return render(request,'darkwebsearch.html',{"json_string":json_string,"keyword_term":keyword_term,"result_count":result_count})
 def iplookup(request):
     if not request.user.is_authenticated:

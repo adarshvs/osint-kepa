@@ -161,3 +161,12 @@ class UpiDetails(models.Model):
     
     class Meta:
         db_table = 'upi_details'   
+
+class DarkwebSearches(models.Model):
+    keyword = models.CharField(max_length=200)
+    created_by = CurrentUserField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'darkweb_searches' 
