@@ -1,7 +1,7 @@
 {%  extends 'theme/base.html' %}
 
 
-{% block title %}   {% endblock %}
+{% block title %} DarkWeb Search Engine {% endblock %}
 
 {% block page_heading %}   {% endblock %}
 
@@ -10,4 +10,37 @@
 {% block sidebar %}   {% endblock %}
 
 {% block body %} 
+
+
+<section class="content">
+    <div class="container-fluid">
+        <h2 class="text-center display-4">Search among  DarkWeb</h2>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        {% if keyword %}
+                        <input type="text" name="search" class="form-control form-control-lg" placeholder="{{keyword}}">
+                        
+                        {% else %}
+                        <input type="text" name="search" class="form-control form-control-lg" placeholder="Type your keywords here">
+                        {% endif %}<div class="input-group-append">
+                            <button type="submit"class="btn btn-lg btn-default">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<br/>
+  {% for obj in json_string.data %}
+  <blockquote class="quote-secondary">
+    <p><b>{{obj.title}}</b></p>
+    <p><a href="{{obj.link}}" class="text-success" >{{obj.link}}</a></p>
+    <small>{{obj.description}}</small>
+  </blockquote>{% endfor %}
 {% endblock %}
