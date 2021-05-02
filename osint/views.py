@@ -2,9 +2,10 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db.models import Count
 
+import urllib.parse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
-from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists, EyeconApiKey, UpiDetails
+from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists, EyeconApiKey, UpiDetails, DarkwebSearches
 from django.contrib import messages
 from django.views import generic
 
@@ -23,10 +24,12 @@ from django.contrib.auth.decorators import user_passes_test
 from osint.Includes.classes.truecaller_search_class import Truecaller
 from osint.Includes.classes.eyecon import Eyecon
 from osint.Includes.classes.upi_validator_class import UpiValidator
+from osint.Includes.classes.darksearch_io import Darknet
 
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
 import json
+import fetchip
 
 
 
@@ -259,6 +262,24 @@ def startAnalyse(request, pk):
     else:
         messages.error(request, 'No email addresses were found associated with this case')
     return redirect(request.META['HTTP_REFERER'])
+
+def darkwebsearch(request):
+    if not request.user.is_authenticated:
+        return redirect(login)
+    keyword_term = str(request.POST.get('search'))
+    if keyword_term == '' or keyword_term == 'None':
+        return render(request,'darkwebsearch.html')
+    else:
+        keyword = urllib.parse.quote(keyword_term)
+        darknet_result = Darknet(keyword)
+        output = darknet_result.darknet_search()
+        json_string = json.loads(output.text)
+        result_count = json_string['total']
+        local_ip = fetchip.get_local_ip()
+        public_ip = fetchip.get_public_ip()
+        search_term = DarkwebSearches(keyword= keyword_term, local_ip = local_ip, public_ip= public_ip )
+        search_term.save()
+        return render(request,'darkwebsearch.html',{"json_string":json_string,"keyword_term":keyword_term,"result_count":result_count})
 def iplookup(request):
     if not request.user.is_authenticated:
         return redirect(login)
@@ -361,11 +382,6 @@ def addons(request):
     return render(request,'addons.html')
 
 
-def darkwebsearch(request):
-    if not request.user.is_authenticated:
-        return redirect(login)
-    
-    return render(request,'darkwebsearch.html')
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')  
 class users(ListView):
