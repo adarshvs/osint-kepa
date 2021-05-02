@@ -29,6 +29,7 @@ from osint.Includes.classes.darksearch_io import Darknet
 from osint.Includes.classes.ipapi_class import IpLookup
 import requests
 import json
+import fetchip
 
 
 
@@ -274,7 +275,9 @@ def darkwebsearch(request):
         output = darknet_result.darknet_search()
         json_string = json.loads(output.text)
         result_count = json_string['total']
-        search_term = DarkwebSearches(keyword= keyword_term)
+        local_ip = fetchip.get_local_ip()
+        public_ip = fetchip.get_public_ip()
+        search_term = DarkwebSearches(keyword= keyword_term, local_ip = local_ip, public_ip= public_ip )
         search_term.save()
         return render(request,'darkwebsearch.html',{"json_string":json_string,"keyword_term":keyword_term,"result_count":result_count})
 def iplookup(request):

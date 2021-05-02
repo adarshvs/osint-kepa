@@ -164,6 +164,8 @@ class UpiDetails(models.Model):
 
 class DarkwebSearches(models.Model):
     keyword = models.CharField(max_length=200)
+    local_ip = models.GenericIPAddressField(blank=True, null=True)
+    public_ip = models.GenericIPAddressField(blank=True, null=True)
     created_by = CurrentUserField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
