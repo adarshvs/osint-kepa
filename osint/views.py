@@ -30,7 +30,8 @@ from osint.Includes.classes.ipapi_class import IpLookup
 import requests
 import json
 import fetchip
-
+import sweetify
+from sweetify.views import SweetifySuccessMixin
 
 
 # Create your views here.
@@ -498,10 +499,11 @@ class UpdateCaseStatus(UpdateView):
     success_url = reverse_lazy('case_overview')
 
 @method_decorator(login_required, name='dispatch')
-class UpdateTheme(UpdateView):
+class UpdateTheme(SweetifySuccessMixin, UpdateView):
     model = Profile
     fields = ["enable_dark"]    
     template_name = 'theme/updatetheme.html'
+    success_message = 'theme successfully updated!'
     success_url = reverse_lazy('index')
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch') 
@@ -515,7 +517,7 @@ class AllUpiLists(generic.TemplateView):
          return context
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class AddUpi(SuccessMessageMixin, generic.CreateView):
+class AddUpi(SweetifySuccessMixin, generic.CreateView):
     model = UpiLists
     fields = ["upi_id","bank_name"]
     template_name = 'settings/add_upi.html'
@@ -523,7 +525,7 @@ class AddUpi(SuccessMessageMixin, generic.CreateView):
     success_message = 'New UPI added to the database'
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class UpdateUpi(SuccessMessageMixin, UpdateView):
+class UpdateUpi(SweetifySuccessMixin, UpdateView):
     model = UpiLists
     fields = ["upi_id","bank_name"]    
     template_name = 'settings/update_upi.html'
@@ -531,7 +533,7 @@ class UpdateUpi(SuccessMessageMixin, UpdateView):
     success_message = ' UPI details updated successfully'
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class DeleteUpi(SuccessMessageMixin, DeleteView):
+class DeleteUpi(SweetifySuccessMixin, DeleteView):
     model = UpiLists
     template_name = 'settings/delete_upi.html'
     success_url = reverse_lazy('settings')    
@@ -539,7 +541,7 @@ class DeleteUpi(SuccessMessageMixin, DeleteView):
 
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class AddTruecallerToken(SuccessMessageMixin, generic.CreateView):
+class AddTruecallerToken(SweetifySuccessMixin, generic.CreateView):
     model = TruecallerApiKey
     fields = ["api_token","is_active"]
     template_name = 'settings/add_truecaller_api.html'
@@ -547,7 +549,7 @@ class AddTruecallerToken(SuccessMessageMixin, generic.CreateView):
     success_message = 'New Truecaller authorization token added to the database'
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class AddEyeconToken(SuccessMessageMixin, generic.CreateView):
+class AddEyeconToken(SweetifySuccessMixin, generic.CreateView):
     model = EyeconApiKey
     fields = ["api_token","is_active"]
     template_name = 'settings/add_eyecon_api.html'

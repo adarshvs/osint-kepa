@@ -6,3 +6,4 @@ Pillow
 django-currentuser
 django-reset-migrations
 fetchip
+sweetify
