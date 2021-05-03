@@ -391,7 +391,7 @@ class users(ListView):
     template_name = 'users.html'
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')  
-class AddUser(SuccessMessageMixin, CreateView):
+class AddUser(SweetifySuccessMixin, CreateView):
     form_class = AddUserForm
     template_name = 'profile/add_user.html'
     success_url = reverse_lazy('users')
@@ -414,12 +414,12 @@ class DeleteUser(DeleteView):
     success_url = reverse_lazy('users')
 
 @method_decorator(login_required, name='dispatch')
-class AddCaseDetails(SuccessMessageMixin, generic.CreateView):
+class AddCaseDetails(SweetifySuccessMixin, generic.CreateView):
     form_class = AddCaseDetailsForm
     model = CaseDetails
     template_name = 'add_case_details.html'
-    success_url = reverse_lazy('index')    
-    success_message = 'Case details added successfully. You may now start osint analysis under My Case History tab'
+    success_url = "{id}/mycases/"
+    success_message = '#%(case_title)s - added successfully. You may now start osint analysis '
 
 @method_decorator(login_required, name='dispatch')
 class ViewAllCases(generic.ListView):
@@ -444,7 +444,7 @@ class ViewCasesDetails(generic.TemplateView):
          return context
 
 @method_decorator(login_required, name='dispatch')
-class UserProfileUpdate(SuccessMessageMixin, UpdateView):
+class UserProfileUpdate(SweetifySuccessMixin, UpdateView):
     
     model = Profile
     template_name = 'profile/updateuser.html'
@@ -468,7 +468,7 @@ class UserProfileUpdate(SuccessMessageMixin, UpdateView):
         return super(UserProfileUpdate, self).form_valid(form)
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class AdminUserProfileUpdate(SuccessMessageMixin, UpdateView):
+class AdminUserProfileUpdate(SweetifySuccessMixin, UpdateView):
     
     model = Profile
     template_name = 'profile/admin-updateuser.html'
