@@ -98,13 +98,13 @@
 
 {% block body %} 
 
-
- {%  if  casedetails.created_by|slugify  == user.username|slugify   or  user.is_superuser == True %}
-
+{% for casedetail in casedetails %} 
+ {%  if casedetail.created_by|slugify  == user.username|slugify   or  user.is_superuser == True %}
+ 
 <div class="col-md-12">
     <div class="card card-primary card-outline">
         <div class="ribbon-wrapper ribbon-lg">
-            {% if casedetails.is_completed == True %}
+            {% if casedetail.is_completed == True %}
             <div class="ribbon bg-success">
               Completed
             </div>
@@ -299,7 +299,7 @@
     <!-- /.error-page -->
 
   </section>
- {% endif %}
+ {% endif %}{% endfor %}
 {% endblock %}
 
 {% block scripts %}
