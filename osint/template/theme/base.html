@@ -38,14 +38,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       <!-- Messages Dropdown Menu -->
       <li class="nav-item">
-      <a class="nav-link" href="{% url 'update-theme' user.profile.pk %}" role="button">
+      <a class="nav-link" href="{% url 'update-theme' user.profile.pk %}" role="button" title="Change Theme">
         {% if user.profile.enable_dark == True %} <i class="fas fa-cloud-moon"></i> {% else %} <i class="fas fa-sun"></i> {% endif%}
       </a>
       </li>
       <!-- Notifications Dropdown Menu -->
       
       <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button" title="fullscreen">
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>
