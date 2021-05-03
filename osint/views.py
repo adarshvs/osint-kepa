@@ -419,7 +419,7 @@ class AddCaseDetails(SweetifySuccessMixin, generic.CreateView):
     model = CaseDetails
     template_name = 'add_case_details.html'
     success_url = "{id}/mycases/"
-    success_message = '#%(case_title)s - added successfully. You may now start osint analysis '
+    success_message = '#%(case_no)s - added successfully. You may now start osint analysis '
 
 @method_decorator(login_required, name='dispatch')
 class ViewAllCases(generic.ListView):
