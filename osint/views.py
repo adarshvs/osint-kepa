@@ -439,8 +439,6 @@ class ViewCasesDetails(generic.TemplateView):
          context['truecallerdetails'] = TruecallerDetails.objects.filter(case_no=pk)
          context['eycondetails'] = EyeconDetails.objects.filter(case_no=pk)
          context['upidetails'] = UpiDetails.objects.filter(case_no=pk)         
-         context['upidetails_uniquename'] = UpiDetails.objects.filter(case_no=pk).distinct('name')
-         context['upidetails_uniquevpa'] = UpiDetails.objects.filter(case_no=pk).distinct('vpa')
          return context
 
 @method_decorator(login_required, name='dispatch')
