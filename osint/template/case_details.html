@@ -98,13 +98,13 @@
 
 {% block body %} 
 
-
- {%  if  casedetails.created_by|slugify  == user.username|slugify   or  user.is_superuser == True %}
-
+{% for casedetail in casedetails %} 
+ {%  if casedetail.created_by|slugify  == user.username|slugify   or  user.is_superuser == True %}
+ 
 <div class="col-md-12">
     <div class="card card-primary card-outline">
         <div class="ribbon-wrapper ribbon-lg">
-            {% if casedetails.is_completed == True %}
+            {% if casedetail.is_completed == True %}
             <div class="ribbon bg-success">
               Completed
             </div>
@@ -155,7 +155,7 @@
           <div class="col-sm-6 ">
             <div class="description-block">
               <h5 class="description-header">Mobile Number</h5>
-              <span class="description-text">+91 - {{ casedetail.phone_no}}</span>
+              <span class="description-text">{% if casedetail.phone_no %}+91 -{% endif %} {{ casedetail.phone_no}}</span>
             </div>
             <!-- /.description-block -->
           </div>
@@ -173,7 +173,8 @@
     
           
           
-  </div><div class="row">{% for object in truecallerdetails %}
+  </div>
+  <div class="row">{% for object in truecallerdetails %}
   <div class="col-12 col-sm-6 col-md-6 d-flex align-items-stretch flex-column">
     <div class="col-md-12">
     <div class="card bg-light d-flex flex-fill card-primary card-outline">
@@ -217,8 +218,8 @@
   </div>
   </div>{% endfor %}
 
-  {% for object in eycondetails %}
-  <div class="col-12 col-sm-6 col-md-6 d-flex align-items-stretch flex-column">
+  
+  <div class="col-12 col-sm-6 col-md-6 d-flex align-items-stretch flex-column">{% for object in eycondetails %}
     <div class="card bg-light d-flex flex-fill">
       <div class="card-header text-muted border-bottom-0 text-warning">
        Eyecon Details
@@ -245,30 +246,39 @@
         </div>
       </div>
     </div>{% endfor %}
-    
+    {% if upidetails %}
     <div class="card bg-light d-flex flex-fill">
       <div class="card-header text-muted border-bottom-0 text-warning">
        UPI Details
       </div>
       <div class="card-body pt-0">
-        <div class="row">
-          <div class="col-7">{% for object in upidetails_uniquename %}
-            <h2 class="lead"><b>
-              {{object.name }}</b></h2>
-              {% endfor %}
-          </div>
-          <div class="col-5 text-center">{% for object in upidetails_uniquevpa %}
-            {{object.vpa }}
-            {% endfor %}
-          </div>
-        </div>
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Payment Gateway</th>
+            <th>UPI ID</th>
+            
+          </tr>
+          </thead>
+          <tbody>{% for object in upidetails %}
+          <tr>
+            <td>{{object.name}}</td>
+            <td>{{object.bank}}</td>
+            <td>{{object.vpa}}</td>
+            
+          </tr>
+          {% endfor %}
+        
+          </tbody>
+        </table>
       </div>
       <div class="card-footer">
         <div class="text-right">
         
         </div>
       </div>
-    </div>
+    </div>{% endif %}
   </div>
 </div>
 
@@ -299,7 +309,7 @@
     <!-- /.error-page -->
 
   </section>
- {% endif %}
+ {% endif %}{% endfor %}
 {% endblock %}
 
 {% block scripts %}

@@ -30,7 +30,8 @@ from osint.Includes.classes.ipapi_class import IpLookup
 import requests
 import json
 import fetchip
-
+import sweetify
+from sweetify.views import SweetifySuccessMixin
 
 
 # Create your views here.
@@ -132,8 +133,8 @@ def change_password(request):
 def startAnalyse(request, pk):
     case_no = pk
     emails = CaseDetails.objects.values_list('email', flat=True).filter(id=pk)
-    for email in emails:
-        email = email
+    for email_id in emails:
+        emails = email_id
     phone_nos =  CaseDetails.objects.values_list('phone_no', flat=True).filter(id=pk)
     for phone_no in phone_nos:
         phone_no = phone_no
@@ -215,6 +216,7 @@ def startAnalyse(request, pk):
             eyecon_data = EyeconDetails(suspects_name= name_eyecon, image=img_path,case_no=case_no)
             eyecon_data.save()
             messages.success(request, 'Eyecon OSINT Completed')
+            
         if UpiDetails.objects.filter(vpa_id = phone_no).exists():
             messages.info(request, 'Already Found all possible upi addresses of this mobile number')
         else:
@@ -230,7 +232,9 @@ def startAnalyse(request, pk):
                     upi_res = upi_res1['customer_name']
                     vpax =  upi_res1['vpa']
                     vpa_addrs = vpax.partition('@')[2]
-                    upi_data = UpiDetails(name = upi_res, vpa = vpax, case_no=case_no, vpa_id = vpa, bank= vpa_addrs)
+                    bank_query = UpiLists.objects.values_list('bank_name', flat=True).filter(upi_id=vpa_addrs)
+                    bank = ' '.join(map(str, bank_query[::1]))
+                    upi_data = UpiDetails(name = upi_res, vpa = vpax, case_no=case_no, vpa_id = vpa, bank= bank)
                     upi_data.save()
             messages.success(request, 'UPI OSINT of the particular mobile number Completed')
         a = CaseDetails.objects.get(id = pk )
@@ -239,13 +243,13 @@ def startAnalyse(request, pk):
         messages.success(request, 'Case staus updated')
     else:
         messages.error(request, 'No mobile numbers were found associated with this case')
-    if email:
-        if UpiDetails.objects.filter(vpa_id = email).exists():
+    if emails:
+        email_uname = emails.partition('@')[0]
+        if UpiDetails.objects.filter(vpa_id = email_uname).exists():
             messages.info(request, 'Already Found all possible upi addresses of this email address')
         else:
             upix = UpiLists.objects.all().values_list('upi_id', flat=True)
-            upi1 = upix[::1]
-            email_uname = email.partition('@')[0]
+            upi1 = upix[::1]            
             vpa = email_uname #text before @ symbol
             for upi in upi1:    
                 UpiValidator_result = UpiValidator(vpa, upi)
@@ -256,7 +260,9 @@ def startAnalyse(request, pk):
                     upi_res = upi_res1['customer_name']
                     vpax =  upi_res1['vpa']
                     vpa_addrs = vpax.partition('@')[2]
-                    upi_data = UpiDetails(name = upi_res, vpa = vpax, case_no=case_no, vpa_id = vpa, bank= vpa_addrs)
+                    bank_query = UpiLists.objects.values_list('bank_name', flat=True).filter(upi_id=vpa_addrs)
+                    bank = ' '.join(map(str, bank_query[::1]))
+                    upi_data = UpiDetails(name = upi_res, vpa = vpax, case_no=case_no, vpa_id = vpa, bank= bank)
                     upi_data.save()
             messages.success(request, 'UPI OSINT of the particular email id Completed')
     else:
@@ -390,7 +396,7 @@ class users(ListView):
     template_name = 'users.html'
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')  
-class AddUser(SuccessMessageMixin, CreateView):
+class AddUser(SweetifySuccessMixin, CreateView):
     form_class = AddUserForm
     template_name = 'profile/add_user.html'
     success_url = reverse_lazy('users')
@@ -413,12 +419,12 @@ class DeleteUser(DeleteView):
     success_url = reverse_lazy('users')
 
 @method_decorator(login_required, name='dispatch')
-class AddCaseDetails(SuccessMessageMixin, generic.CreateView):
+class AddCaseDetails(SweetifySuccessMixin, generic.CreateView):
     form_class = AddCaseDetailsForm
     model = CaseDetails
     template_name = 'add_case_details.html'
-    success_url = reverse_lazy('index')    
-    success_message = 'Case details added successfully. You may now start osint analysis under My Case History tab'
+    success_url = "{id}/mycases/"
+    success_message = '#%(case_no)s - added successfully. You may now start osint analysis '
 
 @method_decorator(login_required, name='dispatch')
 class ViewAllCases(generic.ListView):
@@ -438,12 +444,10 @@ class ViewCasesDetails(generic.TemplateView):
          context['truecallerdetails'] = TruecallerDetails.objects.filter(case_no=pk)
          context['eycondetails'] = EyeconDetails.objects.filter(case_no=pk)
          context['upidetails'] = UpiDetails.objects.filter(case_no=pk)         
-         context['upidetails_uniquename'] = UpiDetails.objects.filter(case_no=pk).distinct('name')
-         context['upidetails_uniquevpa'] = UpiDetails.objects.filter(case_no=pk).distinct('vpa')
          return context
 
 @method_decorator(login_required, name='dispatch')
-class UserProfileUpdate(SuccessMessageMixin, UpdateView):
+class UserProfileUpdate(SweetifySuccessMixin, UpdateView):
     
     model = Profile
     template_name = 'profile/updateuser.html'
@@ -467,7 +471,7 @@ class UserProfileUpdate(SuccessMessageMixin, UpdateView):
         return super(UserProfileUpdate, self).form_valid(form)
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class AdminUserProfileUpdate(SuccessMessageMixin, UpdateView):
+class AdminUserProfileUpdate(SweetifySuccessMixin, UpdateView):
     
     model = Profile
     template_name = 'profile/admin-updateuser.html'
@@ -498,10 +502,11 @@ class UpdateCaseStatus(UpdateView):
     success_url = reverse_lazy('case_overview')
 
 @method_decorator(login_required, name='dispatch')
-class UpdateTheme(UpdateView):
+class UpdateTheme(SweetifySuccessMixin, UpdateView):
     model = Profile
     fields = ["enable_dark"]    
     template_name = 'theme/updatetheme.html'
+    success_message = 'theme successfully updated!'
     success_url = reverse_lazy('index')
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch') 
@@ -515,7 +520,7 @@ class AllUpiLists(generic.TemplateView):
          return context
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class AddUpi(SuccessMessageMixin, generic.CreateView):
+class AddUpi(SweetifySuccessMixin, generic.CreateView):
     model = UpiLists
     fields = ["upi_id","bank_name"]
     template_name = 'settings/add_upi.html'
@@ -523,7 +528,7 @@ class AddUpi(SuccessMessageMixin, generic.CreateView):
     success_message = 'New UPI added to the database'
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class UpdateUpi(SuccessMessageMixin, UpdateView):
+class UpdateUpi(SweetifySuccessMixin, UpdateView):
     model = UpiLists
     fields = ["upi_id","bank_name"]    
     template_name = 'settings/update_upi.html'
@@ -531,7 +536,7 @@ class UpdateUpi(SuccessMessageMixin, UpdateView):
     success_message = ' UPI details updated successfully'
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class DeleteUpi(SuccessMessageMixin, DeleteView):
+class DeleteUpi(SweetifySuccessMixin, DeleteView):
     model = UpiLists
     template_name = 'settings/delete_upi.html'
     success_url = reverse_lazy('settings')    
@@ -539,7 +544,7 @@ class DeleteUpi(SuccessMessageMixin, DeleteView):
 
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class AddTruecallerToken(SuccessMessageMixin, generic.CreateView):
+class AddTruecallerToken(SweetifySuccessMixin, generic.CreateView):
     model = TruecallerApiKey
     fields = ["api_token","is_active"]
     template_name = 'settings/add_truecaller_api.html'
@@ -547,7 +552,7 @@ class AddTruecallerToken(SuccessMessageMixin, generic.CreateView):
     success_message = 'New Truecaller authorization token added to the database'
 
 @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')    
-class AddEyeconToken(SuccessMessageMixin, generic.CreateView):
+class AddEyeconToken(SweetifySuccessMixin, generic.CreateView):
     model = EyeconApiKey
     fields = ["api_token","is_active"]
     template_name = 'settings/add_eyecon_api.html'

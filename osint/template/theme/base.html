@@ -16,6 +16,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'plugins/toastr/toastr.css' %}" media="all">
+<script type="text/javascript" src="{% static 'plugins/toastr/toastr.min.js' %}"></script>  
   {% block css %} {% endblock %}
 </head>
 <body class="hold-transition {% if user.profile.enable_dark == True %}dark{% else %}white{% endif %}-mode sidebar-mini">
@@ -38,14 +42,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       <!-- Messages Dropdown Menu -->
       <li class="nav-item">
-      <a class="nav-link" href="{% url 'update-theme' user.profile.pk %}" role="button">
+      <a class="nav-link" href="{% url 'update-theme' user.profile.pk %}" role="button" title="Change Theme">
         {% if user.profile.enable_dark == True %} <i class="fas fa-cloud-moon"></i> {% else %} <i class="fas fa-sun"></i> {% endif%}
       </a>
       </li>
       <!-- Notifications Dropdown Menu -->
       
       <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button" title="fullscreen">
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>
@@ -208,14 +212,95 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Main content -->
     <div class="content">
-      <div class="container-fluid">{% for message in messages %}
-        <div class="alert alert-{% if message.tags == 'error' %}danger {% endif %}{{ message.tags }} alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          {{ message }}
-        </div>
-      {% endfor %}
+      <div class="container-fluid"> {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success'%}
+                <script type=text/javascript>
+                function toasterOptions() {
+                    toastr.options = {
+                        "closeButton": true,
+                        "progressBar": true,
+                        "preventDuplicates": true,
+                        "onclick": null,
+                        "showDuration": "100",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "show",
+                        "hideMethod": "hide"
+                    };
+                  };                  
+                  
+                  toasterOptions();
+                toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'info' %}
+                <script type=text/javascript>
+                function toasterOptions() {
+                    toastr.options = {
+                        "closeButton": true,
+                        "progressBar": true,
+                        "preventDuplicates": true,
+                        "onclick": null,
+                        "showDuration": "100",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "show",
+                        "hideMethod": "hide"
+                    };
+                  };                  
+                  
+                  toasterOptions();
+                toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'warning' %}
+                <script type=text/javascript>
+                function toasterOptions() {
+                    toastr.options = {
+                        "closeButton": true,
+                        "progressBar": true,
+                        "preventDuplicates": true,
+                        "onclick": null,
+                        "showDuration": "100",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "show",
+                        "hideMethod": "hide"
+                    };
+                  };                  
+                  
+                  toasterOptions();
+                  toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'error' %}
+                <script type=text/javascript>
+                  function toasterOptions() {
+                    toastr.options = {
+                        "closeButton": true,
+                        "progressBar": true,
+                        "preventDuplicates": true,
+                        "onclick": null,
+                        "showDuration": "100",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "show",
+                        "hideMethod": "hide"
+                    };
+                  };                  
+                  
+                  toasterOptions();
+                  toastr.{{ message.tags }}('{{ message }}')</script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
      
         {% block body %}
         
@@ -262,5 +347,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- AdminLTE App -->
 <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
 {% block scripts %}{% endblock %}
+
+{% load sweetify %}
+{% sweetify %}
 </body>
 </html>
