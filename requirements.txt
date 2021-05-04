@@ -7,3 +7,4 @@ django-currentuser
 django-reset-migrations
 fetchip
 sweetify
+jsonfield

@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -11,7 +12,7 @@ from django.core.validators import RegexValidator
 from django_currentuser.middleware import (get_current_user, get_current_authenticated_user)
 # As model field:
 from django_currentuser.db.models import CurrentUserField
-
+from jsonfield import JSONField
 class TruecallerApiKey(models.Model):   
     api_token = models.CharField(max_length=200, unique=True)
     is_active = models.BooleanField()
@@ -140,7 +141,7 @@ class IpLookupData(models.Model):
 
 
 class UpiLists(models.Model):
-    upi_id = models.CharField(max_length=200)
+    upi_id = models.CharField(max_length=200, unique=True)
     bank_name = models.CharField(max_length=200)
 
     created_by = CurrentUserField()
@@ -172,3 +173,13 @@ class DarkwebSearches(models.Model):
 
     class Meta:
         db_table = 'darkweb_searches' 
+
+class HlrLookupDetails(models.Model):
+    phone_no =  models.CharField(max_length=200,null=True, blank=True)
+    info = JSONField(max_length=200)
+    created_by = CurrentUserField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'hlr_details' 
