@@ -5,7 +5,7 @@ from django.db.models import Count
 import urllib.parse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
-from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists, EyeconApiKey, UpiDetails, DarkwebSearches
+from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists, EyeconApiKey, UpiDetails, DarkwebSearches,HlrLookupDetails
 from django.contrib import messages
 from django.views import generic
 
@@ -25,8 +25,9 @@ from osint.Includes.classes.truecaller_search_class import Truecaller
 from osint.Includes.classes.eyecon import Eyecon
 from osint.Includes.classes.upi_validator_class import UpiValidator
 from osint.Includes.classes.darksearch_io import Darknet
-
 from osint.Includes.classes.ipapi_class import IpLookup
+from osint.Includes.classes.hlr_lookup import HlrLookup
+
 import requests
 import json
 import fetchip
@@ -237,9 +238,23 @@ def startAnalyse(request, pk):
                     upi_data = UpiDetails(name = upi_res, vpa = vpax, case_no=case_no, vpa_id = vpa, bank= bank)
                     upi_data.save()
             messages.success(request, 'UPI OSINT of the particular mobile number Completed')
+        
+        
+        if HlrLookupDetails.objects.filter(case_no = pk).exists():
+            messages.info(request, 'HLR lookup related with this case number already completed')
+        else:
+            user_id ='adarshvs'
+            api_key ='td8w9IHz8IKxXtJl4LoQfcLUmQmd4hI2Y8MfiE5kvWCBJm2i'
+            num = '+91'+phone_no
+            hlrlookup_result = HlrLookup(user_id,api_key,num)
+            output = hlrlookup_result.HlrLookupNeutrinoapi()
+            hlr_details = HlrLookupDetails(info=output, case_no=case_no, phone_no= phone_no )
+            hlr_details.save()
+            messages.success(request, 'HLR Lookup of the particular mobile number Completed')
         a = CaseDetails.objects.get(id = pk )
         a.analysis_status = 'True'
         a.save()
+        
         messages.success(request, 'Case staus updated')
     else:
         messages.error(request, 'No mobile numbers were found associated with this case')
@@ -443,7 +458,8 @@ class ViewCasesDetails(generic.TemplateView):
          context['casedetails'] = CaseDetails.objects.filter(id=pk)
          context['truecallerdetails'] = TruecallerDetails.objects.filter(case_no=pk)
          context['eycondetails'] = EyeconDetails.objects.filter(case_no=pk)
-         context['upidetails'] = UpiDetails.objects.filter(case_no=pk)         
+         context['upidetails'] = UpiDetails.objects.filter(case_no=pk)    
+         context['hlrdetails'] = HlrLookupDetails.objects.filter(case_no=pk)       
          return context
 
 @method_decorator(login_required, name='dispatch')

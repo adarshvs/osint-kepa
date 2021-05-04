@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -11,7 +12,7 @@ from django.core.validators import RegexValidator
 from django_currentuser.middleware import (get_current_user, get_current_authenticated_user)
 # As model field:
 from django_currentuser.db.models import CurrentUserField
-
+from jsonfield import JSONField
 class TruecallerApiKey(models.Model):   
     api_token = models.CharField(max_length=200, unique=True)
     is_active = models.BooleanField()
@@ -37,9 +38,9 @@ class CaseDetails(models.Model):
     case_title = models.CharField(max_length=200)
     case_details = models.TextField(blank=True, null=True)
     fir_date = models.DateField()
-    email = models.CharField(max_length=200 , blank=True, null=True)
+    email = models.CharField(max_length=200 , blank=True, null=True, unique=True)
     phone_regex = RegexValidator(regex=r'^\d{10}$', message="Phone number must be entered without +91. Up to 10 digits allowed.")
-    phone_no = models.CharField(validators=[phone_regex],max_length=200 , blank=True, null=True)
+    phone_no = models.CharField(validators=[phone_regex],max_length=200 , blank=True, null=True, unique=True)
     analysis_status = models.BooleanField(default='False')
     is_completed = models.BooleanField(default='False')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -140,7 +141,7 @@ class IpLookupData(models.Model):
 
 
 class UpiLists(models.Model):
-    upi_id = models.CharField(max_length=200)
+    upi_id = models.CharField(max_length=200, unique=True)
     bank_name = models.CharField(max_length=200)
 
     created_by = CurrentUserField()
@@ -172,3 +173,14 @@ class DarkwebSearches(models.Model):
 
     class Meta:
         db_table = 'darkweb_searches' 
+
+class HlrLookupDetails(models.Model):
+    phone_no =  models.CharField(max_length=200,null=True, blank=True)
+    info = JSONField(max_length=200)
+    case_no= models.CharField(max_length=200)
+    created_by = CurrentUserField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'hlr_details' 
