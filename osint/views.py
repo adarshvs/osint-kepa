@@ -458,7 +458,8 @@ class ViewCasesDetails(generic.TemplateView):
          context['casedetails'] = CaseDetails.objects.filter(id=pk)
          context['truecallerdetails'] = TruecallerDetails.objects.filter(case_no=pk)
          context['eycondetails'] = EyeconDetails.objects.filter(case_no=pk)
-         context['upidetails'] = UpiDetails.objects.filter(case_no=pk)         
+         context['upidetails'] = UpiDetails.objects.filter(case_no=pk)    
+         context['hlrdetails'] = HlrLookupDetails.objects.filter(case_no=pk)       
          return context
 
 @method_decorator(login_required, name='dispatch')
