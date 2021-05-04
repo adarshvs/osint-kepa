@@ -58,14 +58,14 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="case_no">Case Number</label>
+                            <label for="case_no">Case Number*</label>
                             {{form.case_no}}
                         </div>
                     </div>
 
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="last_name">Referance Number</label>
+                            <label for="last_name">Referance Number*</label>
                             {{form.ref_id}}
                         </div>
                     </div>
@@ -73,12 +73,12 @@
                 <div class="row">
                     <div class="col-lg-6">
                 <div class="form-group">
-                    <label for="username">Case Title</label>
+                    <label for="username">Case Title*</label>
                     {{form.case_title}}
                 </div></div> 
                 <div class="col-lg-6">
                 <div class="form-group">
-                    <label for="username">Case Registerd on</label>
+                    <label for="username">Case Registerd on*</label>
                         {{form.fir_date}}
                 </div></div>
             </div>
@@ -115,7 +115,7 @@
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
-         
+         <div class="text-right text-danger"><b>* mandatory fields</b></div>
         </div>
       </div>
       <!-- /.card -->
