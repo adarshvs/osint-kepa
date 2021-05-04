@@ -21,13 +21,5 @@ class HlrLookup:
         self.user_id = user_id
         self.api_key = api_key        
         self.num = num
-user_id ='adarshvs'
-api_key ='td8w9IHz8IKxXtJl4LoQfcLUmQmd4hI2Y8MfiE5kvWCBJm2i'
-num ='+919048903190'
-
-hlrlookup_result = HlrLookup(user_id,api_key,num)
-output = hlrlookup_result.HlrLookupNeutrinoapi()
-
-print(output)
 
 
