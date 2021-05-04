@@ -220,8 +220,9 @@
   </div>{% endfor %}
 
   
-  <div class="col-12 col-sm-6 col-md-6 d-flex align-items-stretch flex-column">{% for object in eycondetails %}
-    <div class="card bg-light d-flex flex-fill">
+  <div class="col-12 col-sm-6 col-md-6 d-flex align-items-stretch flex-column">
+   {% for object in eycondetails %}
+    <div class="card bg-light d-flex flex-fill card-primary card-outline">
       <div class="card-header text-muted border-bottom-0 text-warning">
        Eyecon Details
       </div>
@@ -248,7 +249,7 @@
       </div>
     </div>{% endfor %}
     {% if upidetails %}
-    <div class="card bg-light d-flex flex-fill">
+    <div class="card bg-light d-flex flex-fill card-primary card-outline">
       <div class="card-header text-muted border-bottom-0 text-warning">
         UPI Details
       </div>
@@ -285,7 +286,7 @@
   <div class="col-12 col-sm-6 col-md-6 d-flex align-items-stretch flex-column">
     <div class="col-md-12">
       <div class="card bg-light d-flex flex-fill card-primary card-outline">
-        <div class="card-header text border-bottom-0">
+        <div class="card-header text-muted  text border-bottom-0">
           Phone Number lookup Details
   
         </div>
