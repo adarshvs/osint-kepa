@@ -10,3 +10,5 @@ osint/Includes/classes/__pycache__/
 images/avatars/
 images/trucallerImg/
 osint/templatetags/__pycache__/
+
+media/avatars/
