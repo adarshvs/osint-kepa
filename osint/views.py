@@ -2,7 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db.models import Count
 from time import sleep
-
+from datetime import date
+import os
+from django.core.files.storage import FileSystemStorage
 import urllib.parse
 import time, random
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -14,7 +16,7 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
-from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm, AddUserForm, UserAdminUpdateForm
+from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm, AddUserForm, UserAdminUpdateForm, MetaFileForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
@@ -29,6 +31,7 @@ from osint.Includes.classes.upi_validator_class import UpiValidator
 from osint.Includes.classes.darksearch_io import Darknet
 from osint.Includes.classes.ipapi_class import IpLookup
 from osint.Includes.classes.hlr_lookup import HlrLookup
+from osint.Includes.classes.metapdf import PdfMeta
 
 import requests
 import json
@@ -424,6 +427,25 @@ def logout(request):
 def addons(request):
     if not request.user.is_authenticated:
         return redirect(login)
+    if request.method == 'POST':
+        form = MetaFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            filename = form.cleaned_data['file_name']
+            todays_date = date.today()
+            fpath = str(todays_date).replace("-","/")
+            file_extension = os.path.splitext(str(filename))[1]
+            if file_extension == '.pdf' or file_extension == '.PDF':
+                data =PdfMeta('media/files/'+ fpath +'/'+str(filename))
+                file_extension= data.pdf_metadata()
+            #success_message = '#%(uploaded_file_url)s - added successfully. You may now start osint analysis '
+            sweetify.success(request,  'Metadata', icon ='success' , text='Good job! You successfully showed a SweetAlert message', persistent='Hell yeah')
+            return render(request,'addons.html', {"file_extension":file_extension})
+    else:
+        form = MetaFileForm()
+    return render(request, 'addons.html', {
+        'form': form
+    })
     return render(request,'addons.html')
 
 

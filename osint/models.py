@@ -184,3 +184,12 @@ class HlrLookupDetails(models.Model):
 
     class Meta:
         db_table = 'hlr_details' 
+
+class MetaFiles(models.Model):
+    
+    file_name = models.FileField(upload_to='files/%Y/%m/%d/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = CurrentUserField()
+    class Meta:
+        db_table = 'meta_files' 

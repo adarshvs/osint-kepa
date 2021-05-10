@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import TextInput, FileInput, NumberInput, Textarea, DateInput, PasswordInput, CheckboxInput, EmailInput
 from django.contrib.auth.models import User
-from .models import Profile, CaseDetails
+from .models import Profile, CaseDetails, MetaFiles
 from django.contrib.auth.forms import UserCreationForm
 
 class AddUserForm(UserCreationForm):
@@ -149,5 +149,17 @@ class AddCaseDetailsForm(forms.ModelForm):
                     "placeholder":"Enter mobile number without +91"
                 })
 
+        }
+
+class MetaFileForm(forms.ModelForm):
+    class Meta:
+        model = MetaFiles
+        fields = ('file_name', )
+        widgets = {     
+            "file_name": FileInput(
+                attrs={                    
+                    "class":"custom-file-input",
+                    "id":"exampleInputFile"
+                })
         }
     
