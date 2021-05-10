@@ -9,3 +9,4 @@ fetchip
 sweetify
 jsonfield
 PyPDF2
+TinyTag
