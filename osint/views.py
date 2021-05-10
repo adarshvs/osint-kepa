@@ -1,8 +1,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db.models import Count
-
+from time import sleep
+from datetime import date
+import os
+from django.core.files.storage import FileSystemStorage
 import urllib.parse
+import time, random
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
 from .models import Profile, CaseDetails, IpLookupData, TruecallerDetails, TruecallerApiKey, EyeconDetails, UpiLists, EyeconApiKey, UpiDetails, DarkwebSearches,HlrLookupDetails
@@ -12,7 +16,7 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
-from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm, AddUserForm, UserAdminUpdateForm
+from .forms import UserUpdateForm,ProfileUpdateForm, PasswordChangeForm, AddCaseDetailsForm, AddUserForm, UserAdminUpdateForm, MetaFileForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
@@ -27,13 +31,14 @@ from osint.Includes.classes.upi_validator_class import UpiValidator
 from osint.Includes.classes.darksearch_io import Darknet
 from osint.Includes.classes.ipapi_class import IpLookup
 from osint.Includes.classes.hlr_lookup import HlrLookup
+from osint.Includes.classes.metapdf import PdfMeta
 
 import requests
 import json
 import fetchip
 import sweetify
 from sweetify.views import SweetifySuccessMixin
-
+import threading 
 
 # Create your views here.
 @login_required
@@ -131,6 +136,34 @@ def change_password(request):
     return render(request, 'profile/change_password.html', {
         'pass_form': pass_form
     })
+class UpiThread(threading.Thread):
+    def __init__(self, emails, case_no,v_set):
+        self.emails = emails
+        self.case_no = case_no
+        self.v_set = v_set
+        self.delay = random.random()
+        threading.Thread.__init__(self)
+    def run(self):
+        time.sleep(self.delay)
+        email_uname = self.emails.partition('@')[0]
+        upix = self.v_set
+        upi1 = upix[::1]            
+        vpa = email_uname #text before @ symbol
+        for upi in upi1:    
+            UpiValidator_result = UpiValidator(vpa, upi)
+            output = UpiValidator_result.VpaValidator()
+            upi_res1 = output.json()
+            upi_res_status = upi_res1['status']
+            if upi_res_status == str('VALID'):
+                upi_res = upi_res1['customer_name']
+                vpax =  upi_res1['vpa']
+                vpa_addrs = vpax.partition('@')[2]
+                bank_query = UpiLists.objects.values_list('bank_name', flat=True).filter(upi_id=vpa_addrs)
+                bank = ' '.join(map(str, bank_query[::1]))
+                upi_data = UpiDetails(name = upi_res, vpa = vpax, case_no=self.case_no, vpa_id = vpa, bank= bank)
+                upi_data.save()
+    
+            
 def startAnalyse(request, pk):
     case_no = pk
     emails = CaseDetails.objects.values_list('email', flat=True).filter(id=pk)
@@ -262,24 +295,18 @@ def startAnalyse(request, pk):
         email_uname = emails.partition('@')[0]
         if UpiDetails.objects.filter(vpa_id = email_uname).exists():
             messages.info(request, 'Already Found all possible upi addresses of this email address')
-        else:
-            upix = UpiLists.objects.all().values_list('upi_id', flat=True)
-            upi1 = upix[::1]            
-            vpa = email_uname #text before @ symbol
-            for upi in upi1:    
-                UpiValidator_result = UpiValidator(vpa, upi)
-                output = UpiValidator_result.VpaValidator()
-                upi_res1 = output.json()
-                upi_res_status = upi_res1['status']
-                if upi_res_status == str('VALID'):
-                    upi_res = upi_res1['customer_name']
-                    vpax =  upi_res1['vpa']
-                    vpa_addrs = vpax.partition('@')[2]
-                    bank_query = UpiLists.objects.values_list('bank_name', flat=True).filter(upi_id=vpa_addrs)
-                    bank = ' '.join(map(str, bank_query[::1]))
-                    upi_data = UpiDetails(name = upi_res, vpa = vpax, case_no=case_no, vpa_id = vpa, bank= bank)
-                    upi_data.save()
-            messages.success(request, 'UPI OSINT of the particular email id Completed')
+        else:     
+            v_set = UpiLists.objects.all().values_list('upi_id', flat=True)   
+                
+            threads = []             
+            for i in range(5):    
+                threads.append(UpiThread(emails, case_no, v_set))
+                threads[i].start()               
+            for t in threads:
+                t.join()
+           
+            
+        messages.success(request, 'UPI OSINT of the particular email id Completed')
     else:
         messages.error(request, 'No email addresses were found associated with this case')
     return redirect(request.META['HTTP_REFERER'])
@@ -400,6 +427,25 @@ def logout(request):
 def addons(request):
     if not request.user.is_authenticated:
         return redirect(login)
+    if request.method == 'POST':
+        form = MetaFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            filename = form.cleaned_data['file_name']
+            todays_date = date.today()
+            fpath = str(todays_date).replace("-","/")
+            file_extension = os.path.splitext(str(filename))[1]
+            if file_extension == '.pdf' or file_extension == '.PDF':
+                data =PdfMeta('media/files/'+ fpath +'/'+str(filename))
+                file_extension= data.pdf_metadata()
+            #success_message = '#%(uploaded_file_url)s - added successfully. You may now start osint analysis '
+            sweetify.success(request,  'Metadata', icon ='success' , text='Good job! You successfully showed a SweetAlert message', persistent='Hell yeah')
+            return render(request,'addons.html', {"file_extension":file_extension})
+    else:
+        form = MetaFileForm()
+    return render(request, 'addons.html', {
+        'form': form
+    })
     return render(request,'addons.html')
 
 

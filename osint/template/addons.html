@@ -1,4 +1,5 @@
 {% extends 'theme/base.html' %}
+{% load static %}
 
 
 {% block title %} Add-Ons {% endblock %}
@@ -24,19 +25,7 @@
             <!-- /.info-box -->
         </div>
     </div>
-    <div class="col-md-4 col-sm-6 col-12">
-        <div class="info-box shadow-sm">
-            <span class="info-box-icon bg-warning"><i class="fas fa-tags"></i></span>
-
-            <div class="info-box-content">
-                <span class="info-box-text">META DATA EXTRACTOR</span>
-                <span class="info-box-number"><a href="metafind">UPLOAD FILE</a></span>
-            </div>
-            <!-- /.info-box-content -->
-
-            <!-- /.info-box -->
-        </div>
-    </div>
+    
     <div class="col-md-4 col-sm-6 col-12">
         <div class="info-box shadow-sm">
             <span class="info-box-icon bg-danger"><i class="fas fa-user-secret"></i></span>
@@ -50,6 +39,49 @@
             <!-- /.info-box -->
         </div>
     </div>
+
+    <div class="col-md-4 col-sm-6 col-12">
+        <div class="info-box shadow-sm">
+            <span class="info-box-icon bg-warning"><i class="fas fa-tags"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">META DATA EXTRACTOR</span>
+                <span class="info-box-number">
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form.file_name }}
+                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                        </div>
+                    </div>
+                </span>
+                    <span class="info-box-number">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+            
+            
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+
+            <!-- /.info-box -->
+        </div>
+    </div>
 </div>
 
+{{file_extension}}
+
 {% endblock %}
+
+
+{% block scripts %}
+<!-- bs-custom-file-input -->
+<script src="{% static 'plugins/bs-custom-file-input/bs-custom-file-input.min.js' %}"></script>
+<script>
+    $(function () {
+      bsCustomFileInput.init();
+    });
+    </script>
+
+{% endblock %} 
