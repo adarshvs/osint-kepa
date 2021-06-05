@@ -10,3 +10,4 @@ sweetify
 django-heroku
 gunicorn
 whitenoise
+jsonfield
