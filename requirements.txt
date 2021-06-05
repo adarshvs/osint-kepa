@@ -7,3 +7,6 @@ django-currentuser
 django-reset-migrations
 fetchip
 sweetify
+django-heroku
+gunicorn
+whitenoise
