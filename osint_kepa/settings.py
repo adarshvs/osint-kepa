@@ -26,7 +26,8 @@ SECRET_KEY = '+dtxr=wl0b5oh535b%yhz30$1in376zj!#=$h17$!vj9jzcjy7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1','172.16.7.246','osint-kepa.herokuapp.com']
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','172.16.7.246','https://osint-kepa.herokuapp.com']
 
 
 # Application definition
