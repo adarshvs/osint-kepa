@@ -44,7 +44,7 @@ macholib==1.11
 mccabe==0.6.1
 mypy-extensions==0.4.3
 mysqlclient
-numpy==1.8.1\nscipy==0.14.0
+numpy==1.17.4
 oauthlib==3.1.0
 packaging==20.9
 parse==1.19.0
