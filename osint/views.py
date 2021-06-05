@@ -31,7 +31,7 @@ from osint.Includes.classes.upi_validator_class import UpiValidator
 from osint.Includes.classes.darksearch_io import Darknet
 from osint.Includes.classes.ipapi_class import IpLookup
 from osint.Includes.classes.hlr_lookup import HlrLookup
-from osint.Includes.classes.metapdf import PdfMeta
+from osint.Includes.classes.meta_data_extraction import PdfMeta, ImgMeta, MultiMediaMeta
 
 import requests
 import json
@@ -438,6 +438,12 @@ def addons(request):
             if file_extension == '.pdf' or file_extension == '.PDF':
                 data =PdfMeta('media/files/'+ fpath +'/'+str(filename))
                 file_extension= data.pdf_metadata()
+            elif file_extension == '.jpg':
+                exifid = ImgMeta('media/files/'+ fpath +'/'+str(filename))
+                file_extension = exifid.image_metadata()
+            else:
+                exifid = MultiMediaMeta('media/files/'+ fpath +'/'+str(filename))
+                file_extension = exifid.multimedia_meta()
             #success_message = '#%(uploaded_file_url)s - added successfully. You may now start osint analysis '
             sweetify.success(request,  'Metadata', icon ='success' , text='Good job! You successfully showed a SweetAlert message', persistent='Hell yeah')
             return render(request,'addons.html', {"file_extension":file_extension})
