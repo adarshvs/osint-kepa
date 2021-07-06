@@ -1,1 +1,0 @@
-web: gunicorn osint_kepa.wsgi --log-file -
