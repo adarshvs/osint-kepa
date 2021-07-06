@@ -1,0 +1,34 @@
+{%  extends 'theme/base.html' %}
+
+
+{% block title %}  Case Status Update {% endblock %}
+
+{% block page_heading %}  Case Status Update {% endblock %}
+
+{% block breadcrumbnavigation %} <a href="/case_overview"> View Users</a> / Case Status Update   {% endblock %}
+
+{% block sidebarheading %}   {% endblock %}
+{% block sidebarcontent %}  {% endblock %}
+
+{% block body %} 
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">Case #{{object.id}}</h5>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="alert alert-warning" role="alert">
+                {% if object.is_completed == True %}Uncheck the below option for marking this case as #Pending {% else %} Check the below option for marking this case as #Completed {% endif%}
+                
+               {{form.as_p}}
+            </div>
+            
+            {% if object.is_completed == True %}<button type="submit" class="btn btn-danger">  Submit </button> {% else %}<button type="submit" class="btn btn-success">  Submit </button>{% endif%}
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}{% endblock %} 

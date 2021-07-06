@@ -1,0 +1,12 @@
+pylint
+requests
+ipapi
+psycopg2
+Pillow
+django-currentuser
+django-reset-migrations
+fetchip
+sweetify
+jsonfield
+PyPDF2
+TinyTag

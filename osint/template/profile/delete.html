@@ -1,0 +1,32 @@
+{%  extends 'theme/base.html' %}
+
+
+{% block title %}  Delete User {% endblock %}
+
+{% block page_heading %}  Delete User {% endblock %}
+
+{% block breadcrumbnavigation %} <a href="/users"> View Users</a> / Delete User   {% endblock %}
+
+{% block sidebarheading %}   {% endblock %}
+{% block sidebarcontent %}  {% endblock %}
+
+{% block body %} 
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">User #{{object.id}}</h5>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="alert alert-warning" role="alert">
+                Are you sure you want to delete <strong>{{ object }}</strong> ?
+            </div>
+            
+            <button type="submit" class="btn btn-danger"> <i class="fas fa-trash" title="View"> Delete </i></button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}{% endblock %} 
